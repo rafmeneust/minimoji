@@ -51,7 +51,7 @@ export default function Pitch() {
     >
       {/* Image Chat à droite */}
       <motion.img
-        src="src/public/cat-fly.png"
+        src="/public/cat-fly.png"
         alt="Chat magique"
         className="absolute w-24 sm:w-48 top-10 right-4 sm:right-8 z-0 max-w-full"
         style={{ y: smoothCat }}
@@ -61,7 +61,7 @@ export default function Pitch() {
 
       {/* Image Garçon à droite, plus bas */}
       <motion.img
-        src="src/public/magic-paper.png"
+        src="/public/magic-paper.png"
         alt="Garçon qui dessine"
         className="absolute w-32 sm:w-48 md:w-56 bottom-0 left-4 sm:left-10 z-0 max-w-full"
         style={{ y: smoothBoy }}
@@ -71,7 +71,7 @@ export default function Pitch() {
 
       {/* Image Dinosaure, flottante */}
       <motion.img
-        src="src/public/dino.svg"
+        src="/public/dino.svg"
         alt="Dinosaure"
         className="absolute z-10 top-[35%] sm:top-[38%] md:top-[40%] lg:top-[42%]
              left-[50%] sm:left-[55%] md:left-[52%] lg:left-[50%]

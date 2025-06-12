@@ -20,7 +20,7 @@ export default function HeroImage() {
     >
       {/* Image complète */}
       <img
-        src="src/public/hero-min.png"
+        src="/public/hero-min.png"
         alt="Avant/après dessin animé"
         className="w-full lg:w-[760px]"
       />
