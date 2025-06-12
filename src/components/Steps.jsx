@@ -31,19 +31,19 @@ const items = [
   {
     step: "1",
     title: "Téléchargez le dessin\nde votre enfant.",
-    icon: "/public/step1.png",
+    icon: "/step1.png",
     color: "bg-yellow-200 text-yellow-800",
   },
   {
     step: "2",
     title: "Notre magicien transforme\nl'oeuvre en animation.",
-    icon: "/public/step2.png",
+    icon: "/step2.png",
     color: "bg-pink-200 text-pink-800",
   },
   {
     step: "3",
     title: "Recevez votre mini-film\nen moins de 24h.",
-    icon: "/public/step3.png",
+    icon: "/step3.png",
     color: "bg-blue-200 text-blue-800",
   },
 ];

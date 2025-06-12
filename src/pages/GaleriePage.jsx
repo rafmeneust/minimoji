@@ -3,37 +3,37 @@ import { useState, useRef } from "react";
 
 const videos = [
   {
-    src: "/public/video1.mp4",
+    src: "/video1.mp4",
     title: "Le dragon de Milo",
     subtitle: "Par Raphaël, 4 ans",
     tag: "aventures",
   },
   {
-    src: "/public/video2.mp4",
+    src: "/video2.mp4",
     title: "La maison magique de Lila",
     subtitle: "Par Lucas, 7 ans",
     tag: "magie douce",
   },
   {
-    src: "/public/video3.mp4",
+    src: "/video3.mp4",
     title: "Le vaisseau intergalactique",
     subtitle: "Par Alice, 6 ans",
     tag: "science-fiction",
   },
   {
-    src: "/public/video4.mp4",
+    src: "/video4.mp4",
     title: "La danse du doudou panda",
     subtitle: "Par Maëlis, 6 ans",
     tag: "animaux",
   },
   {
-    src: "/public/video5.mp4",
+    src: "/video5.mp4",
     title: "Super-Nuage contre Pluie-Monstre",
     subtitle: "Par Corentin, 7 ans",
     tag: "monstres",
   },
   {
-    src: "/public/video6.mp4",
+    src: "/video6.mp4",
     title: "La fée du jardin secret",
     subtitle: "Par Marina, 5 ans",
     tag: "magie douce",

@@ -4,12 +4,12 @@ const testimonials = [
   {
     name: "C’est juste trop génial.",
     text: "Mon fils passe son temps à regarder ses propres dessins. Il les commente, les met en scène… Je ne pensais pas qu’une simple animation pouvait autant le captiver !",
-    avatar: "/public/testimonial-1.png",
+    avatar: "/testimonial-1.png",
   },
   {
     name: "Quelle diablerie !",
     text: "Mes petits-enfants pensent que je maîtrise une force occulte. C’est devenu un rituel du dimanche : on regarde leurs créations comme un court-métrage. Merci Minimoji !",
-    avatar: "/public/testimonial-2.png",
+    avatar: "/testimonial-2.png",
   },
 ];
 

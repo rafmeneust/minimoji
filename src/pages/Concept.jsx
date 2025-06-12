@@ -64,7 +64,7 @@ export default function Concept() {
           >
             Je confie le dessin au magicien
           </motion.a>
-          <img src="/public/step2.png" alt="Illustration étape 2" className="mx-auto mt-6 w-40 h-40 object-contain" />
+          <img src="/step2.png" alt="Illustration étape 2" className="mx-auto mt-6 w-40 h-40 object-contain" />
         </div>
       </section>
       <div className="relative w-full overflow-hidden bg-transparent">
