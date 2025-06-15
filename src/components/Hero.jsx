@@ -28,15 +28,15 @@ const child = {
 
 export default function Hero() {
   return (
-    <section className="h-[80svh] lg:h-[80vh] flex flex-col justify-center items-center text-center px-6 bg-white dark:bg-gray-800 transition-colors duration-500 font-sans">
+    <section className="pt-24 pb-20 sm:pt-40 sm:pb-32 flex flex-col justify-center items-center text-center px-6 bg-white dark:bg-gray-800 transition-colors duration-500 font-sans">
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
-        className="max-w-6xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-10"
+        className="max-w-6xl mx-auto flex flex-col-reverse lg:flex-row-reverse items-center gap-10 w-full px-4"
       >
         {/* Texte + CTA */}
-        <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-4 max-w-md ">
+        <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-4 max-w-md px-4 w-full">
           <motion.h1
             variants={child}
             className="text-[1.75rem] sm:text-[2rem] font-extrabold text-gray-800 dark:text-gray-100 leading-tight tracking-wide"
@@ -69,7 +69,12 @@ export default function Hero() {
           </motion.p>
         </div>
         {/* Image */}
-        <HeroImage />
+        <motion.div
+          variants={child}
+          className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-full mx-auto flex justify-center"
+        >
+          <HeroImage />
+        </motion.div>
         
       </motion.div>
     </section>

@@ -66,7 +66,7 @@ export default function Galerie() {
   };
 
   return (
-    <section className="py-24 px-6 bg-[#dcedec] dark:bg-gray-900 transition-colors duration-500 font-sans" id="galerie">
+    <section className="relative pt-40 px-6 pb-20 bg-[#dcedec] dark:bg-gray-900 transition-colors duration-500 font-sans" id="galerie">
       <div className="max-w-5xl mx-auto text-center px-4 sm:px-6">
 
         {/* Titre */}
@@ -112,7 +112,6 @@ export default function Galerie() {
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

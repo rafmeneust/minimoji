@@ -108,7 +108,7 @@ export default function Pitch() {
         ))}
 
         <motion.div variants={paragraph} className="pt-6">
-          <CTAButton label="Découvrir la Galerie" href="#tarifs" />
+          <CTAButton label="Découvrir la Galerie" href="/galerie" />
         </motion.div>
       </motion.div>
     </section>

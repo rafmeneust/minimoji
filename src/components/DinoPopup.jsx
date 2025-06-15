@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const sound = new Audio("src/public/pop.wav");
+const sound = new Audio("/pop.wav");
 
 export default function DinoPopup() {
   const [show, setShow] = useState(false);
@@ -66,7 +66,7 @@ export default function DinoPopup() {
                 className="relative w-24 h-24 mx-auto"
               >
                 <motion.img
-                  src="/src/public/dino.svg"
+                  src="/dino.svg"
                   alt="Dino"
                   className="absolute top-0 left-0 w-full origin-center"
                   animate={{

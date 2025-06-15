@@ -15,7 +15,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-[#FEF9E9] dark:bg-gray-900 transition-colors duration-500 py-24 px-4 sm:px-6 md:px-8 font-sans">
+    <section className=" dark:bg-gray-900 transition-colors duration-500 py-24 px-4 sm:px-6 md:px-8 font-sans">
       <h2 className="text-2xl sm:text-3xl md:text-3xl font-extrabold mb-12 text-center text-gray-900 dark:text-white leading-snug max-w-2xl mx-auto">
         Ils ont transformé <br className="sm:hidden" />
         le rêve de leurs enfants

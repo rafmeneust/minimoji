@@ -22,7 +22,7 @@ export default function Footer() {
         {/* Bloc liens */}
         <nav className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-gray-600 dark:text-gray-100">
           <Link
-            to="/"
+            to="/concept"
             className="transform transition-transform duration-300 hover:scale-105 hover:text-gray-900 dark:hover:text-indigo-300"
           >
             Concept
@@ -34,7 +34,7 @@ export default function Footer() {
             Galerie
           </Link>
           <Link
-            to="/infos-legales"
+            to="/creer"
             className="transform transition-transform duration-300 hover:scale-105 hover:text-gray-900 dark:hover:text-indigo-300"
           >
             Créer mon Dessin Animé

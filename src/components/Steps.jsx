@@ -51,9 +51,9 @@ const items = [
 // VERSION 1 - CLASSIQUE
 export function StepsDefault() {
   return (
-    <section className="py-20 md:py-28 bg-[#e6f0ff] dark:bg-gray-900 transition-colors duration-500 text-center font-sans relative overflow-hidden">
+    <section className="py-10 md:py-28 bg-[#e6f0ff] dark:bg-gray-900 transition-colors duration-500 text-center font-sans relative overflow-hidden">
       {/* Ligne horizontale desktop */}
-      <div className="hidden sm:block absolute top-[160px] left-1/2 w-[80%] h-[2px] -translate-x-1/2 z-0" />
+      <div className="hidden sm:block absolute top-[64px] left-1/2 w-[80%] h-[2px] -translate-x-1/2 z-0" />
 
       <motion.div
         variants={container}
