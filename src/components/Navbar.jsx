@@ -92,7 +92,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden px-6 pb-4 pt-2 space-y-4 bg-white dark:bg-gray-900 shadow-md">
-          <nav className="flex flex-col space-y-2 text-gray-700 dark:text-gray-300 text-sm font-medium">
+          <nav className="flex flex-col items-center space-y-4 text-gray-700 dark:text-gray-300 text-xl font-medium mt-4 text-center">
             <Link
               to="/concept"
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
@@ -122,7 +122,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/creer"
-              className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full text-center transition"
+              className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 w-full rounded-full text-center transition"
               onClick={() => setIsOpen(false)}
             >
               Créer mon Dessin Animé

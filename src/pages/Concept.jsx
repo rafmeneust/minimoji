@@ -6,11 +6,16 @@ export default function Concept() {
       <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
 
         {/* Accroche principale */}
-        <h1 className="text-3xl sm:text-4xl font-extrabold leading-snug mb-8 text-center">
-        Un dessin aujourd’hui, un film magique dès demain.
-        </h1>
+         <motion.h1
+          className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-10 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Une dessin aujour'hui, un film magique dès demain ✨
+        </motion.h1>
         <p className="text-lg sm:text-xl leading-relaxed text-center text-indigo-700 dark:text-indigo-300 mb-12">
-          Confiez‑le à notre magicien… et réveillez‑vous avec la magie ✨
+          Confiez‑le à notre magicien… et réveillez‑vous avec la magie
         </p>
 
         {/* Étapes du rituel */}
@@ -88,42 +93,46 @@ export default function Concept() {
 
     {/* Formats */}
     <div className="mt-16">
-      <h3 className="text-lg sm:text-xl font-semibold mb-2">Formats au choix</h3>
-      <p className="text-base text-gray-700 dark:text-gray-300">
-        Portrait, paysage ou carré — le magicien adapte l’histoire et la vidéo à votre demande.
-      </p>
+      <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">Formats au choix</h3>
+        <p className="text-base text-gray-700 dark:text-gray-300">
+          Portrait, paysage ou carré — le magicien adapte l’histoire et la vidéo à votre demande.
+        </p>
+      </div>
     </div>
 
     {/* Confiance & légalité */}
     <div className="mt-16">
-      <div className="mt-8 border-t pt-6 border-gray-300 dark:border-gray-600"></div>
-      <h3 className="text-lg sm:text-xl font-semibold mb-2">Confiance & légalité</h3>
-      <ul className="list-disc list-inside space-y-1 text-base text-gray-700 dark:text-gray-300">
-        <li>Respect strict du droit à l’image</li>
-        <li>Aucune utilisation commerciale sans accord écrit</li>
-        <li>Vous restez pleinement propriétaire des fichiers</li>
-      </ul>
+      <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">Confiance & légalité</h3>
+        <ul className="list-disc list-inside space-y-1 text-base text-gray-700 dark:text-gray-300">
+          <li>Respect strict du droit à l’image</li>
+          <li>Aucune utilisation commerciale sans accord écrit</li>
+          <li>Vous restez pleinement propriétaire des fichiers</li>
+        </ul>
+      </div>
     </div>
 
     {/* Tarifs / accessibilité */}
     <div className="mt-16">
-      <div className="mt-8 border-t pt-6 border-gray-300 dark:border-gray-600"></div>
-      <h3 className="text-lg sm:text-xl font-semibold mb-2">Prix tout doux</h3>
-      <p className="text-base text-gray-700 dark:text-gray-300">
-        La magie est accessible à toutes les bourses. Pas d’abonnement, pas de mauvaise surprise. Une seule formule, un petit prix. Et beaucoup d’émerveillement.
-      </p>
-      <p className="mt-3 text-xs text-gray-600 dark:text-gray-400 italic">
-        Besoin d’un format ou d’une idée spéciale ? Chuchotez‑la, le magicien adore les défis.
-      </p>
-      <div className="mt-10 text-center">
-        <a
-          href="/galerie"
-          className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-800 text-white rounded-full font-semibold text-base transition"
-        >
-          Voir la galerie magique
-        </a>
+      <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">Prix tout doux</h3>
+        <p className="text-base text-gray-700 dark:text-gray-300">
+          La magie est accessible à toutes les bourses. Pas d’abonnement, pas de mauvaise surprise. Une seule formule, un petit prix. Et beaucoup d’émerveillement.
+        </p>
+        <p className="mt-3 text-xs text-gray-600 dark:text-gray-400 italic">
+          Besoin d’un format ou d’une idée spéciale ? Chuchotez‑la, le magicien adore les défis.
+        </p>
       </div>
     </div>
+          <div className="text-center">
+            <a
+              href="/galerie"
+              className="inline-block mt-10 px-6 py-3 bg-indigo-600 hover:bg-indigo-800 text-white rounded-full font-semibold text-base transition mb-10"
+            >
+              Voir la galerie magique
+            </a>
+          </div>
 
   </div>
 </section>

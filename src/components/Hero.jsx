@@ -38,25 +38,27 @@ export default function Hero() {
         {/* Texte + CTA */}
         <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-4 max-w-md px-4 w-full">
           <motion.h1
-            variants={child}
-            className="text-[1.75rem] sm:text-[2rem] font-extrabold text-gray-800 dark:text-gray-100 leading-tight tracking-wide"
-          >
-            Faites vivre les dessins<br /> de vos enfants ✨
-          </motion.h1>
+          variants={child}
+          className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-1"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Faites vivre les dessins de vos enfants
+        </motion.h1>
 
           <motion.p
             variants={child}
             className="text-sm text-gray-700 dark:text-gray-400 font-medium leading-snug font-poppins"
           >
-            Transformez leurs chefs-d’œuvre en mini-films
-            <br />remplis de magie. une photo suffit.
-            <br />En quelques clics, l’imaginaire prend vie.
+            Transformez leurs chefs-d’œuvre en mini-films remplis de magie. une photo suffit.
+            <strong> En quelques clics, l’imaginaire prend vie.</strong>
           </motion.p>
 
           <motion.a
             href="/creer"
             variants={child}
-            className="px-5 py-2 bg-orange-400 hover:bg-orange-600 text-white text-sm font-semibold font-poppins rounded-full shadow-md"
+            className="w-full sm:w-auto px-5 py-2 bg-orange-400 hover:bg-orange-600 text-white text-sm font-semibold font-poppins rounded-full shadow-md text-center transform hover:scale-105 ease-in-out"
           >
             Créer mon Dessin animé
           </motion.a>
