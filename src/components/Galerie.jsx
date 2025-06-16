@@ -98,7 +98,7 @@ export default function Galerie() {
               {videosInView[index] && (
                 <video
                   ref={videoRefs[index]}
-                  src={`/public/${videoSrc}`}
+                  src={`/${videoSrc}`}
                   autoPlay
                   loop
                   muted
