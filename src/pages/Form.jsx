@@ -16,9 +16,8 @@ export default function Form() {
         </div>
 
         <form
-          action="https://hook.eu2.make.com/hirmo9bu7zpl8rzs4sncmpxtdkq7gqv7"
+          action="/api/submit"
           method="POST"
-          encType="multipart/form-data"
           className="space-y-6"
         >
           <div className="space-y-4">

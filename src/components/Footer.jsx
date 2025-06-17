@@ -1,46 +1,93 @@
 import { Link } from "react-router-dom";
 
+// ⚠️ CSS for the shape divider must be added to a global stylesheet or Tailwind config:
+/*
+.custom-shape-divider-top-1750170631 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1750170631 svg {
+  position: relative;
+  display: block;
+  width: calc(169% + 1.3px);
+  height: 70px;
+}
+
+.custom-shape-divider-top-1750170631 .shape-fill {
+  fill: #FFFFFF;
+}
+
+@media (max-width: 767px) {
+  .custom-shape-divider-top-1750170631 svg {
+    width: calc(158% + 1.3px);
+    height: 70px;
+  }
+}
+*/
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      id="footer"
-      className="bg-[#FFF] dark:bg-gray-900 transition-colors duration-500 text-gray-700 dark:text-gray-100 font-sans px-2 py-8 mt-20"
-    >
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:justify-between items-center gap-6 sm:gap-0 text-center sm:text-left">
-        {/* Bloc gauche avec logo et année */}
-        <div>
-          <p className="font-bold dark:text-gray-100 text-lg flex items-center gap-1">
-            <span role="img" aria-label="dino">🦕</span> MonDessinAnimé
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-100 mt-1">
-            © {currentYear} – Tous droits réservés
-          </p>
-        </div>
+    <>
+      <footer
+        id="footer"
+        className="relative bg-indigo-600 transition-colors duration-500 text-white font-sans px-2 py-8 pt-16"
+      >
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:justify-between items-center gap-6 sm:gap-0 text-center sm:text-left">
+          {/* Bloc gauche avec logo et année */}
+          <div>
+            <p className="text-sm text-white">
+              Minimoji by Breizhstorm
+            </p>
+            <p className="text-[0.65rem] text-white mt-1 font-normal">
+              © 2025 – Tous droits réservés
+            </p>
+          </div>
 
-        {/* Bloc liens */}
-        <nav className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-gray-600 dark:text-gray-100">
-          <Link
-            to="/concept"
-            className="transform transition-transform duration-300 hover:scale-105 hover:text-gray-900 dark:hover:text-indigo-300"
-          >
-            Concept
-          </Link>
-          <Link
-            to="/galerie"
-            className="transform transition-transform duration-300 hover:scale-105 hover:text-gray-900 dark:hover:text-indigo-300"
-          >
-            Galerie
-          </Link>
-          <Link
-            to="/creer"
-            className="transform transition-transform duration-300 hover:scale-105 hover:text-gray-900 dark:hover:text-indigo-300"
-          >
-            Créer mon Dessin Animé
-          </Link>
-        </nav>
-      </div>
-    </footer>
+          {/* Bloc liens */}
+          <nav className="flex flex-col sm:flex-row gap-3 sm:gap-8 text-lg text-white">
+            <Link
+              to="/concept"
+              className="transform transition-transform duration-300 hover:scale-105 hover:text-indigo-200"
+            >
+              Concept
+            </Link>
+            <Link
+              to="/galerie"
+              className="transform transition-transform duration-300 hover:scale-105 hover:text-indigo-200"
+            >
+              Galerie
+            </Link>
+            <Link
+              to="/mentions-legales"
+              className="transform transition-transform duration-300 hover:scale-105 hover:text-indigo-200"
+            >
+              Mentions légales
+            </Link>
+            <Link
+              to="/cgu-cgv"
+              className="transform transition-transform duration-300 hover:scale-105 hover:text-indigo-200"
+            >
+              CGU – CGV
+            </Link>
+          </nav>
+          <div className="mt-6 sm:mt-0">
+            <Link
+              to="/creer"
+              className="bg-white hover:bg-gray-200 text-gray-900 font-semibold py-2 px-5 rounded-full text-sm font-poppins transition"
+            >
+              Créer mon Dessin Animé
+            </Link>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }

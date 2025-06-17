@@ -17,7 +17,9 @@ import BlockyDividerBottom from "./components/BlockyDividerBottom";
 
 import Concept from "./pages/Concept"; //
 import GaleriePage from "./pages/GaleriePage"; //
-import Tarifs from "./pages/Tarifs"; //
+import Tarifs from "./pages/Tarifs";
+import MentionsLegales from "./pages/mentions-legales";
+import CGUCGV from "./pages/cgu-cgv";
 
 function HomePage() {
   return (
@@ -55,6 +57,8 @@ function App() {
           <Route path="/galerie" element={<GaleriePage />} />
           <Route path="/creer" element={<Form />} />
           <Route path="/tarifs" element={<Tarifs />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/cgu-cgv" element={<CGUCGV />} />
         </Routes>
         <Footer />
       </div>
