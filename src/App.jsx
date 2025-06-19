@@ -1,15 +1,12 @@
 import SEO from "./components/helmet";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import ScrollTop from "./components/ScrollTop";
 import { Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
-import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-import Galerie from "./components/Galerie";
-import Form from "./pages/Form";
 import { StepsDefault } from "./components/Steps";
 import Pitch from "./components/Pitch";
 import DinoPopup from "./components/DinoPopup";
@@ -17,11 +14,12 @@ import Testimonials from "./components/Testimonials";
 import BlockyDivider from "./components/BlockyDivider";
 import BlockyDividerBottom from "./components/BlockyDividerBottom";
 
-import Concept from "./pages/Concept"; //
-import GaleriePage from "./pages/GaleriePage"; //
-import Tarifs from "./pages/Tarifs";
-import MentionsLegales from "./pages/mentions-legales";
-import CGUCGV from "./pages/cgu-cgv";
+const Form = lazy(() => import("./pages/Form"));
+const Concept = lazy(() => import("./pages/Concept"));
+const GaleriePage = lazy(() => import("./pages/GaleriePage"));
+const Tarifs = lazy(() => import("./pages/Tarifs"));
+const MentionsLegales = lazy(() => import("./pages/mentions-legales"));
+const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
 
 function HomePage() {
   return (
@@ -45,7 +43,6 @@ function HomePage() {
       <StepsDefault />
       <BlockyDividerBottom />
       <Pitch />
-      <Galerie />
       <Testimonials />
     </>
   );
@@ -67,15 +64,17 @@ function App() {
       <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollTop />
         <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/concept" element={<Concept />} />
-          <Route path="/galerie" element={<GaleriePage />} />
-          <Route path="/creer" element={<Form />} />
-          <Route path="/tarifs" element={<Tarifs />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/cgu-cgv" element={<CGUCGV />} />
-        </Routes>
+        <Suspense fallback={<div>Chargement...</div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/concept" element={<Concept />} />
+            <Route path="/galerie" element={<GaleriePage />} />
+            <Route path="/creer" element={<Form />} />
+            <Route path="/tarifs" element={<Tarifs />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
+            <Route path="/cgu-cgv" element={<CGUCGV />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </div>
     </HelmetProvider>
