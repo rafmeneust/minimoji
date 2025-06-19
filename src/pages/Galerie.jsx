@@ -1,8 +1,24 @@
+import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 
 export default function Galerie() {
   return (
-    <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
+    <>
+      <Helmet>
+        <title>Galerie | Minimoji - Les dessins s’animent</title>
+        <meta name="description" content="Découvrez des exemples de dessins transformés en mini-films animés. Magie, émotions et créativité enfantine au cœur de notre galerie." />
+        <meta name="keywords" content="galerie, animation, dessins enfants, vidéos magiques, exemples Minimoji, mini-films créatifs" />
+        <meta property="og:title" content="Galerie | Minimoji - Les dessins s’animent" />
+        <meta property="og:description" content="Plongez dans notre galerie d’exemples et voyez comment les dessins prennent vie grâce à Minimoji." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://minimoji.fr/galerie" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Galerie | Minimoji - Les dessins s’animent" />
+        <meta name="twitter:description" content="Plongez dans notre galerie d’exemples et voyez comment les dessins prennent vie grâce à Minimoji." />
+        <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+        <meta name="twitter:site" content="@minimoji_fr" />
+      </Helmet>
+      <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
 
         {/* Accroche principale */}
@@ -101,5 +117,6 @@ export default function Galerie() {
 
       </section>
     </main>
+    </>
   );
 }

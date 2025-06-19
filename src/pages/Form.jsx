@@ -1,10 +1,26 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 export default function Form() {
   const [preview, setPreview] = useState(null);
 
   return (
-    <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-16 px-6">
+    <>
+      <Helmet>
+        <title>Créer mon dessin animé – Minimoji</title>
+        <meta name="description" content="Soumettez facilement un dessin d’enfant pour le transformer en mini-film animé personnalisé. Formulaire simple et rapide, envoi sécurisé et réponse sous 24h." />
+        <meta property="og:title" content="Créer mon dessin animé – Minimoji" />
+        <meta property="og:description" content="Soumettez facilement un dessin d’enfant pour le transformer en mini-film animé personnalisé. Formulaire simple et rapide, envoi sécurisé et réponse sous 24h." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://minimoji.fr/creer" />
+        <meta property="og:image" content="https://minimoji.fr/images/preview-form.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Créer mon dessin animé – Minimoji" />
+        <meta name="twitter:description" content="Soumettez facilement un dessin d’enfant pour le transformer en mini-film animé personnalisé. Formulaire simple et rapide, envoi sécurisé et réponse sous 24h." />
+        <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+        <link rel="canonical" href="https://minimoji.fr/creer" />
+      </Helmet>
+      <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-16 px-6">
       <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-md rounded-xl p-8 space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">
@@ -98,5 +114,6 @@ export default function Form() {
         </form>
       </div>
     </section>
+    </>
   );
 }

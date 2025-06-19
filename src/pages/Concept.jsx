@@ -1,8 +1,31 @@
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 export default function Concept() {
   return (
-    <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
+    <>
+      <Helmet>
+        <title>Concept Minimoji — Donnez vie aux dessins d’enfants</title>
+        <meta
+          name="description"
+          content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples. Une expérience féérique pour petits et grands."
+        />
+        <link rel="canonical" href="https://minimoji.fr/concept" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Concept Minimoji — Donnez vie aux dessins d’enfants" />
+        <meta property="og:description" content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples. Une expérience féérique pour petits et grands." />
+        <meta property="og:url" content="https://minimoji.fr/concept" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://minimoji.fr/images/preview-form.jpg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Concept Minimoji — Donnez vie aux dessins d’enfants" />
+        <meta name="twitter:description" content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples." />
+        <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+      </Helmet>
+      <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
 
         {/* Accroche principale */}
@@ -136,6 +159,7 @@ export default function Concept() {
 
   </div>
 </section>
-    </main>
+      </main>
+    </>
   );
 }

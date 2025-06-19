@@ -1,6 +1,8 @@
+import SEO from "./components/helmet";
 import { useState, useEffect } from "react";
 import ScrollTop from "./components/ScrollTop";
 import { Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
@@ -24,6 +26,20 @@ import CGUCGV from "./pages/cgu-cgv";
 function HomePage() {
   return (
     <>
+      <SEO
+        title="Minimoji - Donnez vie aux dessins de vos enfants"
+        description="Transformez les dessins d’enfants en mini-films animés en 24h. Magique, ludique, et 100% personnalisé."
+        canonical="https://www.minimoji.fr"
+      >
+        <meta property="og:title" content="Minimoji - Donnez vie aux dessins de vos enfants" />
+        <meta property="og:description" content="Transformez les dessins d’enfants en mini-films animés en 24h. Magique, ludique, et 100% personnalisé." />
+        <meta property="og:image" content="https://minimoji.fr/images/preview-form.jpg" />
+        <meta property="og:url" content="https://www.minimoji.fr" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Minimoji - Donnez vie aux dessins de vos enfants" />
+        <meta name="twitter:description" content="Transformez les dessins d’enfants en mini-films animés en 24h. Magique, ludique, et 100% personnalisé." />
+        <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+      </SEO>
       <Hero />
       <BlockyDivider />
       <StepsDefault />
@@ -41,12 +57,12 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDino(true);
-    }, 45000);
+    }, 90000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <>
+    <HelmetProvider>
       <DinoPopup isVisible={showDino} onClose={() => setShowDino(false)} />
       <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollTop />
@@ -62,7 +78,7 @@ function App() {
         </Routes>
         <Footer />
       </div>
-    </>
+    </HelmetProvider>
   );
 }
 

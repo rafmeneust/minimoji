@@ -1,0 +1,37 @@
+{
+  "name": "Minimoji",
+  "short_name": "Minimoji",
+  "description": "Transformez les dessins d’enfants en mini‑films magiques, personnalisés et livrés en 24h.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "fr-FR",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["kids", "entertainment", "education"],
+  "screenshots": [
+    {
+      "src": "/screenshots/minimoji-preview-1.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/minimoji-preview-2.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ]
+}

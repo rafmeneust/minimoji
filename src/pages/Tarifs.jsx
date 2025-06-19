@@ -1,10 +1,32 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Pitch from "../components/Pitch";
+import { Helmet } from "react-helmet";
 
 export default function Tarifs() {
   return (
     <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+      <Helmet>
+        <title>Tarifs Minimoji – Vidéos animées à partir des dessins d’enfants</title>
+        <meta
+          name="description"
+          content="Découvrez les prix Minimoji : Formule Mini, Classique et Grand Héros. Transformez les dessins de vos enfants en vidéos féeriques, dès 8,99 €, livrées en 24h."
+        />
+        <link rel="canonical" href="https://minimoji.fr/tarifs" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Tarifs Minimoji – Vidéos animées à partir des dessins d’enfants" />
+        <meta property="og:description" content="Formules Mini, Classique, Grand Héros – dès 8,99 €. Livraison rapide de vidéos féeriques basées sur les dessins de vos enfants." />
+        <meta property="og:url" content="https://minimoji.fr/tarifs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://minimoji.fr/images/preview-form.jpg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tarifs Minimoji – Vidéos animées à partir des dessins d’enfants" />
+        <meta name="twitter:description" content="Formules magiques dès 8,99 €. Mini-films personnalisés créés à partir des dessins d’enfants, livrés rapidement." />
+        <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+      </Helmet>
       {/* Hero section */}
       <section className="max-w-4xl mx-auto px-6 py-20 text-center">
         <motion.h1

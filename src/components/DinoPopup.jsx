@@ -12,7 +12,7 @@ export default function DinoPopup() {
     const timer = setTimeout(() => {
       setShow(true);
       sound.play();
-    }, 45000);
+    }, 90000);
 
     return () => clearTimeout(timer);
   }, []);

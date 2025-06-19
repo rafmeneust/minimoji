@@ -1,8 +1,18 @@
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 export default function CGUCGV() {
   return (
     <div className="py-12 px-6">
+      <Helmet>
+        <title>Conditions Générales d’Utilisation et de Vente - Minimoji</title>
+        <meta name="description" content="Consultez les CGU-CGV de Minimoji : conditions d’utilisation, droits d’auteur, modalités de commande, délais, annulations, et politique d’IA pour un service transparent et sécurisé." />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="Conditions Générales d’Utilisation et de Vente - Minimoji" />
+        <meta property="og:description" content="Consultez les CGU-CGV de Minimoji : conditions d’utilisation, droits d’auteur, modalités de commande, délais, annulations, et politique d’IA." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.minimoji.fr/cgu-cgv" />
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

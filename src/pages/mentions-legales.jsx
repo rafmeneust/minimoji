@@ -1,9 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 export default function MentionsLegales() {
   return (
-    <section className="max-w-3xl mx-auto px-6 py-12 text-center font-poppins text-gray-800 dark:text-gray-100">
+    <>
+      <Helmet>
+        <title>Mentions légales – Minimoji</title>
+        <meta name="description" content="Retrouvez toutes les mentions légales du site Minimoji : éditeur, hébergeur, données personnelles, propriété intellectuelle et responsabilités." />
+        <meta property="og:title" content="Mentions légales – Minimoji" />
+        <meta property="og:description" content="Informations légales concernant le site Minimoji, son éditeur BREIZHSTORM – Meneust Raphaël, et les données personnelles collectées." />
+        <meta property="og:url" content="https://www.minimoji.fr/mentions-legales" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <section className="max-w-3xl mx-auto px-6 py-12 text-center font-poppins text-gray-800 dark:text-gray-100">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -79,5 +89,6 @@ export default function MentionsLegales() {
         <p>Le site <strong>www.minimoji.fr</strong> est conçu pour être accessible sur la plupart des navigateurs modernes. Si vous constatez un problème d’accessibilité ou un dysfonctionnement, vous pouvez le signaler à l’adresse suivante : <a href="mailto:meneust.r@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:underline">meneust.r@gmail.com</a>.</p>
       </div>
     </section>
+    </>
   );
 }
