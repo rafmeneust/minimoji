@@ -51,7 +51,7 @@ export default function Pitch() {
     >
       {/* Image Chat à droite */}
       <motion.img
-        src="/cat-fly.png"
+        src="/cat-fly.svg"
         alt="Chat magique"
         className="absolute w-24 sm:w-48 top-10 right-4 sm:right-8 z-0 max-w-full"
         style={{ y: smoothCat }}
@@ -61,7 +61,7 @@ export default function Pitch() {
 
       {/* Image Garçon à droite, plus bas */}
       <motion.img
-        src="/magic-paper.png"
+        src="/magic-paper.svg"
         alt="Garçon qui dessine"
         className="absolute w-32 sm:w-48 md:w-56 bottom-0 left-4 sm:left-10 z-0 max-w-full"
         style={{ y: smoothBoy }}

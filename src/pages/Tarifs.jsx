@@ -58,7 +58,7 @@ export default function Tarifs() {
 
         {/* Carte 2 */}
         <div className="relative bg-indigo-100 dark:bg-gray-700 p-6 rounded-2xl shadow-md text-center border-4 border-indigo-400 transform transition-transform duration-300 hover:scale-105">
-          <div className="absolute -top-3 right-4 translate-y-[-50%]">
+          <div className="absolute -top-3 right-4 translate-y-[-30%]">
             <span className="bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
               Recommandée
             </span>

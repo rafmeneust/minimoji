@@ -31,19 +31,19 @@ const items = [
   {
     step: "1",
     title: "Téléchargez le dessin\nde votre enfant.",
-    icon: "/step1.png",
+    icon: "/dessin.svg",
     color: "bg-yellow-200 text-yellow-800",
   },
   {
     step: "2",
     title: "Notre magicien transforme\nl'oeuvre en animation.",
-    icon: "/step2.png",
+    icon: "/step-2.svg",
     color: "bg-pink-200 text-pink-800",
   },
   {
     step: "3",
     title: "Recevez votre mini-film\nen moins de 24h.",
-    icon: "/step3.png",
+    icon: "/mobile-phone.svg",
     color: "bg-blue-200 text-blue-800",
   },
 ];
@@ -94,31 +94,40 @@ export function StepsDefault() {
         rotate: [0, -4, 4, -2, 2, 0],
       }}
       whileTap={{ scale: 0.95 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     />
 
     {/* Bulle de numéro animée */}
     <motion.div
       whileHover={{ scale: 1.4 }}
       whileTap={{ scale: 0.9 }}
+      transition={{ duration: 0.2 }}
       className={`w-10 h-10 flex items-center justify-center rounded-full ${item.color} text-lg font-bold mb-2 cursor-pointer`}
     >
       {item.step}
     </motion.div>
 
     {/* Texte */}
-    <div className="bg-white/60 dark:bg-white/10 rounded-xl p-4 shadow-sm backdrop-blur-sm">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.2 }}
+      className="bg-white/60 dark:bg-white/10 rounded-xl p-4 shadow-sm backdrop-blur-sm hover:shadow-lg"
+    >
       <p className="text-sm font-medium dark:text-white transition-colors duration-500 whitespace-pre-line leading-snug font-poppins">
         {item.title}
       </p>
-    </div>
+    </motion.div>
   </motion.div>
 ))}
         </div>
 
         <motion.div variants={child} className="mt-12">
         </motion.div>
-        <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm mt-10">
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.2 }}
+          className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm hover:shadow-lg mt-10"
+        >
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -148,7 +157,7 @@ export function StepsDefault() {
                 </motion.span>
               ))}
           </motion.div>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );
