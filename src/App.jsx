@@ -50,8 +50,8 @@ function HomePage() {
 }
 
 function App() {
-  const [showDino, setShowDino] = useState(false);
   const location = useLocation();
+  const [showDino, setShowDino] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,11 +60,23 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+        }, 100); // pour laisser le temps au DOM d'être prêt
+      }
+    }
+  }, [location]);
+
   return (
     <HelmetProvider>
       <DinoPopup isVisible={showDino} onClose={() => setShowDino(false)} />
       <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
-        <ScrollTop />
+        <ScrollTop key={location.pathname} />
         <Navbar />
         <Suspense fallback={<div>Chargement...</div>}>
           <AnimatePresence mode="wait">
