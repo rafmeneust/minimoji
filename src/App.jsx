@@ -3,7 +3,6 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { AnimatePresence, motion } from "framer-motion";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -79,101 +78,15 @@ function App() {
         <ScrollToTop key={location.pathname} /> 
         <Navbar />
         <Suspense fallback={<div>Chargement...</div>}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route
-                path="/"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0, y: 40, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -40, scale: 0.98 }}
-                    transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
-                  >
-                    <HomePage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/concept"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0, x: 60 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -60 }}
-                    transition={{ duration: 0.45 }}
-                  >
-                    <Concept />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/galerie"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0, y: 60 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -60 }}
-                    transition={{ duration: 0.45 }}
-                  >
-                    <GaleriePage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/creer"
-                element={
-                  <motion.div
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <Form />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/tarifs"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0, x: -80 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 80 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <Tarifs />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/mentions-legales"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <MentionsLegales />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/cgu-cgv"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <CGUCGV />
-                  </motion.div>
-                }
-              />
-            </Routes>
-          </AnimatePresence>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/concept" element={<Concept />} />
+            <Route path="/galerie" element={<GaleriePage />} />
+            <Route path="/creer" element={<Form />} />
+            <Route path="/tarifs" element={<Tarifs />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
+            <Route path="/cgu-cgv" element={<CGUCGV />} />
+          </Routes>
         </Suspense>
         <Footer />
       </div>
