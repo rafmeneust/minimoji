@@ -4,6 +4,32 @@ import { Helmet } from "react-helmet";
 export default function Form() {
   const [preview, setPreview] = useState(null);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    try {
+      console.log(Object.fromEntries(formData.entries()));
+      const response = await fetch("/api/send-email.js", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Merci ! Votre dessin a bien été envoyé 🎉 Nous vous confirmerons par email la prise en compte de votre demande.");
+        e.target.reset();
+        setPreview(null);
+      } else {
+        const errorText = await response.text();
+        console.error("Erreur:", errorText);
+        alert("Une erreur est survenue, veuillez réessayer.");
+      }
+    } catch (error) {
+      console.error("Erreur réseau:", error);
+      alert("Une erreur est survenue, veuillez réessayer.");
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -32,10 +58,19 @@ export default function Form() {
         </div>
 
         <form
-          action="/api/submit"
-          method="POST"
+          onSubmit={handleSubmit}
           className="space-y-6"
+          encType="multipart/form-data"
         >
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Formule choisie</label>
+            <select name="plan" className="select select-bordered w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400" required>
+              <option value="mini">Formule Mini – 8,99€</option>
+              <option value="classique">Formule Classique – 13,99€</option>
+              <option value="grand">Formule Grand Héros – 19,99€</option>
+            </select>
+          </div>
+
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Prénom de l’enfant</label>
             <input type="text" name="child_name" className="input input-bordered w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400" />
