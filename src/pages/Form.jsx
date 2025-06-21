@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 export default function Form() {
   const [preview, setPreview] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -10,15 +12,13 @@ export default function Form() {
 
     try {
       console.log(Object.fromEntries(formData.entries()));
-      const response = await fetch("/api/send-email.js", {
+      const response = await fetch("/api/send-email", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        alert("Merci ! Votre dessin a bien été envoyé 🎉 Nous vous confirmerons par email la prise en compte de votre demande.");
-        e.target.reset();
-        setPreview(null);
+        navigate("/confirmation");
       } else {
         const errorText = await response.text();
         console.error("Erreur:", errorText);

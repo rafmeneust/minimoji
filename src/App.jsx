@@ -20,6 +20,7 @@ const GaleriePage = lazy(() => import("./pages/GaleriePage"));
 const Tarifs = lazy(() => import("./pages/Tarifs"));
 const MentionsLegales = lazy(() => import("./pages/mentions-legales"));
 const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
+const Confirmation = lazy(() => import("./pages/Confirmation"));
 
 function HomePage() {
   return (
@@ -86,6 +87,7 @@ function App() {
             <Route path="/tarifs" element={<Tarifs />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/cgu-cgv" element={<CGUCGV />} />
+            <Route path="/confirmation" element={<Confirmation />} />
           </Routes>
         </Suspense>
         <Footer />
