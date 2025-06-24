@@ -1,15 +1,27 @@
-// /api/send-email.js
+import { IncomingForm } from "formidable";
+import { promisify } from "util";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
-  let formData;
+  const form = new IncomingForm();
+  const parseForm = promisify(form.parse);
+
+  let fields;
   try {
-    formData = req.body;
-  } catch (parseError) {
-    console.error("Erreur de parsing du corps de la requête :", parseError);
-    return res.status(400).json({ error: "Corps de requête invalide" });
+    const [parsedFields] = await parseForm(req);
+    fields = parsedFields;
+  } catch (error) {
+    console.error("Erreur de parsing du formulaire:", error);
+    return res.status(400).json({ error: "Formulaire invalide" });
   }
 
   try {
@@ -21,7 +33,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "onboarding@resend.dev",
-        to: formData.email,
+        to: fields.email,
         subject: "Nouvelle commande Minimoji",
         html: `<p>Un nouveau formulaire a été soumis !</p>`,
       }),
