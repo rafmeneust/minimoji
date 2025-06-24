@@ -1,52 +1,33 @@
-import { IncomingForm } from "formidable";
-import { promisify } from "util";
+import { Resend } from 'resend';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Méthode non autorisée" });
-  }
-
-  const form = new IncomingForm();
-  const parseForm = promisify(form.parse);
-
-  let fields;
-  try {
-    const [parsedFields] = await parseForm(req);
-    fields = parsedFields;
-  } catch (error) {
-    console.error("Erreur de parsing du formulaire:", error);
-    return res.status(400).json({ error: "Formulaire invalide" });
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "onboarding@resend.dev",
-        to: fields.email,
-        subject: "Nouvelle commande Minimoji",
-        html: `<p>Un nouveau formulaire a été soumis !</p>`,
-      }),
-    });
+    const { email, child_name, drawing_title, story, plan } = req.body;
 
-    const data = await response.json();
-    if (!response.ok) {
-      return res.status(500).json({ error: data });
+    if (!email || !plan) {
+      return res.status(400).json({ error: 'Email ou plan manquant.' });
     }
 
-    res.status(200).json({ success: true });
+    const data = await resend.emails.send({
+      from: 'noreply@resend.dev',
+      to: email,
+      subject: `Confirmation – Minimoji (${plan})`,
+      html: `<p>Bonjour ${child_name || ''},<br/>
+        Merci pour votre envoi !<br/>
+        Votre dessin <strong>${drawing_title || 'sans titre'}</strong> va être transformé en animation magique ✨</p>
+        <p><em>${story || ''}</em></p>`
+    });
+
+    return res.status(200).json({ success: true, data });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erreur serveur" });
+    console.error('Erreur serveur :', err);
+    return res.status(500).json({ error: 'Erreur interne lors de l’envoi du mail.' });
   }
 }
