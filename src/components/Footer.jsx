@@ -40,19 +40,19 @@ export default function Footer() {
         id="footer"
         className="relative bg-indigo-600 transition-colors duration-500 text-white font-sans px-2 py-8 pt-16"
       >
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:justify-between items-center gap-6 sm:gap-0 text-center sm:text-left">
+        <div className="max-w-6xl mx-auto flex flex-col gap-6 text-center items-center [@media(min-width:968px)]:flex-row [@media(min-width:968px)]:justify-between">
           {/* Bloc gauche avec logo et année */}
-          <div>
-            <p className="text-sm text-white">
+          <div className="bg-indigo-700 rounded-lg px-6 py-3 shadow-md text-center">
+            <p className="text-sm font-semibold text-white">
               Minimoji by Breizhstorm
             </p>
-            <p className="text-[0.65rem] text-white mt-1 font-normal">
+            <p className="text-xs text-indigo-100">
               © 2025 – Tous droits réservés
             </p>
           </div>
 
           {/* Bloc liens */}
-          <nav className="flex flex-col sm:flex-row gap-3 sm:gap-8 text-lg text-white">
+          <nav className="flex flex-col sm:flex-row gap-3 sm:gap-6 text-base sm:text-sm md:text-lg text-white">
             <Link
               to="/concept"
               className="transform transition-transform duration-300 hover:scale-105 hover:text-indigo-200"
@@ -78,7 +78,7 @@ export default function Footer() {
               CGU – CGV
             </Link>
           </nav>
-          <div className="mt-6 sm:mt-0">
+          <div className="mt-6 sm:mt-0 text-center">
             <Link
               to="/creer"
               className="bg-white hover:bg-gray-200 text-gray-900 font-semibold py-2 px-5 rounded-full text-sm font-poppins transition"

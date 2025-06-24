@@ -13,6 +13,7 @@ import DinoPopup from "./components/DinoPopup";
 import Testimonials from "./components/Testimonials";
 import BlockyDivider from "./components/BlockyDivider";
 import BlockyDividerBottom from "./components/BlockyDividerBottom";
+import NotFound from "./pages/NotFound";
 
 const Form = lazy(() => import("./pages/Form"));
 const Concept = lazy(() => import("./pages/Concept"));
@@ -88,6 +89,7 @@ function App() {
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/cgu-cgv" element={<CGUCGV />} />
             <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
         <Footer />

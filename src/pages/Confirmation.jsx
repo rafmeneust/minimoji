@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import Dino from "/public/dino.svg";
 
 export default function Confirmation() {
   return (
@@ -11,6 +12,7 @@ export default function Confirmation() {
 
       <section className="min-h-screen bg-purple-100 dark:bg-gray-900 flex flex-col justify-center items-center text-center px-4 py-16">
         <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md max-w-md">
+          <img src={Dino} alt="Dessin de dinosaure" className="w-24 h-24 mb-4" />
           <h1 className="text-3xl font-extrabold text-purple-600 dark:text-white mb-4">Merci pour votre envoi !</h1>
           <p className="text-gray-700 dark:text-gray-300 mb-6">Votre dessin a bien été reçu. Un mini-film sera généré et envoyé dans un délai de 24h.</p>
           <Link

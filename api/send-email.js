@@ -4,7 +4,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
-  const formData = await req.body; // ou parser autrement selon ton format
+  let formData;
+  try {
+    formData = req.body;
+  } catch (parseError) {
+    console.error("Erreur de parsing du corps de la requête :", parseError);
+    return res.status(400).json({ error: "Corps de requête invalide" });
+  }
 
   try {
     const response = await fetch("https://api.resend.com/emails", {

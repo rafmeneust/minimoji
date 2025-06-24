@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function Form() {
   const [preview, setPreview] = useState(null);
+  const location = useLocation();
+  const [plan, setPlan] = useState("mini");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const selectedPlan = params.get("plan");
+    if (["mini", "classique", "grand"].includes(selectedPlan)) {
+      setPlan(selectedPlan);
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,15 +30,16 @@ export default function Form() {
       });
 
       if (response.ok) {
+        toast.success("✨ Merci ! Votre dessin a bien été envoyé. Le magicien s’en occupe !");
         navigate("/confirmation");
       } else {
         const errorText = await response.text();
         console.error("Erreur:", errorText);
-        alert("Une erreur est survenue, veuillez réessayer.");
+        toast.error("Une erreur est survenue, veuillez réessayer.");
       }
     } catch (error) {
       console.error("Erreur réseau:", error);
-      alert("Une erreur est survenue, veuillez réessayer.");
+      toast.error("Erreur réseau. Merci de vérifier votre connexion.");
     }
   };
 
@@ -46,6 +59,24 @@ export default function Form() {
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
         <link rel="canonical" href="https://minimoji.fr/creer" />
       </Helmet>
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: '#f97316',
+            color: '#fff',
+            fontWeight: '600',
+            fontFamily: 'Poppins, sans-serif',
+            borderRadius: '12px',
+            padding: '14px 20px',
+            boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+          },
+          iconTheme: {
+            primary: '#ffffff',
+            secondary: '#f97316',
+          },
+        }}
+      />
       <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-16 px-6">
       <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 shadow-md rounded-xl p-8 space-y-8">
         <div className="text-center">
@@ -64,11 +95,31 @@ export default function Form() {
         >
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Formule choisie</label>
-            <select name="plan" className="select select-bordered w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400" required>
-              <option value="mini">Formule Mini – 8,99€</option>
-              <option value="classique">Formule Classique – 13,99€</option>
-              <option value="grand">Formule Grand Héros – 19,99€</option>
-            </select>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 text-center">
+              <div className="flex flex-col items-center">
+                <img src="/potion1.svg" alt="Formule Mini" className="w-6 h-6 mb-1" />
+                <p className="text-sm text-gray-700 dark:text-gray-300">Mini</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <img src="/potion2.svg" alt="Formule Classique" className="w-6 h-6 mb-1" />
+                <p className="text-sm text-gray-700 dark:text-gray-300">Classique</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <img src="/potion3.svg" alt="Formule Grand Héros" className="w-6 h-6 mb-1" />
+                <p className="text-sm text-gray-700 dark:text-gray-300">Grand Héros</p>
+              </div>
+            </div>
+          <select
+            name="plan"
+            value={plan}
+            onChange={(e) => setPlan(e.target.value)}
+            className="select select-bordered w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+            required
+          >
+            <option value="mini">Formule Mini – 8,99€</option>
+            <option value="classique">Formule Classique – 13,99€</option>
+            <option value="grand">Formule Grand Héros – 19,99€</option>
+          </select>
           </div>
 
           <div className="space-y-4">
