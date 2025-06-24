@@ -19,6 +19,7 @@ export default async function handler(req, res) {
       from: 'noreply@resend.dev',
       to: email,
       subject: `Confirmation – Minimoji (${plan})`,
+      reply_to: 'meneust.r@gmail.com',
       html: `<p>Bonjour ${child_name || ''},<br/>
         Merci pour votre envoi !<br/>
         Votre dessin <strong>${drawing_title || 'sans titre'}</strong> va être transformé en animation magique ✨</p>
