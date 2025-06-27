@@ -16,10 +16,10 @@ export default async function handler(req, res) {
     }
 
     const data = await resend.emails.send({
-      from: 'noreply@resend.dev',
+      from: 'hello@minimoji.fr',
       to: 'delivered@resend.dev',
       subject: `Confirmation – Minimoji (${plan})`,
-      reply_to: 'meneust.r@gmail.com',
+      reply_to: 'hello@minimoji.fr',
       html: `<p>Bonjour ${child_name || ''},<br/>
         Merci pour votre envoi !<br/>
         Votre dessin <strong>${drawing_title || 'sans titre'}</strong> va être transformé en animation magique ✨</p>

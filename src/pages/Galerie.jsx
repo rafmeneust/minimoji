@@ -29,47 +29,45 @@ export default function Galerie() {
           Confiez‑le à notre magicien… et réveillez‑vous avec la magie ✨
         </p>
 
-        {/* Étapes du rituel */}
-        <div className="space-y-16">
+        {/* Section galerie – secrets, témoignages, appel à contribution */}
+        <div className="mt-20">
+          <div className="border-t pt-6 border-gray-300 dark:border-gray-600"></div>
+          <div className="space-y-12">
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="space-y-3"
-          >
-            <h2 className="text-xl sm:text-2xl font-bold">1. Remettez le parchemin</h2>
-            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
-              Envoyez une photo ou un scan du dessin de votre enfant — même bancal, même griffonné. L’essentiel, c’est l’élan créatif. Vous pouvez y ajouter une note vocale ou un petit texte si vous souhaitez enrichir l’histoire. Pas obligatoire, mais notre magicien aime les détails !
-            </p>
-          </motion.div>
+            {/* Secrets du magicien */}
+            <div>
+              <h4 className="text-lg sm:text-xl font-semibold mb-2">Les secrets du magicien</h4>
+              <p className="text-base text-gray-700 dark:text-gray-300">
+                Chaque dessin contient une intention, une histoire, un geste. Le magicien Minimoji interprète cette énergie enfantine à l’aide de l’IA et d’un savoir-faire artisanal : il détecte les éléments narratifs, amplifie l’émotion du trait, puis génère un court métrage animé fidèle à la spontanéité du dessin. Ici, pas de modèle figé — chaque création est un prototype magique, pensé pour révéler la beauté du chaos enfantin.
+              </p>
+            </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-3"
-          >
-            <h2 className="text-xl sm:text-2xl font-bold">2. Le magicien s’en empare</h2>
-            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
-              Il analyse les lignes, les couleurs, l’énergie du dessin. Puis, d’un coup de baguette, il en fait une animation. Fidèle, mais prolongée. Une mini‑histoire naît, pleine de douceur ou de folie, selon l’inspiration de l’œuvre.
-            </p>
-          </motion.div>
+            {/* Témoignages */}
+            <div>
+              <h4 className="text-lg sm:text-xl font-semibold mb-2">Ils ont tenté l’expérience</h4>
+              <ul className="space-y-2 text-base text-gray-700 dark:text-gray-300 list-disc list-inside">
+                <li>“Mon fils s’est vu en héros, il en a pleuré de joie.” – Camille, maman émerveillée</li>
+                <li>“On l’a projeté à l’école : standing ovation dans la classe !” – Thomas, enseignant en CE2</li>
+                <li>“Le dessin prenait déjà toute la place sur le frigo, maintenant il vit sur nos téléphones, et nos cœurs.” – Inès</li>
+              </ul>
+            </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="space-y-3"
-          >
-            <h2 className="text-xl sm:text-2xl font-bold">3. Réception du film (sous 24 h) </h2>
-            <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
-              Vous recevez un lien sécurisé contenant la vidéo en HD, sans watermark. Elle est prête à être projetée, partagée ou transformée en souvenir : certains l’intègrent dans un album, d’autres la collent au dos du dessin via QR code.
-            </p>
-          </motion.div>
+            {/* Appel à contribution */}
+            <div className="text-center">
+              <h4 className="text-lg sm:text-xl font-semibold mb-2">Faites partie de la galerie</h4>
+              <p className="text-base text-gray-700 dark:text-gray-300 mb-4">
+                Vous êtes parent, enseignant ou curieux ? Offrez à votre enfant l’opportunité de voir son imagination prendre vie. Chaque mois, certains dessins sont sélectionnés pour intégrer notre galerie magique.
+              </p>
+              <motion.a
+                href="/creer"
+                className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-semibold text-base transition"
+                whileHover={{ scale: 1.05 }}
+              >
+                Créer mon dessin animé
+              </motion.a>
+            </div>
+
+          </div>
         </div>
 
         {/* Formats */}
