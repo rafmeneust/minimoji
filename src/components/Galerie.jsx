@@ -81,7 +81,7 @@ export default function Galerie() {
 
         {/* Galerie */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {["video1.mp4", "video2.mp4", "video3.mp4", "video2.mp4"].map((videoSrc, index) => (
+          {["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4"].map((videoSrc, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}

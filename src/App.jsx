@@ -13,6 +13,7 @@ import DinoPopup from "./components/DinoPopup";
 import Testimonials from "./components/Testimonials";
 import BlockyDivider from "./components/BlockyDivider";
 import BlockyDividerBottom from "./components/BlockyDividerBottom";
+import Galerie from "./components/Galerie";
 import NotFound from "./pages/NotFound";
 
 const Form = lazy(() => import("./pages/Form"));
@@ -45,6 +46,7 @@ function HomePage() {
       <StepsDefault />
       <BlockyDividerBottom />
       <Pitch />
+      <Galerie />
       <Testimonials />
     </>
   );
