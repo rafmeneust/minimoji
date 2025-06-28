@@ -15,11 +15,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email ou plan manquant.' });
     }
 
+    console.log('✅ Envoi en cours vers hello@minimoji.fr');
     const data = await resend.emails.send({
       from: 'hello@minimoji.fr',
       to: 'delivered@resend.dev',
       subject: `Confirmation – Minimoji (${plan})`,
       reply_to: 'hello@minimoji.fr',
+      headers: {
+        'List-Unsubscribe': '<mailto:hello@minimoji.fr?subject=unsubscribe>'
+      },
       html: `<p>Bonjour ${child_name || ''},<br/>
         Merci pour votre envoi !<br/>
         Votre dessin <strong>${drawing_title || 'sans titre'}</strong> va être transformé en animation magique ✨</p>

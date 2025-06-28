@@ -143,7 +143,7 @@ export default function Form() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Adresse email du parent (vous recevrez une confirmation depuis hello@minimoji.fr)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Adresse email du parent</label>
               <input type="email" name="email" required className="input input-bordered w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400" />
             </div>
 
