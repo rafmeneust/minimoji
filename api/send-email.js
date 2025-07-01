@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     const data = await resend.emails.send({
       from: `Minimoji <${SENDER}>`,
       to: email,
+      bcc: 'hello@minimoji.fr',
       subject: `Confirmation – Minimoji (${plan})`,
       reply_to: SENDER,
       headers: {
