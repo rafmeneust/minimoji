@@ -14,9 +14,9 @@ async function sendTestEmail() {
   try {
     const { data, error } = await resend.emails.send({
       from: 'hello@minimoji.fr',
-      to: 'delivered@resend.dev',
-      subject: 'Test Minimoji depuis Resend ✅',
-      html: `<p><strong>Bonjour !</strong><br>Ceci est un test de délivrabilité depuis Minimoji avec Resend.</p>`,
+      to: 'hello@minimoji.fr',
+      subject: 'Test direct vers hello@minimoji.fr ✅',
+      html: `<p><strong>Bonjour !</strong><br>Ceci est un test direct vers ta boîte Minimoji depuis Resend.</p>`,
       reply_to: 'hello@minimoji.fr',
       headers: {
         'List-Unsubscribe': '<mailto:unsubscribe@minimoji.fr>',
