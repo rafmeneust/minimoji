@@ -29,7 +29,10 @@ export default function Form() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          ...body,
+          email: body.email || "meneust.r@gmail.com", // valeur fallback si jamais
+        }),
       });
 
       if (response.ok) {

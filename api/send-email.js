@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const SENDER = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'hello@minimoji.fr';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -15,14 +16,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email ou plan manquant.' });
     }
 
-    console.log('✅ Envoi en cours vers hello@minimoji.fr');
+    console.log(`✅ Envoi en cours vers ${email}`);
     const data = await resend.emails.send({
-      from: 'hello@minimoji.fr',
-      to: 'delivered@resend.dev',
+      from: `Minimoji <${SENDER}>`,
+      to: email,
       subject: `Confirmation – Minimoji (${plan})`,
-      reply_to: 'hello@minimoji.fr',
+      reply_to: SENDER,
       headers: {
-        'List-Unsubscribe': '<mailto:hello@minimoji.fr?subject=unsubscribe>'
+        'List-Unsubscribe': `<mailto:${SENDER}?subject=unsubscribe>`
       },
       html: `<p>Bonjour ${child_name || ''},<br/>
         Merci pour votre envoi !<br/>
