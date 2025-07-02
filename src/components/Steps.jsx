@@ -48,7 +48,6 @@ const items = [
   },
 ];
 
-// VERSION 1 - CLASSIQUE
 export function StepsDefault() {
   return (
     <section className="py-10 md:py-28 bg-[#e6f0ff] dark:bg-gray-900 transition-colors duration-500 text-center font-sans relative overflow-hidden">
@@ -75,6 +74,16 @@ export function StepsDefault() {
       >
       En quelques clics, donnez vie aux dessins de votre enfant et créez un souvenir unique, animé avec tendresse et magie.
         </motion.p>
+        <div className="w-full max-w-4xl mx-auto mt-10 mb-16 rounded-lg overflow-hidden shadow-lg aspect-video">
+          <iframe
+            src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=cld-adaptive-stream"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowFullScreen
+            frameBorder="0"
+            className="w-full h-full"
+            title="Vidéo Minimoji"
+          ></iframe>
+        </div>
 
         <div className="flex flex-col sm:flex-row justify-center items-center lg:gap-24 gap-12 sm:gap-30 mt-10">
         {items.map((item, index) => (
