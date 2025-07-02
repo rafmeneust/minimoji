@@ -76,13 +76,14 @@ export function StepsDefault() {
         </motion.p>
         <div className="w-full max-w-4xl mx-auto mt-10 mb-16 rounded-lg overflow-hidden shadow-lg aspect-video">
           <iframe
-            src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=cld-adaptive-stream"
-            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            className="w-full h-full"
-            title="Vidéo Minimoji"
-          ></iframe>
+        src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=minimoji"
+        width="640"
+        height="360"
+        style={{ height: 'auto', width: '100%', aspectRatio: '640 / 360' }}
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        allowFullScreen
+        frameBorder="0"
+      />
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center items-center lg:gap-24 gap-12 sm:gap-30 mt-10">
