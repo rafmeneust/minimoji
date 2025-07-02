@@ -22,11 +22,11 @@ export default function HeroImage() {
       <picture>
         <source
           media="(max-width: 768px)"
-          srcSet="/hero-mobile.png"
+          srcSet="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto/hero-mobile_ds8xfg.png"
           type="image/png"
         />
         <img
-          src="/hero-min.png"
+          src="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto/hero-min_p6b85v.png"
           alt="Avant/après dessin animé"
           className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto object-contain max-h-[60vh] relative z-0"
           loading="eager"
