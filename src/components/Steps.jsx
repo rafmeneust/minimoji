@@ -76,7 +76,7 @@ export function StepsDefault() {
         </motion.p>
         <div className="w-full max-w-4xl mx-auto mt-10 mb-16 rounded-lg overflow-hidden shadow-lg aspect-video">
           <iframe
-        src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=minimoji"
+        src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=minimoji&player[autoplay]=false"
         width="640"
         height="360"
         style={{ height: 'auto', width: '100%', aspectRatio: '640 / 360' }}
