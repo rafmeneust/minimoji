@@ -1,7 +1,16 @@
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
+import DrawingCanvas from "../components/DrawingCanvas";
+import Toolbar from "../components/Toolbar";
+import SaveExportButtons from "../components/SaveExportButtons";
+import { useRef, useState } from "react";
 
 export default function Concept() {
+  const [color, setColor] = useState("#000000");
+  const [tool, setTool] = useState("pen");
+  const [clearCanvas, setClearCanvas] = useState(false);
+  const stageRef = useRef(null);
+
   return (
     <>
       <Helmet>
@@ -159,6 +168,26 @@ export default function Concept() {
 
   </div>
 </section>
+      <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-10">Dessin (2D)</h2>
+        <Toolbar
+          color={color}
+          setColor={setColor}
+          tool={tool}
+          setTool={setTool}
+          onClear={() => setClearCanvas(true)}
+        />
+        <DrawingCanvas
+          color={color}
+          tool={tool}
+          clearCanvas={clearCanvas}
+          onClearComplete={() => setClearCanvas(false)}
+          stageRef={stageRef}
+        />
+        <div className="flex justify-center mb-4">
+          <SaveExportButtons stageRef={stageRef} />
+        </div>
+      </section>
       </main>
     </>
   );

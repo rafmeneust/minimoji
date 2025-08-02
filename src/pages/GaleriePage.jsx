@@ -4,23 +4,23 @@ import { useState, useRef } from "react";
 const videos = [
   {
     src: "/video1.mp4",
-    title: "Le dragon de Milo",
+    title: "Rayon d’Éveil",
     subtitle: "Par Raphaël, 4 ans",
   },
   {
     src: "/video2.mp4",
-    title: "La maison magique de Lila",
+    title: "Folie sucrée",
     subtitle: "Par Lucas, 7 ans",
   },
   {
     src: "/video3.mp4",
-    title: "Le chat Croquette",
+    title: "Félin d'Ombre",
     subtitle: "Par Alice, 6 ans",
   },
   {
     src: "/video4.mp4",
-    title: "La danse du doudou panda",
-    subtitle: "Par Maëlis, 6 ans",
+    title: "Tracé de Rêve",
+    subtitle: "Par Maëlis, 8 ans",
   },
 ];
 
