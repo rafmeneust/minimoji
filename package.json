@@ -1,6 +1,7 @@
 {
   "name": "react-vite-tailwind-template",
   "private": true,
+  "packageManager": "npm@10.8.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
