@@ -15,6 +15,7 @@ import BlockyDivider from "./components/BlockyDivider";
 import BlockyDividerBottom from "./components/BlockyDividerBottom";
 import Galerie from "./components/Galerie";
 import NotFound from "./pages/NotFound";
+import SignInUpload from "./components/SignInUpload";
 
 const Form = lazy(() => import("./pages/Form"));
 const Concept = lazy(() => import("./pages/Concept"));
@@ -42,6 +43,7 @@ function HomePage() {
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
       </SEO>
       <Hero />
+      <SignInUpload />
       <BlockyDivider />
       <StepsDefault />
       <BlockyDividerBottom />
