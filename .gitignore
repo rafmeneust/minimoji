@@ -20,3 +20,6 @@ yarn-error.log*
 
 # Vercel
 .vercel
+# macOS
+.DS_Store
+src/.DS_Store
