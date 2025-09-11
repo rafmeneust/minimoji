@@ -91,7 +91,7 @@ export default function Pitch() {
       >
         <motion.h2
           variants={paragraph}
-          className="text-2xl sm:text-3xl md:text-3xl font-extrabold mb-8 text-left text-gray-900 dark:text-gray-300 transition-colors duration-500 leading-snug max-w-2xl mx-auto"
+          className="mb-6 text-left font-display"
         >
           Votre enfant, <br />
           acteur de son univers magique

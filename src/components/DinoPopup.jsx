@@ -11,11 +11,15 @@ export default function DinoPopup() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
-      sound.play();
     }, 90000);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const playPop = () => {
+    sound.currentTime = 0;
+    sound.play().catch(() => {/* ignore si bloqué */});
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText("DINO15");
@@ -131,7 +135,7 @@ export default function DinoPopup() {
                 <div className="mt-6 flex justify-center">
                   <button
                     className="px-4 py-2 bg-green-500 text-white rounded-full shadow hover:bg-green-600 transition"
-                    onClick={() => setShowPromo(true)}
+                    onClick={() => { setShowPromo(true); playPop(); }}
                   >
                     J'en profite
                   </button>

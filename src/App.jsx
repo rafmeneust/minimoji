@@ -1,5 +1,5 @@
 import SEO from "./components/helmet";
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -56,14 +56,6 @@ function HomePage() {
 
 function App() {
   const location = useLocation();
-  const [showDino, setShowDino] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowDino(true);
-    }, 90000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -79,7 +71,7 @@ function App() {
 
   return (
     <HelmetProvider>
-      <DinoPopup isVisible={showDino} onClose={() => setShowDino(false)} />
+      <DinoPopup />
       <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollToTop key={location.pathname} /> 
         <Navbar />

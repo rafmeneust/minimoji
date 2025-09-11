@@ -35,8 +35,8 @@ export default function DrawingCanvas({ color, tool, clearCanvas, onClearComplet
       width={660}
       height={400}
       onMouseDown={handleMouseDown}
-      onMousemove={handleMouseMove}
-      onMouseup={handleMouseUp}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       style={{ background: "#fff", border: "1px solid #ccc" }}
     >
       <Layer>

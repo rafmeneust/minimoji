@@ -1,6 +1,5 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import Dino from "/public/dino.svg";
 import { motion } from "framer-motion";
 
 export default function Confirmation() {
@@ -25,7 +24,7 @@ export default function Confirmation() {
             className="relative w-24 h-24 mx-auto mb-4"
           >
             <motion.img
-              src={Dino}
+              src="/dino.svg"
               alt="Dino"
               className="absolute top-0 left-0 w-full origin-center"
               animate={{

@@ -7,7 +7,7 @@ export default function ScrollToTop() {
   useEffect(() => {
     // On attend un tout petit temps pour éviter de perturber l’animation d’entrée
     const timeout = setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "instant" });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }, 10); // Tu peux jouer avec ce timing
 
     return () => clearTimeout(timeout);

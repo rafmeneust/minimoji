@@ -132,14 +132,14 @@ export default function SignInUpload() {
 
   return (
     <div className="max-w-xl mx-auto my-12 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-lg backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/70">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-violet-600 dark:text-violet-300">
-        ✨ Essai Minimoji
-      </h3>
+      <h4 className="text-center text-gray-900 mb-6">
+        Créer mon minimoji
+      </h4>
 
       {!user ? (
         <button
           onClick={signIn}
-          className="px-4 py-2 rounded-xl font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600 text-white hover:bg-violet-500"
+          className="px-4 py-2 rounded-xl font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-500 text-white hover:bg-indigo-800 block mx-auto"
         >
           Se connecter avec Google
         </button>
@@ -151,10 +151,10 @@ export default function SignInUpload() {
 
       <label
         htmlFor="file-upload"
-        className="block cursor-pointer rounded-xl border-2 border-dashed border-zinc-300 p-6 text-center hover:border-violet-400 hover:bg-violet-50/40 dark:border-zinc-600 dark:hover:bg-violet-500/10 mt-4"
+        className="block mx-auto cursor-pointer rounded-xl border-2 border-dashed border-zinc-300 p-6 text-center hover:border-violet-400 hover:bg-violet-50/40 dark:border-zinc-600 dark:hover:bg-violet-500/10 mt-4"
       >
         <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">Choisir un dessin à uploader</p>
-        <p className="mt-1 text-xs text-zinc-500">{uploading ? 'Upload en cours…' : 'Formats acceptés : JPG, PNG (≤ 20 Mo)'}
+        <p className="mt-1 text-xs text-zinc-500">{uploading ? 'Upload en cours…' : 'Formats acceptés : JPG, PNG (≤ 5 Mo)'}
         </p>
       </label>
       <input
@@ -176,9 +176,9 @@ export default function SignInUpload() {
       <button
         onClick={createJob}
         disabled={!user || !uploadInfo || creating}
-        className="mt-6 px-4 py-2 rounded-xl font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-emerald-500 text-white hover:bg-emerald-400"
+        className="mt-6 px-4 py-2 rounded-xl font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-emerald-500 text-white hover:bg-emerald-400 block mx-auto"
       >
-        {creating ? 'Création…' : 'Générer (crée un job)'}
+        {creating ? 'Création…' : 'Générer un Minimoji'}
       </button>
 
       {error && (
@@ -186,11 +186,6 @@ export default function SignInUpload() {
           ⚠ {error}
         </p>
       )}
-
-      <p className="mt-4 text-xs text-zinc-500 dark:text-zinc-400">
-        Astuce: si ça bloque, vérifie que <code>vercel dev</code> tourne sur <code>:3000</code> (API)
-        et que <code>npm run dev</code> tourne sur <code>:5173</code> (front). Regarde l’onglet Réseau.
-      </p>
     </div>
   );
 }

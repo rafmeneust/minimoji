@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import DrawingCanvas from "../components/DrawingCanvas";
 import Toolbar from "../components/Toolbar";
 import SaveExportButtons from "../components/SaveExportButtons";
@@ -34,7 +34,7 @@ export default function Concept() {
         <meta name="twitter:description" content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples." />
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
       </Helmet>
-      <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
+      <main className="relative bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
 
         {/* Accroche principale */}
@@ -44,7 +44,7 @@ export default function Concept() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Une dessin aujour'hui, un film magique dès demain ✨
+          Un dessin aujour'hui, un film magique dès demain ✨
         </motion.h1>
         <p className="text-lg sm:text-xl leading-relaxed text-center text-indigo-700 dark:text-indigo-300 mb-12">
           Confiez‑le à notre magicien… et réveillez‑vous avec la magie

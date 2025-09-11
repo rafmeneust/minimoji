@@ -1,4 +1,7 @@
-function VideoCard({ vid, index }) {
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+
+export default function VideoCard({ vid, index }) {
   const [isReady, setIsReady] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
