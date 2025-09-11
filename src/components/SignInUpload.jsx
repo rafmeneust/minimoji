@@ -132,8 +132,8 @@ export default function SignInUpload() {
 
   return (
     <div className="max-w-xl mx-auto my-12 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-lg backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/70">
-      <h4 className="text-center text-gray-900 mb-6">
-        Créer mon minimoji
+      <h4 className="text-center font-display text-brand dark:text-brand mb-6">
+        Créer mon Minimoji
       </h4>
 
       {!user ? (

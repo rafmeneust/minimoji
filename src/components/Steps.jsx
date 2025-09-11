@@ -118,53 +118,15 @@ export function StepsDefault() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
-                className="card bg-white dark:bg-white p-5 hover:shadow-lg"
+                className="card bg-white dark:bg-white p-5 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.18)] hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)] hover:ring-2 hover:ring-indigo-400/50 transition-shadow duration-300"
               >
-                <p className="text-sm font-medium dark:text-white transition-colors duration-500 whitespace-pre-line leading-snug">
+                <p className="text-sm font-medium text-gray-900 whitespace-pre-line leading-snug">
                   {item.title}
                 </p>
               </motion.div>
             </motion.div>
           ))}
         </div>
-
-        <motion.div variants={child} className="mt-12">
-        </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.2 }}
-          className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm hover:shadow-lg mt-10"
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.08,
-                },
-              },
-            }}
-            className="flex flex-wrap justify-center text-base sm:text-lg max-w-3xl mx-auto text-gray-900 dark:text-gray-300 transition-colors duration-500 leading-relaxed px-6"
-          >
-            {"Chaque dessin cache une histoire. En 24h, nous la transformons en mini-film animé : un souvenir unique, à partager et garder précieusement."
-              .split(" ")
-              .map((word, index) => (
-                <motion.span
-                  key={index}
-                  variants={{
-                    hidden: { opacity: 0, y: 10 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  className="mr-1"
-                >
-                  {word}
-                </motion.span>
-              ))}
-          </motion.div>
-        </motion.div>
       </motion.div>
     </section>
   );

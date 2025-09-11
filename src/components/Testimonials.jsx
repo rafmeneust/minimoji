@@ -15,43 +15,46 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className=" dark:bg-gray-900 transition-colors duration-500 py-32 px-4 sm:px-6 md:px-8 font-sans">
-      <h2 className="text-2xl sm:text-3xl md:text-3xl font-extrabold mb-12 text-center text-gray-900 dark:text-white leading-snug max-w-2xl mx-auto">
+    <section className="section bg-white dark:bg-gray-900 transition-colors duration-500 font-sans">
+      <div className="container-xl">
+      <h2 className="text-gray-900 dark:text-white text-center mb-8 font-display">
         Ils ont transformé <br className="sm:hidden" />
         le rêve de leurs enfants
       </h2>
-
-      <div className="max-w-5xl w-full mx-auto px-2 sm:px-4 md:px-0 grid gap-6 sm:gap-8 md:grid-cols-2">
-        {testimonials.map((t, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.1, y: -2 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, delay: i * 0 }}
-            className="flex items-start gap-4 bg-white/90 dark:bg-white/10 backdrop-blur-lg p-5 sm:p-6 rounded-3xl shadow-md hover:shadow-3xl border border-white/90 dark:border-white/20 ease-out transition-shadow duration-500"
-          >
-            <motion.img
-              src={t.avatar}
-              alt={t.name}
-              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full object-cover cursor-pointer"
-              whileHover={{
-                scale: [1, 1.15, 1],
-                rotate: [0, -4, 4, -2, 2, 0],
-              }}
-              transition={{ duration: 0.4 }}
-            />
-            <div className="text-left">
-              <p className="font-bold text-gray-800 dark:text-gray-100 text-sm sm:text-base mb-2">
-                {t.name}
-              </p>
-              <p className="text-sm sm:text-[0.95rem] md:text-base leading-snug text-gray-700 dark:text-gray-300 font-poppins">
-                {t.text}
-              </p>
-            </div>
-          </motion.div>
-        ))}
+      <div className="max-w-5xl mx-auto px-2 sm:px-4">
+        <div className="grid gap-6 md:gap-8 md:grid-cols-2">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.02, y: -2 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 150, damping: 16, bounce: 0.12, delay: i * 0.05 }}
+              className="card bg-white p-6 sm:p-7 flex items-start gap-4 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.35)] transition-shadow duration-300"
+            >
+              <motion.img
+                src={t.avatar}
+                alt={t.name}
+                className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full object-cover cursor-pointer"
+                whileHover={{
+                  scale: [1, 1.08, 1],
+                  rotate: [0, -3, 3, -1.5, 1.5, 0],
+                }}
+                transition={{ duration: 0.4 }}
+              />
+              <div className="text-left">
+                <p className="font-display font-semibold text-gray-900 dark:text-gray-100 text-base mb-2">
+                  {t.name}
+                </p>
+                <p className="font-sans text-sm md:text-base leading-snug text-gray-700 dark:text-gray-300">
+                  {t.text}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
       </div>
     </section>
   );

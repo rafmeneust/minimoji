@@ -10,6 +10,7 @@
     "dev:all": "concurrently -k \"npx vercel@latest dev -y --port 3000\" \"npm run dev -- --port 5173\""
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@vercel/mcp-adapter": "^0.11.1",
     "cloudinary": "^2.7.0",
     "dotenv": "^17.0.0",

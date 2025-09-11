@@ -87,10 +87,10 @@ function ScribbleWord({ children }) {
 }
 
 export default function Galerie() {
-  const [videosInView, setVideosInView] = useState([false, false, false, false, false]);
-  const [isMuted, setIsMuted] = useState([true, true, true, true, true]);
+  const [videosInView, setVideosInView] = useState([false, false, false, false, false, false, false, false]);
+  const [isMuted, setIsMuted] = useState([true, true, true, true, true, true, true, true]);
   const [hoveredVideo, setHoveredVideo] = useState(null);
-  const videoRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
+  const videoRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
   const handleInView = (index) => {
     setVideosInView((prev) => {
@@ -176,7 +176,7 @@ export default function Galerie() {
 
         {/* Galerie */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8">
-          {["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video2.mp4", "video3.mp4", "video1.mp4", "video4.mp4"].map((videoSrc, index) => (
+          {["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4", "video6.mp4", "video7.mp4", "video8.mp4"].map((videoSrc, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}

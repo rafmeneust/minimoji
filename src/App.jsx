@@ -16,6 +16,7 @@ import BlockyDividerBottom from "./components/BlockyDividerBottom";
 import Galerie from "./components/Galerie";
 import NotFound from "./pages/NotFound";
 import SignInUpload from "./components/SignInUpload";
+import ParcoursCards, { PARCOURS } from "./components/ParcoursCards";
 
 const Form = lazy(() => import("./pages/Form"));
 const Concept = lazy(() => import("./pages/Concept"));
@@ -49,6 +50,7 @@ function HomePage() {
       <BlockyDividerBottom />
       <Pitch />
       <Galerie />
+      <ParcoursCards items={PARCOURS} />
       <Testimonials />
     </>
   );
