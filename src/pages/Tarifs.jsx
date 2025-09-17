@@ -3,23 +3,13 @@ import { motion } from "framer-motion";
 import Pitch from "../components/Pitch";
 import { Helmet } from "react-helmet";
 import { useState, useEffect, useRef } from "react";
+import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/pricing";
 
 export default function Tarifs() {
   const [selected, setSelected] = useState(null);
   const buttonRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Prix par formule
-  const PRICES = { mini: 3.5, classique: 6.9, grand: 9.9 };
-
-  // Options tarifaires (cliquables)
-  const OPTS = { music: 1.5, sfx: 1.5, voice: 3.9, intro: 1.5, express: 4.0 };
-  // Options disponibles selon la formule
-  const OPTIONS_BY_PLAN = {
-    mini: ["voice", "intro", "express"], // simplifiée
-    classique: ["music", "sfx", "voice", "intro"], // pas d'express
-    grand: ["music", "sfx", "voice", "intro", "express"],
-  };
 
   // Etat des options (communes, filtrées par plan courant)
   const [options, setOptions] = useState({ music: false, sfx: false, voice: false, intro: false, express: false });
@@ -115,12 +105,14 @@ export default function Tarifs() {
       {/* Tarifs cards */}
       <section className="section bg-white dark:bg-gray-900 font-sans" role="radiogroup" aria-label="Choisir une formule"><div className="container-pg"><div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Carte 1 */}
-        <button
+        <div
           onClick={() => { setSelected("mini"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected("mini"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); } }}
+          tabIndex={0}
+          role="radio"
+          aria-checked={selected === "mini"}
           aria-label="Choisir la formule Mini"
-          role="button"
-          aria-pressed={selected === "mini"}
-          className={`card bg-white dark:bg-white/10 p-6 rounded-2xl text-center transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
+          className={`cursor-pointer card bg-white dark:bg-white/10 p-6 rounded-2xl text-center transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
             selected === "mini" ? "border-4 border-indigo-400 ring-4 ring-indigo-400/60 bg-indigo-50/40 dark:bg-white/10 shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)]" : ""
           }`}
         >
@@ -133,7 +125,7 @@ export default function Tarifs() {
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <button
               type="button"
-              onClick={() => toggleOption("voice")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("voice"); }}
               disabled={selected !== "mini"}
               aria-disabled={selected !== "mini"}
               aria-pressed={selected === "mini" && options.voice}
@@ -143,7 +135,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("intro")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("intro"); }}
               disabled={selected !== "mini"}
               aria-disabled={selected !== "mini"}
               aria-pressed={selected === "mini" && options.intro}
@@ -153,7 +145,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("express")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("express"); }}
               disabled={selected !== "mini"}
               aria-disabled={selected !== "mini"}
               aria-pressed={selected === "mini" && options.express}
@@ -163,15 +155,17 @@ export default function Tarifs() {
             </button>
           </div>
           <p className="mt-4 inline-block bg-white text-gray-700 dark:text-gray-800 text-sm px-5 py-1 rounded-full shadow">≤ Livré en 1 heure </p>
-        </button>
+        </div>
 
         {/* Carte 2 */}
-        <button
+        <div
           onClick={() => { setSelected("classique"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected("classique"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); } }}
+          tabIndex={0}
+          role="radio"
+          aria-checked={selected === "classique"}
           aria-label="Choisir la formule Classique"
-          role="button"
-          aria-pressed={selected === "classique"}
-          className={`card relative p-6 rounded-2xl text-center transition-all duration-300 bg-white dark:bg-white/10 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
+          className={`cursor-pointer card relative p-6 rounded-2xl text-center transition-all duration-300 bg-white dark:bg-white/10 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
             selected === "classique" ? "border-4 border-indigo-400 ring-4 ring-indigo-400/60 bg-indigo-50/40 dark:bg-white/10 shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)]" : "border-0"
           }`}
         >
@@ -189,7 +183,7 @@ export default function Tarifs() {
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <button
               type="button"
-              onClick={() => toggleOption("music")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("music"); }}
               disabled={selected !== "classique"}
               aria-disabled={selected !== "classique"}
               aria-pressed={selected === "classique" && options.music}
@@ -199,7 +193,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("sfx")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("sfx"); }}
               disabled={selected !== "classique"}
               aria-disabled={selected !== "classique"}
               aria-pressed={selected === "classique" && options.sfx}
@@ -209,7 +203,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("voice")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("voice"); }}
               disabled={selected !== "classique"}
               aria-disabled={selected !== "classique"}
               aria-pressed={selected === "classique" && options.voice}
@@ -219,7 +213,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("intro")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("intro"); }}
               disabled={selected !== "classique"}
               aria-disabled={selected !== "classique"}
               aria-pressed={selected === "classique" && options.intro}
@@ -229,15 +223,17 @@ export default function Tarifs() {
             </button>
           </div>
           <p className="mt-4 inline-block bg-white text-gray-700 dark:text-gray-800 text-sm px-5 py-1 rounded-full shadow">≤ Livré en 6 h </p>
-        </button>
+        </div>
 
         {/* Carte 3 */}
-        <button
+        <div
           onClick={() => { setSelected("grand"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected("grand"); setOptions({ music:false, sfx:false, voice:false, intro:false, express:false }); } }}
+          tabIndex={0}
+          role="radio"
+          aria-checked={selected === "grand"}
           aria-label="Choisir la formule Grand Héros"
-          role="button"
-          aria-pressed={selected === "grand"}
-          className={`card bg-white dark:bg-white/10 p-6 rounded-2xl text-center transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
+          className={`cursor-pointer card bg-white dark:bg-white/10 p-6 rounded-2xl text-center transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70 ${
             selected === "grand" ? "border-4 border-indigo-400 ring-4 ring-indigo-400/60 bg-indigo-50/40 dark:bg-white/10 shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)]" : ""
           }`}
         >
@@ -250,7 +246,7 @@ export default function Tarifs() {
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <button
               type="button"
-              onClick={() => toggleOption("music")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("music"); }}
               disabled={selected !== "grand"}
               aria-disabled={selected !== "grand"}
               aria-pressed={selected === "grand" && options.music}
@@ -260,7 +256,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("sfx")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("sfx"); }}
               disabled={selected !== "grand"}
               aria-disabled={selected !== "grand"}
               aria-pressed={selected === "grand" && options.sfx}
@@ -270,7 +266,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("voice")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("voice"); }}
               disabled={selected !== "grand"}
               aria-disabled={selected !== "grand"}
               aria-pressed={selected === "grand" && options.voice}
@@ -280,7 +276,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("intro")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("intro"); }}
               disabled={selected !== "grand"}
               aria-disabled={selected !== "grand"}
               aria-pressed={selected === "grand" && options.intro}
@@ -290,7 +286,7 @@ export default function Tarifs() {
             </button>
             <button
               type="button"
-              onClick={() => toggleOption("express")}
+              onClick={(e) => { e.stopPropagation(); toggleOption("express"); }}
               disabled={selected !== "grand"}
               aria-disabled={selected !== "grand"}
               aria-pressed={selected === "grand" && options.express}
@@ -300,7 +296,7 @@ export default function Tarifs() {
             </button>
           </div>
           <p className="mt-4 inline-block bg-white text-gray-700 dark:text-gray-800 text-sm px-5 py-1 rounded-full shadow">≤ Livré en 12 h </p>
-        </button>
+        </div>
       </div>
       {/* Total estimé recap block */}
       <div className="text-center mt-6">
