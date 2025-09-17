@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Pitch from "../components/Pitch";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useState, useEffect, useRef } from "react";
 import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/pricing";
 
