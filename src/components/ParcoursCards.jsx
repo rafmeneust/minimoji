@@ -63,9 +63,9 @@ function renderIcon(name, props = {}) {
 
 export default function ParcoursCards({ items = PARCOURS }) {
   return (
-    <section className="section bg-white dark:bg-gray-900 font-sans" id="parcours">
-      <div className="container-xl">
-        <h2 className="text-gray-900 dark:text-white text-center mb-8 font-display">Choisissez votre parcours</h2>
+    <section className="section bg-white dark:bg-gray-900 font-sans" id="parcours" aria-labelledby="parcours-heading">
+      <div className="container-pg">
+        <h2 id="parcours-heading" className="text-center mb-8 font-display">Choisissez votre parcours</h2>
         <div className="max-w-5xl mx-auto px-2 sm:px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {items.map((item) => (
@@ -74,11 +74,11 @@ export default function ParcoursCards({ items = PARCOURS }) {
               role="group"
               tabIndex={0}
               aria-label={item.title}
-              className="group card bg-white p-6 md:p-8 h-full flex flex-col justify-between transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand hover:-translate-y-[2px] hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.35)]"
+              className="group card relative bg-white dark:bg-white/10 p-6 md:p-8 h-full flex flex-col justify-between transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/70"
             >
               {/* Titre + icône */}
               <div className="flex items-start gap-4">
-                <div className="flex-none flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50">
+                <div className="flex-none flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-white/10">
                   {renderIcon(item.icon, { className: "w-7 h-7 text-gray-900 group-hover:text-brand dark:text-white dark:group-hover:text-brand transition-colors" })}
                 </div>
                 <div className="flex-1">

@@ -17,13 +17,13 @@ export default function Concept() {
         <title>Concept Minimoji — Donnez vie aux dessins d’enfants</title>
         <meta
           name="description"
-          content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples. Une expérience féérique pour petits et grands."
+          content="Du dessin au mini‑film en 24 h (HD MP4 + lien privé). Formats portrait/paysage/carré. Paiement sécurisé, respect du droit à l’image."
         />
         <link rel="canonical" href="https://minimoji.fr/concept" />
 
         {/* Open Graph */}
         <meta property="og:title" content="Concept Minimoji — Donnez vie aux dessins d’enfants" />
-        <meta property="og:description" content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples. Une expérience féérique pour petits et grands." />
+        <meta property="og:description" content="Du dessin au mini‑film en 24 h (HD MP4 + lien privé). Formats portrait/paysage/carré. Paiement sécurisé, respect du droit à l’image." />
         <meta property="og:url" content="https://minimoji.fr/concept" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://minimoji.fr/images/preview-form.jpg" />
@@ -31,20 +31,29 @@ export default function Concept() {
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Concept Minimoji — Donnez vie aux dessins d’enfants" />
-        <meta name="twitter:description" content="Découvrez comment Minimoji transforme les dessins d’enfants en films animés magiques, en 3 étapes simples." />
+        <meta name="twitter:description" content="Du dessin au mini‑film en 24 h (HD MP4 + lien privé). Formats portrait/paysage/carré. Paiement sécurisé, respect du droit à l’image." />
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
       </Helmet>
-      <main className="relative bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
-      <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
+      <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
+      <section className="section bg-white dark:bg-gray-900 font-sans"><div className="container-pg max-w-3xl relative">
+        <img
+          src="/scribble_bonhomme.svg"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="pointer-events-none select-none absolute block w-16 left-1 top-16 sm:w-20 sm:-left-12 sm:top-10 md:w-24 md:-left-20 md:top-12 lg:w-28 lg:-left-28 lg:top-14"
+          draggable="false"
+        />
 
         {/* Accroche principale */}
          <motion.h1
-          className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-10 text-center"
+          className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-10 text-center font-display"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Un dessin aujour'hui, un film magique dès demain ✨
+          Un dessin aujourd'hui, un film magique dès demain ✨
         </motion.h1>
         <p className="text-lg sm:text-xl leading-relaxed text-center text-indigo-700 dark:text-indigo-300 mb-12">
           Confiez‑le à notre magicien… et réveillez‑vous avec la magie
@@ -60,7 +69,7 @@ export default function Concept() {
             transition={{ duration: 0.5 }}
             className="space-y-3"
           >
-            <h2 className="text-xl sm:text-2xl font-bold">1. Remettez le parchemin</h2>
+            <h2 className="text-xl sm:text-2xl font-bold font-display">1. Remettez le parchemin</h2>
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Envoyez une photo ou un scan du dessin de votre enfant — même bancal, même griffonné. L’essentiel, c’est l’élan créatif. Vous pouvez y ajouter une note vocale ou un petit texte si vous souhaitez enrichir l’histoire. Pas obligatoire, mais notre magicien aime les détails !
             </p>
@@ -73,7 +82,7 @@ export default function Concept() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="space-y-3"
           >
-            <h2 className="text-xl sm:text-2xl font-bold">2. Le magicien s’en empare</h2>
+            <h2 className="text-xl sm:text-2xl font-bold font-display">2. Le magicien s’en empare</h2>
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Il analyse les lignes, les couleurs, l’énergie du dessin. Puis, d’un coup de baguette, il en fait une animation. Fidèle, mais prolongée. Une mini‑histoire naît, pleine de douceur ou de folie, selon l’inspiration de l’œuvre.
             </p>
@@ -86,11 +95,34 @@ export default function Concept() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-3"
           >
-            <h2 className="text-xl sm:text-2xl font-bold">3. Réception du film (sous 24 h) </h2>
+            <h2 className="text-xl sm:text-2xl font-bold font-display">3. Réception du film (sous 24 h) </h2>
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Vous recevez un lien sécurisé contenant la vidéo en HD, sans watermark. Elle est prête à être projetée, partagée ou transformée en souvenir : certains l’intègrent dans un album, d’autres la collent au dos du dessin via QR code.
             </p>
           </motion.div>
+        </div>
+        {/* Preuve sociale + Formats & livraisons */}
+        <div className="mt-10">
+          <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm">
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Preuves & avis</h3>
+                <ul className="list-disc list-inside space-y-1 text-base text-gray-700 dark:text-gray-300">
+                  <li><span aria-hidden="true">⭐️⭐️⭐️⭐️⭐️</span> Noté 4,9/5 par les parents</li>
+                  <li>Livré ≤ 24 h</li>
+                  <li>Paiement sécurisé (Stripe)</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">Formats & livraisons</h3>
+                <ul className="list-disc list-inside space-y-1 text-base text-gray-700 dark:text-gray-300">
+                  <li>Portrait / Paysage / Carré</li>
+                  <li>Vidéo HD (MP4) + lien privé téléchargeable</li>
+                  <li>Durée ~6 s, optimisée pour le partage</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
           {/* CTA final */}
          <div className="mt-16 text-center">
@@ -101,30 +133,25 @@ export default function Concept() {
           >
             Je confie le dessin au magicien
           </motion.a>
-          <img src="/step-2.svg" alt="Illustration étape 2" className="mx-auto mt-6 w-40 h-40 object-contain" />
+          <img
+            src="/step-2.svg"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="mx-auto mt-6 w-40 h-40 object-contain"
+            draggable="false"
+          />
         </div>
+      </div>
       </section>
-      <div className="relative w-full overflow-hidden bg-transparent">
-
-
-  <style>
-    {`
-      @keyframes blob {
-        0%   { transform: scale(1) translate(0px, 0px) rotate(0deg); }
-        33%  { transform: scale(1.05) translate(5px, -5px) rotate(2deg); }
-        66%  { transform: scale(0.95) translate(-5px, 5px) rotate(-2deg); }
-        100% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
-      }
-    `}
-  </style>
-</div>
-      <section className="bg-[#FEF9E9] dark:bg-gray-900 transition-colors duration-500 w-full">
-  <div className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto font-sans" id="galerie">
+      <section className="section bg-[#FEF9E9] dark:bg-gray-900 transition-colors duration-500 w-full">
+  <div className="container-pg max-w-3xl font-sans" id="galerie">
     
-    <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-10">Préparez la magie ✨</h2>
+    <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-10 font-display">Préparez la magie ✨</h2>
 
     {/* Formats */}
-    <div className="mt-16">
+    <div className="mt-12">
       <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
         <h3 className="text-lg sm:text-xl font-semibold mb-2">Formats au choix</h3>
         <p className="text-base text-gray-700 dark:text-gray-300">
@@ -134,7 +161,7 @@ export default function Concept() {
     </div>
 
     {/* Confiance & légalité */}
-    <div className="mt-16">
+    <div className="mt-6">
       <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
         <h3 className="text-lg sm:text-xl font-semibold mb-2">Confiance & légalité</h3>
         <ul className="list-disc list-inside space-y-1 text-base text-gray-700 dark:text-gray-300">
@@ -146,7 +173,7 @@ export default function Concept() {
     </div>
 
     {/* Tarifs / accessibilité */}
-    <div className="mt-16">
+    <div className="mt-6">
       <div className="bg-white/60 dark:bg-white/10 rounded-xl p-6 shadow-sm backdrop-blur-sm transition-transform duration-300 ease-in-out hover:scale-105">
         <h3 className="text-lg sm:text-xl font-semibold mb-2">Prix tout doux</h3>
         <p className="text-base text-gray-700 dark:text-gray-300">
@@ -168,8 +195,8 @@ export default function Concept() {
 
   </div>
 </section>
-      <section className="px-10 sm:px-6 md:px-10 py-20 max-w-3xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-10">Dessin (2D)</h2>
+      <section className="section"><div className="container-pg max-w-3xl">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-10 font-display">Dessin (2D)</h2>
         <Toolbar
           color={color}
           setColor={setColor}
@@ -187,6 +214,7 @@ export default function Concept() {
         <div className="flex justify-center mb-4">
           <SaveExportButtons stageRef={stageRef} />
         </div>
+      </div>
       </section>
       </main>
     </>

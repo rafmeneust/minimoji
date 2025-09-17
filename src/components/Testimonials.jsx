@@ -15,9 +15,9 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="section bg-white dark:bg-gray-900 transition-colors duration-500 font-sans">
-      <div className="container-xl">
-      <h2 className="text-gray-900 dark:text-white text-center mb-8 font-display">
+    <section className="section bg-white dark:bg-gray-900 font-sans" aria-labelledby="testimonials-heading">
+      <div className="container-pg">
+      <h2 id="testimonials-heading" className="text-center mb-8 font-display">
         Ils ont transformé <br className="sm:hidden" />
         le rêve de leurs enfants
       </h2>
@@ -28,10 +28,10 @@ export default function Testimonials() {
               key={i}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.02, y: -2 }}
+              whileHover={{ y: -2 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 150, damping: 16, bounce: 0.12, delay: i * 0.05 }}
-              className="card bg-white p-6 sm:p-7 flex items-start gap-4 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.35)] transition-shadow duration-300"
+              className="card relative bg-white dark:bg-white/10 p-6 sm:p-7 flex items-start gap-4 transition-all duration-300 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)]"
             >
               <motion.img
                 src={t.avatar}

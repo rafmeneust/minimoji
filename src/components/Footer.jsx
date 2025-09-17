@@ -1,36 +1,5 @@
 import { Link } from "react-router-dom";
 
-// ⚠️ CSS for the shape divider must be added to a global stylesheet or Tailwind config:
-/*
-.custom-shape-divider-top-1750170631 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  transform: rotate(180deg);
-}
-
-.custom-shape-divider-top-1750170631 svg {
-  position: relative;
-  display: block;
-  width: calc(169% + 1.3px);
-  height: 70px;
-}
-
-.custom-shape-divider-top-1750170631 .shape-fill {
-  fill: #FFFFFF;
-}
-
-@media (max-width: 767px) {
-  .custom-shape-divider-top-1750170631 svg {
-    width: calc(158% + 1.3px);
-    height: 70px;
-  }
-}
-*/
-
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
