@@ -9,8 +9,8 @@ export const OPTIONS_BY_PLAN = {
   grand: ["music", "sfx", "voice", "intro", "express"],
 };
 
+// Optionnel si tu veux les réutiliser ailleurs :
 export const BASE = { ...PRICES, decouverte: 3.49 };
-
 export const LABEL = {
   mini: "Formule Mini",
   classique: "Formule Classique",
