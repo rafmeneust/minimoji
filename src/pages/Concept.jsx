@@ -42,7 +42,7 @@ export default function Concept() {
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          className="pointer-events-none select-none absolute block w-16 left-1 top-16 sm:w-20 sm:-left-12 sm:top-10 md:w-24 md:-left-20 md:top-12 lg:w-28 lg:-left-28 lg:top-14"
+          className="pointer-events-none select-none absolute hidden sm:block w-16 left-1 top-16 sm:w-20 sm:-left-12 sm:top-10 md:w-24 md:-left-20 md:top-12 lg:w-28 lg:-left-28 lg:top-14"
           draggable="false"
         />
 
