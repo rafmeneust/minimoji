@@ -27,7 +27,7 @@ export const PARCOURS = [
       "Ressources PDF fournies : lettre aux parents, fiche activité, autorisations.",
       "Tarif indicatif : ~12–15 € / élève (devis selon personnalisation).",
     ],
-    cta: { label: "Demander un devis classe", href: "/ecoles" },
+    cta: { label: "Demander un devis classe", href: "/ecole" },
     trust: "🕛 Réponse sous 48 h pour les demandes scolaires",
     icon: "academic-cap",
   },

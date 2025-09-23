@@ -25,6 +25,8 @@ const Tarifs = lazy(() => import("./pages/Tarifs"));
 const MentionsLegales = lazy(() => import("./pages/mentions-legales"));
 const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
 const Confirmation = lazy(() => import("./pages/Confirmation"));
+const Ecole = lazy(() => import("./pages/Ecole"));
+const Atelier = lazy(() => import("./pages/Atelier"));
 
 function HomePage() {
   return (
@@ -74,7 +76,7 @@ function App() {
   return (
     <HelmetProvider>
       <DinoPopup />
-      <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
+      <div className="scroll-smooth bg-whitee dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollToTop key={location.pathname} /> 
         <Navbar />
         <Suspense fallback={<div>Chargement...</div>}>
@@ -84,6 +86,8 @@ function App() {
             <Route path="/galerie" element={<GaleriePage />} />
             <Route path="/creer" element={<Form />} />
             <Route path="/tarifs" element={<Tarifs />} />
+            <Route path="/ecole" element={<Ecole />} />
+            <Route path="/atelier" element={<Atelier />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/cgu-cgv" element={<CGUCGV />} />
             <Route path="/confirmation" element={<Confirmation />} />

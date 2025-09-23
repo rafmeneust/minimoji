@@ -8,7 +8,10 @@ import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/Pricing.js";
 export default function Tarifs() {
   const [selected, setSelected] = useState(null);
   const buttonRef = useRef(null);
+
   const [searchParams, setSearchParams] = useSearchParams();
+  const title = "Nos formules magiques";
+  const letters = Array.from(title);
 
 
   // Etat des options (communes, filtrées par plan courant)
@@ -84,21 +87,46 @@ export default function Tarifs() {
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
       </Helmet>
       {/* Hero section */}
-      <section className="section bg-white dark:bg-gray-900 font-sans pb-6 md:pb-8"><div className="container-pg max-w-4xl text-center">
-        <motion.h1
-          className="text-4xl sm:text-5xl font-extrabold mb-2 md:mb-3 font-display"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Nos formules magiques 
-        </motion.h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-sans">
-          Choisissez la formule qui correspond à votre univers.  
-          Chaque dessin peut devenir un souvenir animé, à offrir ou à garder précieusement.
-        </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">TVA non applicable — pas de frais de livraison.</p>
-      </div>
+      <section className="section bg-white dark:bg-gray-900 font-sans pb-6 md:pb-8">
+        <div className="container-pg max-w-4xl text-center">
+          <div className="relative inline-block">
+            <motion.h1
+              className="text-4xl sm:text-5xl font-extrabold mb-2 md:mb-3 font-display tracking-tight"
+              aria-label={title}
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } },
+              }}
+            >
+              {letters.map((ch, i) => (
+                <motion.span
+                  key={i}
+                  aria-hidden="true"
+                  className={ch === " " ? "inline-block w-2" : "inline-block"}
+                  variants={{
+                    hidden: { opacity: 0, y: 12, scale: 0.9, rotate: -2 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      rotate: 0,
+                      transition: { type: "spring", stiffness: 320, damping: 18, mass: 0.6 },
+                    },
+                  }}
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </motion.h1>
+          </div>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-sans">
+            Choisissez la formule qui correspond à votre univers.  
+            Chaque dessin peut devenir un souvenir animé, à offrir ou à garder précieusement.
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">TVA non applicable — pas de frais de livraison.</p>
+        </div>
       </section>
 
 

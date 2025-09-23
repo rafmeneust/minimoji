@@ -10,6 +10,8 @@ export default function Concept() {
   const [tool, setTool] = useState("pen");
   const [clearCanvas, setClearCanvas] = useState(false);
   const stageRef = useRef(null);
+  const h1Title = "Un dessin aujourd'hui, un film magique dès demain ✨";
+  const h1Letters = Array.from(h1Title);
 
   return (
     <>
@@ -49,11 +51,30 @@ export default function Concept() {
         {/* Accroche principale */}
          <motion.h1
           className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-10 text-center font-display"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          aria-label={h1Title}
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } } }}
         >
-          Un dessin aujourd'hui, un film magique dès demain ✨
+          {h1Letters.map((ch, i) => (
+            <motion.span
+              key={i}
+              aria-hidden="true"
+              className={ch === " " ? "inline-block w-2" : "inline-block"}
+              variants={{
+                hidden: { opacity: 0, y: 12, scale: 0.9, rotate: -2 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  rotate: 0,
+                  transition: { type: "spring", stiffness: 320, damping: 18, mass: 0.6 },
+                },
+              }}
+            >
+              {ch}
+            </motion.span>
+          ))}
         </motion.h1>
         <p className="text-lg sm:text-xl leading-relaxed text-center text-indigo-700 dark:text-indigo-300 mb-12">
           Confiez‑le à notre magicien… et réveillez‑vous avec la magie

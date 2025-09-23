@@ -69,6 +69,8 @@ function shuffleWithSeed(arr, seed) {
 export default function GaleriePage() {
   const [hovered, setHovered] = useState(null);
   const [activeTag, setActiveTag] = useState("tous");
+  const h1Title = "Ils ont dessiné… et la magie a fait le reste";
+  const h1Letters = Array.from(h1Title);
   // Pick a random seed once per mount; keeps order stable for this session
   const seedRef = useRef(Math.floor(Math.random() * 0xffffffff));
   const shuffledVideos = useMemo(() => shuffleWithSeed([...videos], seedRef.current), []);
@@ -155,9 +157,33 @@ export default function GaleriePage() {
   return (
     <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="px-4 sm:px-6 md:px-10 py-20 max-w-6xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-extrabold leading-snug mb-4 text-center">
-          Ils ont dessiné… et la magie a fait le reste
-        </h1>
+        <motion.h1
+          className="text-4xl sm:text-5xl font-extrabold leading-snug mb-4 text-center font-display"
+          aria-label={h1Title}
+          initial="hidden"
+          animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } } }}
+        >
+          {h1Letters.map((ch, i) => (
+            <motion.span
+              key={i}
+              aria-hidden="true"
+              className={ch === " " ? "inline-block w-2" : "inline-block"}
+              variants={{
+                hidden: { opacity: 0, y: 12, scale: 0.9, rotate: -2 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  rotate: 0,
+                  transition: { type: "spring", stiffness: 320, damping: 18, mass: 0.6 },
+                },
+              }}
+            >
+              {ch}
+            </motion.span>
+          ))}
+        </motion.h1>
         <p className="text-base sm:text-lg text-center text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-12">
           Voici une sélection de vidéos magiques, créées à partir de vrais dessins d’enfants. Chaque film est une aventure unique.
         </p>
