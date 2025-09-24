@@ -9,6 +9,40 @@ const container = {
   },
 };
 
+// --- Cloudinary player URL builder (nested params support) ---
+const buildCloudinarySrc = ({ cloudName, publicId, profile, player = {}, source = {}, cloudinary = {} }) => {
+  const qs = new URLSearchParams();
+  qs.set("cloud_name", cloudName);
+  qs.set("public_id", publicId);
+  if (profile) qs.set("profile", profile);
+
+  const append = (prefix, obj) => {
+    Object.entries(obj).forEach(([k, v]) => {
+      if (v === undefined || v === null) return;
+      if (typeof v === "object" && !Array.isArray(v)) {
+        append(`${prefix}[${k}]`, v);
+      } else if (Array.isArray(v)) {
+        v.forEach((item, idx) => {
+          if (item === undefined || item === null) return;
+          if (typeof item === "object") {
+            append(`${prefix}[${k}][${idx}]`, item);
+          } else {
+            qs.set(`${prefix}[${k}][${idx}]`, String(item));
+          }
+        });
+      } else {
+        qs.set(`${prefix}[${k}]`, String(v));
+      }
+    });
+  };
+
+  if (player && Object.keys(player).length) append("player", player);
+  if (source && Object.keys(source).length) append("source", source);
+  if (cloudinary && Object.keys(cloudinary).length) append("cloudinary", cloudinary);
+
+  return `https://player.cloudinary.com/embed/?${qs.toString()}`;
+};
+
 const child = {
   hidden: { opacity: 0, y: 40, scale: 0.95 },
   show: {
@@ -46,6 +80,32 @@ const items = [
 ];
 
 export function StepsDefault() {
+  const playerSrc = buildCloudinarySrc({
+    cloudName: "dwl7ufet9",
+    publicId: "video5_f0pcxa",
+    profile: "minimoji",
+    player: {
+      // Comportement
+      autoplay: true,
+      muted: true,          // autoplay silencieux
+      playsinline: true,    // iOS inline
+      controls: true,
+      loop: true,
+      preload: "metadata",
+      fluid: true,
+      // Branding (bleu/indigo)
+      colors: {
+        base: "#EEF2FF",   // Indigo 100 (barre de contrôle)
+        accent: "#6366F1", // Indigo 500 (seek/volume)
+        text: "#0F172A",   // Slate 900 (icônes/texte)
+      },
+    },
+    // Réduction de volume perçue à ~40% par défaut (optionnel)
+    // Note: applique une transformation audio non destructive au flux livré
+    source: {
+      transformation: { effect: "volume:40" },
+    },
+  });
   return (
     <section className="section bg-[#E6F0FF] dark:bg-gray-900 transition-colors duration-500 text-center relative overflow-hidden">
       {/* Ligne horizontale desktop */}
@@ -73,11 +133,14 @@ export function StepsDefault() {
         </motion.p>
         <div className="w-full max-w-4xl mx-auto mt-10 mb-16 rounded-2xl overflow-hidden shadow-card border border-white/70 dark:border-white/20 bg-white/90 dark:bg-white/10 aspect-video">
           <iframe
-            src="https://player.cloudinary.com/embed/?cloud_name=dwl7ufet9&public_id=video5_f0pcxa&profile=minimoji&player[autoplay]=false"
+            src={playerSrc}
+            title="Démonstration Minimoji — vidéo"
             width="640"
             height="360"
             style={{ height: 'auto', width: '100%', aspectRatio: '640 / 360' }}
+            loading="lazy"
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
             frameBorder="0"
           />

@@ -1,13 +1,16 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Pitch from "../components/Pitch";
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect, useRef } from "react";
 import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/Pricing.js";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 export default function Tarifs() {
   const [selected, setSelected] = useState(null);
   const buttonRef = useRef(null);
+
+  const prefersReducedMotion = useReducedMotion();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const title = "Nos formules magiques";
@@ -327,47 +330,90 @@ export default function Tarifs() {
         </div>
       </div>
       {/* Total estimé recap block */}
-      <div className="text-center mt-6">
+      <aside className="mt-6 relative z-20" aria-label="Récapitulatif et action">
         {selected ? (
-          <div className="inline-block text-left card bg-white dark:bg-white/10 px-5 py-4">
-            <p className="text-sm md:text-base text-gray-800 dark:text-gray-200">
-              Total estimé : <strong>{totalEstimated.toFixed(2)} €</strong>
-            </p>
-            {allowed.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {allowed.filter(k => options[k]).length > 0 ? (
-                  allowed.filter(k => options[k]).map((k) => (
-                    <span key={`sum-${k}`} className="chip text-xs bg-indigo-50 text-indigo-700 dark:bg-white/10 dark:text-white border-0">
-                      {k === 'music' && 'Musique'}
-                      {k === 'sfx' && 'SFX'}
-                      {k === 'voice' && 'Voix-off'}
-                      {k === 'intro' && 'Intro/Fin'}
-                      {k === 'express' && 'Express 6h'}
-                      {` +${OPTS[k].toFixed(2)}€`}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">Aucune option sélectionnée</span>
-                )}
-              </div>
-            )}
+          <div
+            className="
+              sticky bottom-4 md:sticky md:top-24
+              bg-white/90 dark:bg-gray-800/80 backdrop-blur
+              border border-orange-200/70 dark:border-orange-300/20
+              rounded-2xl shadow-[0_20px_50px_-20px_rgba(2,6,23,.25)]
+              px-4 py-3 md:px-6 md:py-4
+              flex flex-col md:flex-row items-center justify-between gap-3
+              pb-[max(0px,env(safe-area-inset-bottom))]
+            "
+            role="region"
+            aria-live="polite"
+          >
+            {/* Récap total */}
+            <div className="w-full md:w-auto">
+              <p className="font-semibold text-gray-900 dark:text-gray-100">
+                Total estimé : <span className="font-bold">{totalEstimated.toFixed(2)} €</span>
+              </p>
+              {allowed.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {allowed.filter(k => options[k]).length > 0 ? (
+                    allowed.filter(k => options[k]).map((k) => (
+                      <span
+                        key={`sum-${k}`}
+                        className="chip text-xs bg-indigo-50 text-indigo-700 dark:bg-white/10 dark:text-white border-0"
+                      >
+                        {k === 'music' && 'Musique'}
+                        {k === 'sfx' && 'SFX'}
+                        {k === 'voice' && 'Voix-off'}
+                        {k === 'intro' && 'Intro/Fin'}
+                        {k === 'express' && 'Express 6h'}
+                        {` +${OPTS[k].toFixed(2)}€`}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Aucune option sélectionnée</span>
+                  )}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Sans inscription — paiement sécurisé</p>
+            </div>
+
+            {/* CTA */}
+            <motion.div initial={false} className="w-full md:w-auto relative">
+              <Link
+                ref={buttonRef}
+                to={selected ? `/creer?plan=${selected}` : "/creer"}
+                aria-label="Aller au formulaire pour créer un dessin animé"
+                className="
+                  relative z-10
+                  inline-flex items-center justify-center
+                  px-5 py-3 rounded-full font-semibold
+                  text-white bg-accent hover:bg-orange-500
+                  text-base whitespace-nowrap
+                  shadow-[0_8px_28px_-8px_rgba(251,146,60,.5)]
+                  ring-2 ring-orange-400/70 hover:ring-orange-500
+                  focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-400/80
+                  transition w-full md:w-auto
+                "
+              >
+                Créer mon Minimoji
+                <ArrowRightIcon className="ml-2 h-5 w-5" aria-hidden />
+              </Link>
+              {!prefersReducedMotion && (
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full ring-2 ring-orange-400/60 pointer-events-none"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: [0, 1, 0], scale: [1, 1.06, 1.12] }}
+                  transition={{ duration: 0.9, ease: "easeOut", repeat: Infinity, repeatDelay: 5 }}
+                />
+              )}
+            </motion.div>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 dark:text-gray-300">Sélectionnez une formule puis ajoutez des options.</p>
+          <p className="text-sm text-center text-gray-600 dark:text-gray-300">
+            Sélectionnez une formule puis ajoutez des options.
+          </p>
         )}
-      </div>
+      </aside>
     </div>
   </section>
-      <div className="text-center mt-8">
-        <Link
-          ref={buttonRef}
-          to={selected ? `/creer?plan=${selected}` : "/creer"}
-          aria-label="Aller vers le formulaire pour créer un dessin animé"
-          className="btn-accent text-lg"
-        >
-          Créer mon Minimoji
-        </Link>
-      </div>
 <motion.div
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
