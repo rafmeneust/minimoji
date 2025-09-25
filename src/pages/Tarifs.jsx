@@ -378,7 +378,20 @@ export default function Tarifs() {
             <motion.div initial={false} className="w-full md:w-auto relative">
               <Link
                 ref={buttonRef}
-                to={selected ? `/creer?plan=${selected}` : "/creer"}
+                to={(() => {
+                  if (!selected) return "/creer";
+                  const allowedForPlan = OPTIONS_BY_PLAN[selected] || [];
+                  const activeOpts = allowedForPlan.filter((k) => options[k]);
+                  const params = new URLSearchParams({ plan: selected });
+                  if (activeOpts.length) params.set("opts", activeOpts.join(","));
+                  return `/creer?${params.toString()}`;
+                })()}
+                state={(() => {
+                  if (!selected) return undefined;
+                  const allowedForPlan = OPTIONS_BY_PLAN[selected] || [];
+                  const activeOpts = allowedForPlan.filter((k) => options[k]);
+                  return { plan: selected, opts: activeOpts };
+                })()}
                 aria-label="Aller au formulaire pour créer un dessin animé"
                 className="
                   relative z-10
