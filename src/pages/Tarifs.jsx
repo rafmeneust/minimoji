@@ -2,7 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import Pitch from "../components/Pitch";
 import { Helmet } from "react-helmet-async";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/Pricing.js";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
@@ -20,10 +20,11 @@ export default function Tarifs() {
   // Etat des options (communes, filtrées par plan courant)
   const [options, setOptions] = useState({ music: false, sfx: false, voice: false, intro: false, express: false });
 
-  const allowed = selected ? OPTIONS_BY_PLAN[selected] : [];
-  const basePrice = selected ? PRICES[selected] : 0;
-  const optionsTotal = allowed.reduce((sum, k) => (options[k] ? sum + OPTS[k] : sum), 0);
-  const totalEstimated = selected ? basePrice + optionsTotal : 0;
+const allowed = useMemo(() => (selected ? OPTIONS_BY_PLAN[selected] : []), [selected]);
+const basePrice = useMemo(() => (selected ? PRICES[selected] : 0), [selected]);
+const activeOpts = useMemo(() => allowed.filter((k) => options[k]), [allowed, options]);
+const optionsTotal = useMemo(() => activeOpts.reduce((sum, k) => sum + OPTS[k], 0), [activeOpts]);
+const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), [selected, basePrice, optionsTotal]);
 
   const toggleOption = (key) => {
     if (!allowed.includes(key)) return; // ignore if not in current plan
@@ -352,8 +353,8 @@ export default function Tarifs() {
               </p>
               {allowed.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {allowed.filter(k => options[k]).length > 0 ? (
-                    allowed.filter(k => options[k]).map((k) => (
+                    {activeOpts.length > 0 ? (
+                    activeOpts.map((k) => (
                       <span
                         key={`sum-${k}`}
                         className="chip text-xs bg-indigo-50 text-indigo-700 dark:bg-white/10 dark:text-white border-0"
@@ -380,18 +381,11 @@ export default function Tarifs() {
                 ref={buttonRef}
                 to={(() => {
                   if (!selected) return "/creer";
-                  const allowedForPlan = OPTIONS_BY_PLAN[selected] || [];
-                  const activeOpts = allowedForPlan.filter((k) => options[k]);
                   const params = new URLSearchParams({ plan: selected });
                   if (activeOpts.length) params.set("opts", activeOpts.join(","));
                   return `/creer?${params.toString()}`;
                 })()}
-                state={(() => {
-                  if (!selected) return undefined;
-                  const allowedForPlan = OPTIONS_BY_PLAN[selected] || [];
-                  const activeOpts = allowedForPlan.filter((k) => options[k]);
-                  return { plan: selected, opts: activeOpts };
-                })()}
+                state={selected ? { plan: selected, opts: activeOpts } : undefined}
                 aria-label="Aller au formulaire pour créer un dessin animé"
                 className="
                   relative z-10

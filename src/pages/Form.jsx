@@ -5,11 +5,20 @@ import toast, { Toaster } from "react-hot-toast";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRightIcon, CloudArrowUpIcon, UserIcon, PencilSquareIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { auth, provider } from "../lib/firebaseClient";
-import { signInWithPopup, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+
+import { signInWithPopup, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
+// Safe analytics stub so we don't crash if GA isn't ready
+if (typeof window !== 'undefined' && !window.track) {
+  window.track = (eventName, params = {}) => {
+    try { window.gtag && window.gtag('event', eventName, params); } catch (_) {}
+  };
+}
+
+const GSI_POLL_MS = 400;
 
 export default function Form() {
   const [preview, setPreview] = useState(null);
-  const [fileSelected, setFileSelected] = useState(false);
+  const [imageDataUrl, setImageDataUrl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -18,6 +27,7 @@ export default function Form() {
   const fileInputRef = useRef(null);
   const [user, setUser] = useState(null);
   const [authError, setAuthError] = useState("");
+  const oneTapInitRef = useRef(false);
   const signIn = async () => {
     setAuthError("");
     try {
@@ -27,6 +37,68 @@ export default function Form() {
       setAuthError(e?.message || "Erreur connexion Google");
     }
   };
+
+  // --- Google One Tap (GSI) -> Firebase signInWithCredential ---
+  useEffect(() => {
+    if (oneTapInitRef.current) return;
+    if (typeof window === 'undefined') return;
+    if (user) return; // déjà connecté
+
+    const clientId = import.meta.env?.VITE_GOOGLE_ONE_TAP_CLIENT_ID || import.meta.env?.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      console.warn('[one-tap] Client ID manquant (VITE_GOOGLE_ONE_TAP_CLIENT_ID ou VITE_GOOGLE_CLIENT_ID), skip init');
+      return;
+    }
+
+    let tries = 0;
+    const maxTries = 15; // ~6s max
+
+    const init = () => {
+      try {
+        if (!window.google?.accounts?.id) return false;
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: async ({ credential }) => {
+            if (!credential) return;
+            try {
+              const cred = GoogleAuthProvider.credential(credential);
+              await signInWithCredential(auth, cred);
+              setUser(auth.currentUser);
+              window.track && window.track('auth_one_tap_success');
+            } catch (e) {
+              console.error('[one-tap] signInWithCredential error', e);
+              setAuthError(e?.message || 'Erreur One Tap');
+              window.track && window.track('auth_one_tap_error', { message: e?.message });
+            }
+          },
+          ux_mode: 'popup',
+          auto_select: true,
+          context: 'signin',
+        });
+        window.google.accounts.id.prompt((n) => {
+          // Optionnel: métriques d’affichage/refus
+          if (n?.isNotDisplayed()) window.track && window.track('auth_one_tap_not_displayed', { reason: n.getNotDisplayedReason?.() });
+          if (n?.isSkippedMoment()) window.track && window.track('auth_one_tap_skipped', { reason: n.getSkippedReason?.() });
+          if (n?.isDismissedMoment()) window.track && window.track('auth_one_tap_dismissed', { reason: n.getDismissedReason?.() });
+        });
+        oneTapInitRef.current = true;
+        window.track && window.track('auth_one_tap_initialized');
+        return true;
+      } catch (e) {
+        console.warn('[one-tap] init error', e);
+        return false;
+      }
+    };
+
+    // Essaie immédiatement puis poll jusqu’à dispo
+    if (!init()) {
+      const id = setInterval(() => {
+        tries += 1;
+        if (init() || tries >= maxTries) clearInterval(id);
+      }, GSI_POLL_MS);
+      return () => clearInterval(id);
+    }
+  }, [user]);
 
   const handleGoToUpload = () => {
     const el = uploadRef.current;
@@ -70,6 +142,13 @@ export default function Form() {
     { key: "intro", label: "Écran intro/fin stylisé", price: 1.5 },
     { key: "express", label: "Livraison express 6 h", price: 4.0 },
   ];
+  // Options autorisées par formule
+const ALLOWED_OPTS = {
+  mini: new Set(["voice", "intro", "express"]),
+  classique: new Set(["music", "sfx", "voice", "intro", "express"]),
+  grand: new Set(["music", "sfx", "voice", "intro", "express"]),
+};
+const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(key);
   const [options, setOptions] = useState({
     music: false,
     sfx: false,
@@ -78,6 +157,50 @@ export default function Form() {
     express: false,
   });
   const toggleOption = (k) => setOptions((o) => ({ ...o, [k]: !o[k] }));
+
+  // Pré-sélection des options depuis l'URL: /creer?plan=...&opts=voice,intro
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const raw = (params.get('opts') || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!raw.length) return;
+    setOptions((prev) => {
+      const next = { ...prev };
+      raw.forEach((k) => { if (k in next && isAllowed(plan, k)) next[k] = true; });
+      return next;
+    });
+  }, [location.search, plan]);
+
+  // Fallback: lecture via location.state (depuis /tarifs)
+  useEffect(() => {
+    const st = location.state || {};
+    let p = plan;
+    if (st.plan && ["mini", "classique", "grand"].includes(String(st.plan))) {
+      p = String(st.plan);
+      setPlan(p);
+    }
+    if (Array.isArray(st.opts) && st.opts.length) {
+      const planForOpts = p;
+      setOptions((prev) => {
+        const next = { ...prev };
+        st.opts.forEach((k) => { if (k in next && isAllowed(planForOpts, k)) next[k] = true; });
+        return next;
+      });
+    }
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // À chaque changement de formule, on désactive les options non disponibles
+  useEffect(() => {
+    setOptions((prev) => {
+      const next = { ...prev };
+      Object.keys(next).forEach((k) => { if (!isAllowed(plan, k)) next[k] = false; });
+      return next;
+    });
+  }, [plan]);
 
   const total = useMemo(() => {
     let t = BASE[plan] || 0;
@@ -93,6 +216,13 @@ export default function Form() {
     const formData = new FormData(e.target);
     const body = Object.fromEntries(formData.entries());
 
+    // Image obligatoire : on bloque et on scrolle si absente
+    if (!imageDataUrl) {
+      toast.error("Ajoutez d’abord le dessin à envoyer.");
+      handleGoToUpload();
+      return;
+    }
+
     // Ajout d'infos de pricing dans le payload
     body.plan = plan;
     body.options = options;
@@ -105,6 +235,7 @@ export default function Form() {
         body: JSON.stringify({
           ...body,
           email: body.email || "meneust.r@gmail.com", // fallback
+          imageDataUrl,
         }),
       });
 
@@ -195,21 +326,32 @@ export default function Form() {
                     {/* Options */}
                     <h4 className="font-display text-lg font-semibold mb-4 md:mb-5">Options (facultatives)</h4>
                     <ul className="space-y-3">
-                      {OPTS.map((o) => (
-                        <li key={o.key} className="flex items-center justify-between gap-4 py-2.5">
-                          <label htmlFor={`opt-${o.key}`} className="flex items-center gap-3 cursor-pointer">
-                            <input
-                              id={`opt-${o.key}`}
-                              type="checkbox"
-                              className="h-5 w-5 rounded border-gray-300 text-brand focus:ring-brand"
-                              checked={options[o.key]}
-                              onChange={() => toggleOption(o.key)}
-                            />
-                            <span className="text-gray-800 dark:text-gray-200">{o.label}</span>
-                          </label>
-                          <span className="text-sm text-gray-600 dark:text-gray-300">+ {o.price.toFixed(2)} €</span>
-                        </li>
-                      ))}
+                      {OPTS.map((o) => {
+                        const disabled = !isAllowed(plan, o.key);
+                        return (
+                          <li
+                            key={o.key}
+                            className={`flex items-center justify-between gap-4 py-2.5 ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
+                          >
+                            <label
+                              htmlFor={`opt-${o.key}`}
+                              className={`flex items-center gap-3 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                            >
+                              <input
+                                id={`opt-${o.key}`}
+                                type="checkbox"
+                                className="h-5 w-5 rounded border-gray-300 text-brand focus:ring-brand"
+                                checked={options[o.key]}
+                                onChange={() => { if (!disabled) toggleOption(o.key); }}
+                                disabled={disabled}
+                                aria-disabled={disabled}
+                              />
+                              <span className="text-gray-800 dark:text-gray-200">{o.label}</span>
+                            </label>
+                            <span className="text-sm text-gray-600 dark:text-gray-300">+ {o.price.toFixed(2)} €</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                     <p className="help mt-4">Vous pourrez modifier ces options avant de valider.</p>
                   </div>
@@ -294,7 +436,10 @@ export default function Form() {
                     const file = e.dataTransfer?.files?.[0];
                     if (file) {
                       const reader = new FileReader();
-                      reader.onload = () => setPreview(reader.result);
+                      reader.onload = () => {
+                        setPreview(reader.result);
+                        setImageDataUrl(reader.result);
+                      };
                       reader.readAsDataURL(file);
                       const input = fileInputRef.current;
                       if (input) {
@@ -302,24 +447,27 @@ export default function Form() {
                         dt.items.add(file);
                         input.files = dt.files;
                       }
-                      setFileSelected(true);
-                      track("file_selected", { via: "drop" });
+                      window.track && window.track("file_selected", { via: "drop" });
                     }
                   }}
                 >
                   <input
                     id="file-upload"
+                    name="image"
                     type="file"
                     accept="image/*"
-                    required
                     ref={fileInputRef}
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        setPreview(URL.createObjectURL(file));
-                        setFileSelected(true);
-                        track("file_selected", { via: "picker" });
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setPreview(reader.result);
+                          setImageDataUrl(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+                        window.track && window.track("file_selected", { via: "picker" });
                       }
                     }}
                   />

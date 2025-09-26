@@ -58,7 +58,7 @@
   }
 
   /* Petites chips (filtres Galerie) */
-  .chip { @apply inline-flex items-center rounded-full border border-gray-200 px-3 py-1 text-sm bg-white hover:bg-gray-50; }
+  .chip { @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium no-underline cursor-pointer border bg-white text-gray-800 border-gray-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 shadow-sm dark:bg-white dark:text-gray-900 dark:border-white/30 dark:hover:bg-white; }
 }
 
 /* --- Accessibilité & motion --- */

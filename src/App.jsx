@@ -17,6 +17,7 @@ import Galerie from "./components/Galerie";
 import NotFound from "./pages/NotFound";
 import SignInUpload from "./components/SignInUpload";
 import ParcoursCards, { PARCOURS } from "./components/ParcoursCards";
+import Values from "./components/Values";
 
 const Form = lazy(() => import("./pages/Form"));
 const Concept = lazy(() => import("./pages/Concept"));
@@ -51,6 +52,7 @@ function HomePage() {
       <StepsDefault />
       <BlockyDividerBottom />
       <Pitch />
+      <Values />
       <Galerie />
       <ParcoursCards items={PARCOURS} />
       <Testimonials />
