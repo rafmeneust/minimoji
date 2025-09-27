@@ -60,6 +60,21 @@ function HomePage() {
   );
 }
 
+function RouteChangeTracker() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    const id = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (typeof window === "undefined" || typeof window.gtag !== "function" || !id) return;
+    window.gtag("event", "page_view", {
+      send_to: id,
+      page_path: pathname + search,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }, [pathname, search]);
+  return null;
+}
+
 function App() {
   const location = useLocation();
 
@@ -78,8 +93,9 @@ function App() {
   return (
     <HelmetProvider>
       <DinoPopup />
-      <div className="scroll-smooth bg-whitee dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
+      <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollToTop key={location.pathname} /> 
+        <RouteChangeTracker />
         <Navbar />
         <Suspense fallback={<div>Chargement...</div>}>
           <Routes location={location} key={location.pathname}>

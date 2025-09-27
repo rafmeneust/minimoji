@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import toast, { Toaster } from "react-hot-toast";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRightIcon, CloudArrowUpIcon, UserIcon, PencilSquareIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, CloudArrowUpIcon, UserIcon, PencilSquareIcon, EnvelopeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { auth, provider } from "../lib/firebaseClient";
 
 import { signInWithPopup, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
@@ -14,11 +14,13 @@ if (typeof window !== 'undefined' && !window.track) {
   };
 }
 
+const API_BASE = import.meta.env?.VITE_API_BASE || '';
 const GSI_POLL_MS = 400;
 
 export default function Form() {
   const [preview, setPreview] = useState(null);
   const [imageDataUrl, setImageDataUrl] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -27,12 +29,14 @@ export default function Form() {
   const fileInputRef = useRef(null);
   const [user, setUser] = useState(null);
   const [authError, setAuthError] = useState("");
+  const [oneTapFallback, setOneTapFallback] = useState(false);
   const oneTapInitRef = useRef(false);
   const signIn = async () => {
     setAuthError("");
     try {
       const cred = await signInWithPopup(auth, provider);
       setUser(cred.user);
+      setOneTapFallback(false);
     } catch (e) {
       setAuthError(e?.message || "Erreur connexion Google");
     }
@@ -64,6 +68,7 @@ export default function Form() {
               const cred = GoogleAuthProvider.credential(credential);
               await signInWithCredential(auth, cred);
               setUser(auth.currentUser);
+              setOneTapFallback(false);
               window.track && window.track('auth_one_tap_success');
             } catch (e) {
               console.error('[one-tap] signInWithCredential error', e);
@@ -76,10 +81,14 @@ export default function Form() {
           context: 'signin',
         });
         window.google.accounts.id.prompt((n) => {
-          // Optionnel: métriques d’affichage/refus
-          if (n?.isNotDisplayed()) window.track && window.track('auth_one_tap_not_displayed', { reason: n.getNotDisplayedReason?.() });
-          if (n?.isSkippedMoment()) window.track && window.track('auth_one_tap_skipped', { reason: n.getSkippedReason?.() });
-          if (n?.isDismissedMoment()) window.track && window.track('auth_one_tap_dismissed', { reason: n.getDismissedReason?.() });
+          // Optionnel: métriques d’affichage/refus + fallback visuel
+          const notDisplayed = n?.isNotDisplayed?.();
+          const skipped = n?.isSkippedMoment?.();
+          const dismissed = n?.isDismissedMoment?.();
+          if (notDisplayed) window.track && window.track('auth_one_tap_not_displayed', { reason: n.getNotDisplayedReason?.() });
+          if (skipped) window.track && window.track('auth_one_tap_skipped', { reason: n.getSkippedReason?.() });
+          if (dismissed) window.track && window.track('auth_one_tap_dismissed', { reason: n.getDismissedReason?.() });
+          if (!user && (notDisplayed || skipped || dismissed)) setOneTapFallback(true);
         });
         oneTapInitRef.current = true;
         window.track && window.track('auth_one_tap_initialized');
@@ -214,7 +223,7 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const body = Object.fromEntries(formData.entries());
+    const flat = Object.fromEntries(formData.entries());
 
     // Image obligatoire : on bloque et on scrolle si absente
     if (!imageDataUrl) {
@@ -223,34 +232,88 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
       return;
     }
 
-    // Ajout d'infos de pricing dans le payload
-    body.plan = plan;
-    body.options = options;
-    body.total_estime = total;
+    // Payload attendu par l’API (clés à plat)
+    const payload = {
+      email: flat.email || "meneust.r@gmail.com",
+      child_name: flat.child_name || "",
+      drawing_title: flat.drawing_title || "",
+      story: flat.story || "",
+      plan,
+      music: !!options.music,
+      sfx: !!options.sfx,
+      voice: !!options.voice,
+      intro: !!options.intro,
+      express: !!options.express,
+      total_estime: total,
+      imageDataUrl,
+    };
 
     try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...body,
-          email: body.email || "meneust.r@gmail.com", // fallback
-          imageDataUrl,
-        }),
-      });
+  // 1) Essai JSON
+  let response = await fetch(`${API_BASE}/api/send-email`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-      if (response.ok) {
-        toast.success("✉️ Votre dessin a bien été envoyé !");
-        setTimeout(() => navigate("/confirmation"), 1200);
-      } else {
-        const errorText = await response.text();
-        console.error("Erreur:", errorText);
-        toast.error("Une erreur est survenue, veuillez réessayer.");
+  // 2) Fallback multipart pour gros fichiers / limites JSON
+  if (!response.ok && imageFile && [400, 413, 415].includes(response.status)) {
+    window.track && window.track('send_email_json_failed', { status: response.status });
+    const form = new FormData();
+    form.append('email', payload.email);
+    form.append('child_name', payload.child_name || '');
+    form.append('drawing_title', payload.drawing_title || '');
+    form.append('story', payload.story || '');
+    form.append('plan', plan);
+    form.append('total_estime', String(total));
+    form.append('music', String(!!options.music));
+    form.append('sfx', String(!!options.sfx));
+    form.append('voice', String(!!options.voice));
+    form.append('intro', String(!!options.intro));
+    form.append('express', String(!!options.express));
+    form.append('image', imageFile);
+
+    response = await fetch(`${API_BASE}/api/send-email`, { method: 'POST', body: form });
+  }
+
+  if (response.ok) {
+    window.track && window.track('send_email_success');
+    toast.success('✉️ Votre dessin a bien été envoyé !');
+    setTimeout(() => navigate('/confirmation'), 1200);
+  } else {
+    const errorText = await response.text();
+    console.error('Erreur:', errorText);
+    toast.error('Une erreur est survenue, veuillez réessayer.');
+  }
+} catch (error) {
+  console.error('Erreur réseau:', error);
+  // Dernier recours: si JSON a échoué à cause du réseau et qu'on a un fichier, on tente le multipart une fois
+  if (imageFile) {
+    try {
+      const form = new FormData();
+      form.append('email', payload.email);
+      form.append('child_name', payload.child_name || '');
+      form.append('drawing_title', payload.drawing_title || '');
+      form.append('story', payload.story || '');
+      form.append('plan', plan);
+      form.append('total_estime', String(total));
+      form.append('music', String(!!options.music));
+      form.append('sfx', String(!!options.sfx));
+      form.append('voice', String(!!options.voice));
+      form.append('intro', String(!!options.intro));
+      form.append('express', String(!!options.express));
+      form.append('image', imageFile);
+      const resp2 = await fetch(`${API_BASE}/api/send-email`, { method: 'POST', body: form });
+      if (resp2.ok) {
+        window.track && window.track('send_email_success_multipart_after_error');
+        toast.success('✉️ Votre dessin a bien été envoyé !');
+        setTimeout(() => navigate('/confirmation'), 1200);
+        return;
       }
-    } catch (error) {
-      console.error("Erreur réseau:", error);
-      toast.error("Une erreur est survenue, veuillez réessayer.");
-    }
+    } catch (_) { /* ignore */ }
+  }
+  toast.error('Une erreur est survenue, veuillez réessayer.');
+}
   };
 
   return (
@@ -282,7 +345,7 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
       <Toaster position="bottom-center" />
 
       {/* Section principale */}
-      <section className="section bg-white dark:bg-gray-900">
+      <section className="section bg-white dark:bg-gray-900 relative">
         <div className="container-pg">
           <div className="card p-6 md:p-8 lg:p-10 max-w-5xl mx-auto">
             <div className="text-center mb-6">
@@ -435,6 +498,7 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
                     e.preventDefault();
                     const file = e.dataTransfer?.files?.[0];
                     if (file) {
+                      setImageFile(file);
                       const reader = new FileReader();
                       reader.onload = () => {
                         setPreview(reader.result);
@@ -449,18 +513,20 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
                       }
                       window.track && window.track("file_selected", { via: "drop" });
                     }
-                  }}
+}}
                 >
                   <input
                     id="file-upload"
                     name="image"
                     type="file"
                     accept="image/*"
+                    required
                     ref={fileInputRef}
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
+                        setImageFile(file);
                         const reader = new FileReader();
                         reader.onload = () => {
                           setPreview(reader.result);
@@ -553,6 +619,35 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
           </div>
         </div>
       </section>
+      {(!user && oneTapFallback) && (
+        <div className="fixed inset-x-0 bottom-4 z-50 px-4 sm:px-6">
+          <div className="mx-auto max-w-xl rounded-2xl border border-gray-200 bg-white/95 backdrop-blur shadow-card dark:bg-gray-900/90 dark:border-white/15">
+            <div className="flex items-center gap-3 p-3">
+              <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-semibold select-none">G</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate">Connexion rapide</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 truncate">Se connecter avec Google pour continuer plus vite.</p>
+              </div>
+              <button
+                type="button"
+                onClick={signIn}
+                className="inline-flex items-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                Se connecter
+                <ArrowRightIcon className="ml-1 h-4 w-4" aria-hidden />
+              </button>
+              <button
+                type="button"
+                aria-label="Fermer"
+                onClick={() => setOneTapFallback(false)}
+                className="ml-1 inline-flex p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
+              >
+                <XMarkIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" aria-hidden />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
