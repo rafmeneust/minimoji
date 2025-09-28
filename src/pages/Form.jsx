@@ -30,6 +30,7 @@ export default function Form() {
   const [user, setUser] = useState(null);
   const [authError, setAuthError] = useState("");
   const [oneTapFallback, setOneTapFallback] = useState(false);
+  const [useCustomEmail, setUseCustomEmail] = useState(false);
   const oneTapInitRef = useRef(false);
   const signIn = async () => {
     setAuthError("");
@@ -37,6 +38,7 @@ export default function Form() {
       const cred = await signInWithPopup(auth, provider);
       setUser(cred.user);
       setOneTapFallback(false);
+      setUseCustomEmail(false);
     } catch (e) {
       setAuthError(e?.message || "Erreur connexion Google");
     }
@@ -68,6 +70,7 @@ export default function Form() {
               const cred = GoogleAuthProvider.credential(credential);
               await signInWithCredential(auth, cred);
               setUser(auth.currentUser);
+              setUseCustomEmail(false);
               setOneTapFallback(false);
               window.track && window.track('auth_one_tap_success');
             } catch (e) {
@@ -232,12 +235,23 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
       return;
     }
 
+    // Choix d'email cohérent : si connecté Google => on utilise user.email (sauf si useCustomEmail) ; sinon on exige le champ saisi
+    const emailToUse = ((user && !useCustomEmail) ? user.email : (flat.email || '')).trim();
+    if (!emailToUse) {
+      toast.error('Renseignez une adresse email');
+      if (!user || useCustomEmail) {
+        const emailEl = e.target.querySelector('input[name="email"]');
+        if (emailEl) emailEl.focus();
+      }
+      return;
+    }
+
     // Payload attendu par l’API (clés à plat)
     const payload = {
-      email: flat.email || "meneust.r@gmail.com",
-      child_name: flat.child_name || "",
-      drawing_title: flat.drawing_title || "",
-      story: flat.story || "",
+      email: emailToUse,
+      child_name: flat.child_name || '',
+      drawing_title: flat.drawing_title || '',
+      story: flat.story || '',
       plan,
       music: !!options.music,
       sfx: !!options.sfx,
@@ -257,7 +271,7 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
   });
 
   // 2) Fallback multipart pour gros fichiers / limites JSON
-  if (!response.ok && imageFile && [400, 413, 415].includes(response.status)) {
+  if (!response.ok && imageFile) {
     window.track && window.track('send_email_json_failed', { status: response.status });
     const form = new FormData();
     form.append('email', payload.email);
@@ -590,17 +604,39 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
                       Se connecter avec Google
                     </button>
                   ) : (
-                    <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-sm">
-                      Connecté : <strong>{user.displayName || user.email}</strong>
-                    </p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-sm">
+                        Connecté avec Google — <strong className="font-semibold">{user.email}</strong>
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setUseCustomEmail((v) => !v)}
+                        className="px-3 py-1.5 rounded-full border text-sm font-semibold bg-white text-gray-900 border-gray-200 hover:bg-gray-50 dark:text-gray-100 dark:border-white/20"
+                      >
+                        {useCustomEmail ? 'Utiliser l\u2019email Google' : 'Utiliser une autre adresse'}
+                      </button>
+                    </div>
                   )}
                   {authError && <p className="mt-2 text-sm text-red-600">{authError}</p>}
                 </div>
 
-                <div>
-                  <label className="label inline-flex items-center gap-2"><EnvelopeIcon className="h-5 w-5" aria-hidden /> Adresse email du parent</label>
-                  <input type="email" name="email" autoComplete="email" required className="input" placeholder="prenom@exemple.com" />
-                </div>
+                {(!user || useCustomEmail) && (
+                  <div>
+                    <label className="label inline-flex items-center gap-2">
+                      <EnvelopeIcon className="h-5 w-5" aria-hidden />
+                      Adresse email du parent
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      required={!user || useCustomEmail}
+                      defaultValue={user?.email || ''}
+                      className="input"
+                      placeholder="prenom@exemple.com"
+                    />
+                  </div>
+                )}
 
                 <div className="mt-4">
                   <div className="relative inline-flex">
