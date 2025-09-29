@@ -26,6 +26,14 @@ const activeOpts = useMemo(() => allowed.filter((k) => options[k]), [allowed, op
 const optionsTotal = useMemo(() => activeOpts.reduce((sum, k) => sum + OPTS[k], 0), [activeOpts]);
 const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), [selected, basePrice, optionsTotal]);
 
+  // --- Build search string for /creer (plan + opts) ---
+  const search = useMemo(() => {
+    if (!selected) return "";
+    const params = new URLSearchParams({ plan: selected });
+    if (activeOpts.length) params.set("opts", activeOpts.join(","));
+    return `?${params.toString()}`;
+  }, [selected, activeOpts]);
+
   const toggleOption = (key) => {
     if (!allowed.includes(key)) return; // ignore if not in current plan
     setOptions((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -379,13 +387,8 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
             <motion.div initial={false} className="w-full md:w-auto relative">
               <Link
                 ref={buttonRef}
-                to={(() => {
-                  if (!selected) return "/creer";
-                  const params = new URLSearchParams({ plan: selected });
-                  if (activeOpts.length) params.set("opts", activeOpts.join(","));
-                  return `/creer?${params.toString()}`;
-                })()}
-                state={selected ? { plan: selected, opts: activeOpts } : undefined}
+                to={{ pathname: "/creer", search }}
+                state={selected ? { from: "tarifs", plan: selected, opts: activeOpts } : undefined}
                 aria-label="Aller au formulaire pour créer un dessin animé"
                 className="
                   relative z-10
