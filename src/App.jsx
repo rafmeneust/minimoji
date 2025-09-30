@@ -2,6 +2,7 @@ import SEO from "./components/helmet";
 import { useEffect, lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 import Navbar from "./components/Navbar";
@@ -28,6 +29,10 @@ const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
 const Confirmation = lazy(() => import("./pages/Confirmation"));
 const Ecole = lazy(() => import("./pages/Ecole"));
 const Atelier = lazy(() => import("./pages/Atelier"));
+
+import RequireAuth from "./components/auth/require-auth.jsx";
+import Dashboard from "./app/Dashboard.jsx";
+import Login from "./app/Login.jsx";
 
 function HomePage() {
   return (
@@ -109,6 +114,15 @@ function App() {
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/cgu-cgv" element={<CGUCGV />} />
             <Route path="/confirmation" element={<Confirmation />} />
+            <Route
+              path="/app"
+              element={
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>
+              }
+            />
+            <Route path="/login" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

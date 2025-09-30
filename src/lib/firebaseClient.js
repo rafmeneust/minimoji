@@ -1,6 +1,8 @@
 // src/lib/firebaseClient.js
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore, setLogLevel } from "firebase/firestore";
+
 
 // Lis les variables d'env exposées par Vite (préfixe VITE_)
 const firebaseConfig = {
@@ -24,9 +26,6 @@ if (import.meta.env.DEV) {
   if (!firebaseConfig.projectId) missing.push("VITE_FIREBASE_PROJECT_ID");
 
   if (missing.length) {
-    // Message clair si Vite n’a pas (re)chargé le .env
-    // ou si les variables ne sont pas nommées avec le préfixe VITE_
-    // (Vite n’expose QUE celles qui commencent par VITE_)
     console.error(
       `[firebase] Variables manquantes: ${missing.join(", ")}.
 Vérifie ton .env, les noms (préfixe VITE_), et **redémarre** le serveur Vite.`
@@ -41,7 +40,13 @@ Vérifie ton .env, les noms (préfixe VITE_), et **redémarre** le serveur Vite.
 // Initialise l’app une seule fois
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
-// Exports
+// Exports (utiliser `app` **après** son initialisation)
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
+if (import.meta.env.DEV) setLogLevel("error");
+
+// Expose pour debug console en dev
+if (import.meta.env.DEV) window.__auth = auth;
+
 export default app;

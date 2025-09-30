@@ -2,8 +2,50 @@ import { Resend } from 'resend';
 import { v2 as cloudinary } from 'cloudinary';
 
 // --- Server-only environment variables ---
+const REQUIRED_ENV = ['RESEND_API_KEY', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
+const missing = REQUIRED_ENV.filter((key) => !process.env[key]);
+if (missing.length) {
+  throw new Error(`[send-email] Missing environment variables: ${missing.join(', ')}`);
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SUPPORT_EMAIL = (process.env.SUPPORT_EMAIL || process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'hello@minimoji.fr').trim();
+
+const PLAN_LABEL = {
+  mini: 'Formule Mini',
+  classique: 'Formule Classique',
+  grand: 'Formule Grand Héros',
+};
+
+const PLAN_BASE = { mini: 3.5, classique: 6.9, grand: 9.9 };
+const ALLOWED_PLANS = new Set(Object.keys(PLAN_LABEL));
+
+const MAX_JSON_BODY_BYTES = 1024 * 1024; // 1MB JSON payload cap
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB image cap
+const MAX_STORY_LENGTH = 5000;
+const MAX_LABEL_LENGTH = 120;
+
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+const isValidUrl = (value) => {
+  try {
+    const url = new URL(String(value || '').trim());
+    return ['http:', 'https:'].includes(url.protocol);
+  } catch (err) {
+    return false;
+  }
+};
+const toTrimmedString = (value) => String(value ?? '').trim();
+const buildPublicId = (title) => {
+  const base = toTrimmedString(title) || 'dessin';
+  const cleaned = base
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9-_]+/g, '_')
+    .replace(/_{2,}/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 60) || 'dessin';
+  return `${Date.now()}_${cleaned}`;
+};
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -33,7 +75,7 @@ export default async function handler(req, res) {
   try {
     const ctype = String(req.headers['content-type'] || '').toLowerCase();
 
-    let email, child_name, drawing_title, story, plan, total_estime;
+    let email, child_name, drawing_title, story, plan;
     // Legacy vs new UI options
     let style, ambiance, voiceover; // legacy
     let music, sfx, voice, intro, express; // new
@@ -42,36 +84,76 @@ export default async function handler(req, res) {
     if (ctype.includes('application/json')) {
       // Read & parse JSON body manually since bodyParser is disabled
       const raw = await readRawBody(req);
-      const body = raw ? JSON.parse(raw) : {};
-      ({ email, child_name, drawing_title, story, plan, style, ambiance, voiceover, music, sfx, voice, intro, express, total_estime } = body);
+      const payloadSize = Buffer.byteLength(raw || '', 'utf8');
+      if (payloadSize > MAX_JSON_BODY_BYTES) {
+        return res.status(413).json({ error: 'Payload JSON trop volumineux' });
+      }
+
+      let body = {};
+      try {
+        body = raw ? JSON.parse(raw) : {};
+      } catch (error) {
+        return res.status(400).json({ error: 'JSON invalide' });
+      }
+
+      ({ email, child_name, drawing_title, story, plan, style, ambiance, voiceover, music, sfx, voice, intro, express } = body);
+
+      email = toTrimmedString(email);
+      child_name = toTrimmedString(child_name);
+      drawing_title = toTrimmedString(drawing_title);
+      story = toTrimmedString(story);
+      plan = toTrimmedString(plan).toLowerCase();
 
       if (body.imageUrl) {
-        imageUrl = String(body.imageUrl);
-      } else if (body.imageDataUrl?.startsWith('data:')) {
-        const up = await cloudinary.uploader.upload(body.imageDataUrl, {
+        if (!isValidUrl(body.imageUrl)) {
+          return res.status(400).json({ error: 'URL image invalide' });
+        }
+        imageUrl = toTrimmedString(body.imageUrl);
+      } else if (typeof body.imageDataUrl === 'string' && body.imageDataUrl.trim().startsWith('data:')) {
+        const dataUrl = body.imageDataUrl.trim();
+        const [meta, base64] = dataUrl.split(',');
+        if (!meta?.startsWith('data:image/') || !base64) {
+          return res.status(400).json({ error: 'Image invalide' });
+        }
+        const imageBytes = Buffer.from(base64, 'base64').length;
+        if (imageBytes > MAX_IMAGE_SIZE_BYTES) {
+          return res.status(413).json({ error: 'Image trop volumineuse' });
+        }
+        const up = await cloudinary.uploader.upload(dataUrl, {
           folder: process.env.CLOUDINARY_UPLOAD_FOLDER || 'minimoji_uploads',
           resource_type: 'image',
-          public_id: `${Date.now()}_${(body.drawing_title || 'dessin').replace(/\s+/g, '_')}`,
+          public_id: buildPublicId(drawing_title),
           use_filename: true,
           unique_filename: false,
         });
         imageUrl = up.secure_url;
+      } else if (body.imageDataUrl) {
+        return res.status(400).json({ error: 'Image invalide' });
       }
     } else if (ctype.includes('multipart/form-data')) {
       // Parse multipart/form-data with formidable (dynamic import to avoid bundling issues)
       const formidable = (await import('formidable')).default;
-      const form = formidable({ keepExtensions: true });
-      const [fields, files] = await form.parse(req);
+      const form = formidable({ keepExtensions: true, maxFileSize: MAX_IMAGE_SIZE_BYTES });
+
+      let fields, files;
+      try {
+        [fields, files] = await form.parse(req);
+      } catch (error) {
+        const message = String(error?.message || '').toLowerCase();
+        if (message.includes('maxfilesize exceeded')) {
+          return res.status(413).json({ error: 'Image trop volumineuse' });
+        }
+        return res.status(400).json({ error: 'Formulaire invalide' });
+      }
 
       // fields can be arrays depending on formidable version
       const get = (obj, key) => (Array.isArray(obj[key]) ? obj[key][0] : obj[key]);
 
-      email = get(fields, 'email');
-      child_name = get(fields, 'child_name');
-      drawing_title = get(fields, 'drawing_title');
-      story = get(fields, 'story');
-      plan = get(fields, 'plan');
-      total_estime = get(fields, 'total_estime');
+      email = toTrimmedString(get(fields, 'email'));
+      child_name = toTrimmedString(get(fields, 'child_name'));
+      drawing_title = toTrimmedString(get(fields, 'drawing_title'));
+      story = toTrimmedString(get(fields, 'story'));
+      plan = toTrimmedString(get(fields, 'plan')).toLowerCase();
 
       style = get(fields, 'style');
       ambiance = get(fields, 'ambiance');
@@ -86,10 +168,16 @@ export default async function handler(req, res) {
       const imageFile = files?.image || files?.file || files?.upload;
       const file = Array.isArray(imageFile) ? imageFile[0] : imageFile;
       if (file?.filepath) {
+        if (file.mimetype && !String(file.mimetype).startsWith('image/')) {
+          return res.status(400).json({ error: 'Format image non supporté' });
+        }
+        if (file.size && file.size > MAX_IMAGE_SIZE_BYTES) {
+          return res.status(413).json({ error: 'Image trop volumineuse' });
+        }
         const up = await cloudinary.uploader.upload(file.filepath, {
           folder: process.env.CLOUDINARY_UPLOAD_FOLDER || 'minimoji_uploads',
           resource_type: 'image',
-          public_id: `${Date.now()}_${(drawing_title || 'dessin').replace(/\s+/g, '_')}`,
+          public_id: buildPublicId(drawing_title),
           use_filename: true,
           unique_filename: false,
         });
@@ -101,8 +189,23 @@ export default async function handler(req, res) {
 
     // Basic validations → 4xx, not 500
     if (!email) return res.status(400).json({ error: 'Email manquant' });
+    if (!isValidEmail(email)) return res.status(400).json({ error: 'Email invalide' });
+
     if (!plan) return res.status(400).json({ error: 'Plan manquant' });
+    if (!ALLOWED_PLANS.has(plan)) return res.status(400).json({ error: 'Plan invalide' });
+
     if (!imageUrl) return res.status(400).json({ error: 'Image manquante' });
+    if (!isValidUrl(imageUrl)) return res.status(400).json({ error: 'URL image invalide' });
+
+    if (child_name && child_name.length > MAX_LABEL_LENGTH) {
+      return res.status(400).json({ error: 'Prénom trop long' });
+    }
+    if (drawing_title && drawing_title.length > MAX_LABEL_LENGTH) {
+      return res.status(400).json({ error: 'Titre trop long' });
+    }
+    if (story && story.length > MAX_STORY_LENGTH) {
+      return res.status(400).json({ error: 'Histoire trop longue' });
+    }
 
     // -------- Helpers & formatting for a clearer email --------
     const escapeHtml = (s = '') =>
@@ -116,13 +219,6 @@ export default async function handler(req, res) {
       const v = Number.isFinite(+n) ? +n : 0;
       return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(v);
     };
-
-    const PLAN_LABEL = {
-      mini: 'Formule Mini',
-      classique: 'Formule Classique',
-      grand: 'Formule Grand Héros',
-    };
-    const PLAN_BASE = { mini: 3.5, classique: 6.9, grand: 9.9 };
 
     const ALL_OPTS = [
       { key: 'music',  label: 'Musique d’ambiance', price: 1.5 },
@@ -138,7 +234,7 @@ export default async function handler(req, res) {
 
     const labelForPlan = PLAN_LABEL[plan] || plan || 'Formule';
     const basePrice    = PLAN_BASE[plan] ?? 0;
-    const total        = Number.isFinite(+total_estime) ? +total_estime : (basePrice + selected.reduce((a,b)=>a+b.price,0));
+    const total        = basePrice + selected.reduce((sum, option) => sum + option.price, 0);
 
     const preheader = 'Nous avons bien reçu votre dessin — on commence la magie !';
 
