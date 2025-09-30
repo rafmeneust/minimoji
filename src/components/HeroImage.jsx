@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const child = {
   hidden: { opacity: 0, y: 40 },
@@ -15,8 +15,14 @@ const child = {
 };
 
 export default function HeroImage() {
+  const heroDesktop = (width) =>
+    `https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_${width},c_fill,dpr_auto/hero-min_p6b85v.png`;
+
+  const heroMobile = (width) =>
+    `https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_${width},c_fill,dpr_auto/hero-mobile_ds8xfg.png`;
+
   return (
-    <motion.div
+    <m.div
       variants={child}
       className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto mt-4 overflow-hidden"
     >
@@ -24,14 +30,21 @@ export default function HeroImage() {
       <picture>
         <source
           media="(max-width: 768px)"
-          srcSet="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto/hero-mobile_ds8xfg.png"
-          type="image/png"
+          srcSet={`${heroMobile(480)} 480w, ${heroMobile(720)} 720w, ${heroMobile(960)} 960w`}
+          sizes="(max-width: 480px) 90vw, (max-width: 768px) 80vw, 480px"
         />
         <img
-          src="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto/hero-min_p6b85v.png"
+          src={heroDesktop(960)}
+          srcSet={`${heroDesktop(640)} 640w, ${heroDesktop(960)} 960w, ${heroDesktop(1200)} 1200w`}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
           alt="Avant/après dessin animé"
           className="w-full mx-auto object-contain max-h-[60vh] relative z-0"
           loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          width="1200"
+          height="800"
+          style={{ aspectRatio: "3 / 2" }}
         />
       </picture>
 
@@ -47,6 +60,6 @@ export default function HeroImage() {
           6 sec de vidéo
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

@@ -112,6 +112,30 @@ export default function Form() {
     }
   }, [user]);
 
+  // --- Récupère une image déjà uploadée (depuis la homepage) ---
+  useEffect(() => {
+    const publicId =
+      location.state?.publicId || localStorage.getItem("lastUploadPublicId");
+    if (!publicId) return;
+
+    (async () => {
+      try {
+        const idToken = await auth.currentUser?.getIdToken?.();
+        const res = await fetch(
+          `/api/clip-url?publicId=${encodeURIComponent(publicId)}`,
+          {
+            headers: idToken ? { Authorization: `Bearer ${idToken}` } : undefined,
+          }
+        );
+        const data = await res.json().catch(() => null);
+        if (res.ok && data?.url) {
+          setPreview(data.url);     // On affiche l’aperçu à partir de l’URL sécurisée
+          setImageDataUrl(null);    // On ne garde pas la version base64
+        }
+      } catch (_) {}
+    })();
+  }, [location.state]);
+
   const handleGoToUpload = () => {
     const el = uploadRef.current;
     if (el) {
@@ -563,7 +587,16 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
                 {preview && (
                   <div className="mb-6">
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Aperçu :</p>
-                    <img src={preview} alt="Aperçu du dessin" className="w-full max-w-xs rounded-xl shadow-soft" />
+                    <img
+                      src={preview}
+                      alt="Aperçu du dessin"
+                      className="w-full max-w-xs rounded-xl shadow-soft"
+                      loading="lazy"
+                      decoding="async"
+                      width="320"
+                      height="320"
+                      style={{ aspectRatio: "1 / 1", objectFit: "cover" }}
+                    />
                   </div>
                 )}
 

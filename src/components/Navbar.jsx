@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ThemeSwitcher from './ThemeSwitcher';
 import { Link, useLocation } from 'react-router-dom';
 
+const preloadFormPage = () => import('@/pages/Form');
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -128,6 +130,7 @@ export default function Navbar() {
 
           <Link
             to="/creer"
+            onMouseEnter={preloadFormPage}
             className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full text-sm transition"
           >
             Créer mon Dessin Animé
@@ -214,6 +217,7 @@ export default function Navbar() {
               to="/creer"
               className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 w-full rounded-full text-center transition"
               onClick={() => setIsOpen(false)}
+              onMouseEnter={preloadFormPage}
             >
               Créer mon Dessin Animé
             </Link>

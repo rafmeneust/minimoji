@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
 import {
   SparklesIcon, ShieldCheckIcon, BoltIcon, AcademicCapIcon,
 } from "@heroicons/react/24/outline";
+import { loadMotionFeatures } from "@/lib/motion";
 
 export default function Values() {
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -58,7 +59,8 @@ export default function Values() {
 
   return (
     // FULL-BLEED: section qui occupe 100% de la largeur, avec fond vidéo
-    <section aria-labelledby="values-title" className="relative isolate overflow-hidden min-h-[420px] md:min-h-[500px]">
+    <LazyMotion features={loadMotionFeatures}>
+      <section aria-labelledby="values-title" className="relative isolate overflow-hidden min-h-[420px] md:min-h-[500px]">
       {/* Vidéo Cloudinary en plein fond (HTML5 video pour autoplay fiable) */}
       <div className="absolute inset-0 -z-10">
         <video
@@ -102,7 +104,7 @@ export default function Values() {
         {/* Cartes de réassurance */}
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((it, i) => (
-            <motion.li
+            <m.li
               key={it.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -119,10 +121,11 @@ export default function Values() {
                   <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{it.desc}</p>
                 </div>
               </div>
-            </motion.li>
+            </m.li>
           ))}
         </ul>
       </div>
-    </section>
+      </section>
+    </LazyMotion>
   );
 }

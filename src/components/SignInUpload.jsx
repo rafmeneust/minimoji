@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { auth, provider } from '../lib/firebaseClient';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 // --- Config côté client ---
 const MAX_FILE_MB = 5; // limite raisonnable
@@ -12,6 +13,12 @@ export default function SignInUpload() {
   const [uploadInfo, setUploadInfo] = useState(null);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u || null));
+    return () => unsub();
+  }, []);
 
   // Utilitaire pour POST JSON + remonter proprement l'erreur serveur
   const postJSON = async (url, body) => {
@@ -57,36 +64,46 @@ export default function SignInUpload() {
       if (file.size > MAX_FILE_MB * 1024 * 1024) {
         throw new Error(`Image trop lourde (> ${MAX_FILE_MB} Mo).`);
       }
+      if (!auth.currentUser) {
+        throw new Error('Connecte-toi d’abord.');
+      }
 
       setUploading(true);
       console.log('[upload] start', file?.name, file?.size);
 
-      // 1) Récupérer une signature côté serveur
-      const params = {
-        folder: 'minimoji-uploads',
-        timestamp: Math.floor(Date.now() / 1000), // secondes
-      };
+      // 1) Récupérer une signature côté serveur (auth requise)
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('/api/cloudinary-sign', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${idToken}` }
+        // pas de Content-Type: on n'envoie pas de JSON ici
+      });
 
-      const { signature, timestamp, apiKey, cloudName } = await postJSON('/api/cloudinary-sign', { params });
-      if (!signature || !timestamp || !apiKey || !cloudName) {
+      if (!res.ok) {
+        const txt = await res.text().catch(() => '');
+        throw new Error(txt || `/api/cloudinary-sign ${res.status}`);
+      }
+
+      // sig = { signature, timestamp, apiKey, cloudName, folder, type, context, publicId? }
+      const sig = await res.json();
+      if (!sig?.signature || !sig?.timestamp || !sig?.apiKey || !sig?.cloudName || !sig?.folder) {
         throw new Error('Réponse de signature invalide.');
       }
-      console.log('[upload] signature OK', { cloudName, hasSig: !!signature });
+      console.log('[upload] signature OK', { cloud: sig.cloudName });
 
       // 2) Upload signé directement chez Cloudinary
       const form = new FormData();
       form.append('file', file);
-      form.append('api_key', apiKey);
-      form.append('timestamp', String(timestamp));
-      form.append('folder', params.folder);
-      form.append('signature', signature);
+      form.append('api_key', sig.apiKey);
+      form.append('timestamp', String(sig.timestamp));
+      form.append('signature', sig.signature);
+      // Utiliser EXACTEMENT les paramètres signés par le serveur
+      form.append('folder', sig.folder);
+      form.append('type', sig.type);         // "private"
+      form.append('context', sig.context);   // "owner=<uid>"
+      if (sig.publicId) form.append('public_id', sig.publicId);
 
-      // (Facultatif) support d'un preset non signé si défini dans l'env (ex: en CI
-      // ou pour dépannage). On ne l’envoie QUE s’il existe.
-      const preset = import.meta?.env?.VITE_CLOUDINARY_UPLOAD_PRESET;
-      if (preset) form.append('upload_preset', preset);
-
-      const url = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+      const url = `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`;
       const upResp = await fetch(url, { method: 'POST', body: form });
       const body = await upResp.json().catch(() => null);
       if (!upResp.ok) {
@@ -97,6 +114,9 @@ export default function SignInUpload() {
 
       console.log('[upload] done', body);
       setUploadInfo({ public_id: body.public_id, secure_url: body.secure_url });
+      // mémorise l'upload pour la page /creer et redirige
+      try { localStorage.setItem('lastUploadPublicId', body.public_id); } catch (_) {}
+      navigate('/creer', { replace: true, state: { publicId: body.public_id } });
     } catch (e) {
       console.error('[upload] error', e);
       setError(e.message || 'Erreur upload');
@@ -168,7 +188,16 @@ export default function SignInUpload() {
 
       {uploadInfo && (
         <>
-          <img src={uploadInfo.secure_url} alt="" className="mt-4 h-24 w-24 rounded-lg border object-cover" />
+          <img
+            src={uploadInfo.secure_url}
+            alt="Aperçu du dessin téléchargé"
+            className="mt-4 h-24 w-24 rounded-lg border object-cover"
+            loading="lazy"
+            decoding="async"
+            width="96"
+            height="96"
+            style={{ aspectRatio: "1 / 1" }}
+          />
           <p className="text-xs text-zinc-500">ID : {uploadInfo.public_id}</p>
         </>
       )}

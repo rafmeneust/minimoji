@@ -5,6 +5,10 @@ export default function Loader() {
         src="/dino.svg"
         alt="Chargement Dino"
         className="w-20 h-20 animate-spin-slow mb-4"
+        loading="lazy"
+        decoding="async"
+        width="80"
+        height="80"
       />
       <p className="text-sm">Un petit dino arrive... Patience !</p>
     </div>

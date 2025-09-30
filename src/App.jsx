@@ -8,19 +8,13 @@ import { HelmetProvider } from "react-helmet-async";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-import { StepsDefault } from "./components/Steps";
-import Pitch from "./components/Pitch";
 import DinoPopup from "./components/DinoPopup";
-import Testimonials from "./components/Testimonials";
-import BlockyDivider from "./components/BlockyDivider";
-import BlockyDividerBottom from "./components/BlockyDividerBottom";
-import Galerie from "./components/Galerie";
 import NotFound from "./pages/NotFound";
 import SignInUpload from "./components/SignInUpload";
 import ParcoursCards, { PARCOURS } from "./components/ParcoursCards";
-import Values from "./components/Values";
 
-const Form = lazy(() => import("./pages/Form"));
+const loadFormPage = () => import("./pages/Form");
+const Form = lazy(loadFormPage);
 const Concept = lazy(() => import("./pages/Concept"));
 const GaleriePage = lazy(() => import("./pages/GaleriePage"));
 const Tarifs = lazy(() => import("./pages/Tarifs"));
@@ -29,12 +23,31 @@ const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
 const Confirmation = lazy(() => import("./pages/Confirmation"));
 const Ecole = lazy(() => import("./pages/Ecole"));
 const Atelier = lazy(() => import("./pages/Atelier"));
+const StepsLazy = lazy(() => import("./components/Steps").then((mod) => ({ default: mod.StepsDefault })));
+const BlockyDivider = lazy(() => import("./components/BlockyDivider"));
+const BlockyDividerBottom = lazy(() => import("./components/BlockyDividerBottom"));
+const Pitch = lazy(() => import("./components/Pitch"));
+const Values = lazy(() => import("./components/Values"));
+const Galerie = lazy(() => import("./components/Galerie"));
+const Testimonials = lazy(() => import("./components/Testimonials"));
 
 import RequireAuth from "./components/auth/require-auth.jsx";
 import Dashboard from "./app/Dashboard.jsx";
 import Login from "./app/Login.jsx";
 
 function HomePage() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const preload = () => {
+      loadFormPage();
+    };
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(preload, { timeout: 2000 });
+    } else {
+      window.setTimeout(preload, 1500);
+    }
+  }, []);
+
   return (
     <>
       <SEO
@@ -50,17 +63,40 @@ function HomePage() {
         <meta name="twitter:title" content="Minimoji - Donnez vie aux dessins de vos enfants" />
         <meta name="twitter:description" content="Transformez les dessins d’enfants en mini-films animés en 24h. Magique, ludique, et 100% personnalisé." />
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_1200,c_fill,dpr_auto/hero-min_p6b85v.png"
+          imagesrcset="https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_640,c_fill,dpr_auto/hero-min_p6b85v.png 640w, https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_960,c_fill,dpr_auto/hero-min_p6b85v.png 960w, https://res.cloudinary.com/dwl7ufet9/image/upload/f_auto,q_auto,w_1200,c_fill,dpr_auto/hero-min_p6b85v.png 1200w"
+          imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+          fetchpriority="high"
+        />
       </SEO>
       <Hero />
       <SignInUpload />
-      <BlockyDivider />
-      <StepsDefault />
-      <BlockyDividerBottom />
-      <Pitch />
-      <Values />
-      <Galerie />
+      <Suspense fallback={null}>
+        <BlockyDivider />
+      </Suspense>
+      <Suspense fallback={null}>
+        <StepsLazy />
+      </Suspense>
+      <Suspense fallback={null}>
+        <BlockyDividerBottom />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Pitch />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Values />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Galerie />
+      </Suspense>
       <ParcoursCards items={PARCOURS} />
-      <Testimonials />
+      <Suspense fallback={null}>
+        <Testimonials />
+      </Suspense>
     </>
   );
 }
@@ -82,6 +118,34 @@ function RouteChangeTracker() {
 
 function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const id = import.meta.env.VITE_GA_MEASUREMENT_ID;
+    if (!id) return;
+
+    const loadAnalytics = () => {
+      if (window.gtag) return;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+      const script = document.createElement("script");
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+      script.async = true;
+      script.onload = () => {
+        window.gtag("js", new Date());
+        window.gtag("config", id, { send_page_view: false });
+      };
+      document.head.appendChild(script);
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
+    } else {
+      window.setTimeout(loadAnalytics, 1500);
+    }
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash;

@@ -9,10 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-function GoogleIcon({ className = "h-4 w-4" }) {
+function GoogleIcon({ className = "h-5 w-5" }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.7 3.8-5.5 3.8-3.3 0-6-2.8-6-6.2s2.7-6.2 6-6.2c1.9 0 3.2.8 3.9 1.4l2.7-2.6C16.9 2.2 14.7 1.3 12 1.3 6.9 1.3 2.7 5.5 2.7 10.7S6.9 20 12 20c6.9 0 9.6-4.8 9.6-7.3 0-.5 0-.9-.1-1.2H12z"/>
+    <svg viewBox="0 0 48 48" className={className} aria-hidden>
+      <path fill="#FFC107" d="M43.611 20.083h-1.611v-.083H24v8h11.303A13.996 13.996 0 0 1 10 24a14 14 0 0 1 14-14c3.579 0 6.847 1.356 9.353 3.575l5.657-5.657C34.912 4.058 29.702 2 24 2 11.85 2 2 11.85 2 24s9.85 22 22 22 22-9.85 22-22c0-1.315-.137-2.601-.389-3.917z"/>
+      <path fill="#FF3D00" d="M6.306 14.691l6.571 4.817A13.996 13.996 0 0 1 24 10c3.579 0 6.847 1.356 9.353 3.575l5.657-5.657C34.912 4.058 29.702 2 24 2 14.49 2 6.359 7.738 6.306 14.691z"/>
+      <path fill="#4CAF50" d="M24 46c5.557 0 10.63-2.132 14.438-5.61l-6.667-5.637A13.958 13.958 0 0 1 24 38c-6.004 0-11.079-3.86-12.897-9.231l-6.571 5.061C7.455 40.117 15.048 46 24 46z"/>
+      <path fill="#1976D2" d="M43.611 20.083H24v8h11.303A14.01 14.01 0 0 1 24 38c-5.004 0-9.579-2.804-11.897-6.969l-6.571 5.061C8.955 40.117 15.048 46 24 46c12.15 0 22-9.85 22-22 0-1.315-.137-2.601-.389-3.917z"/>
     </svg>
   );
 }
@@ -23,7 +26,7 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
-  const [mode, setMode] = useState("login"); // "login" | "signup"
+  const [mode, setMode] = useState("login");
 
   const mapError = (code, fallback) => {
     const MSG = {
@@ -46,7 +49,6 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
     try {
       setPending(true);
       await handler(email, password);
-      // navigation gérée dans Login.jsx
     } catch (e) {
       setError(mapError(e?.code, e?.message));
     } finally {
@@ -68,33 +70,38 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
     }
   }
 
+  const isSignup = mode === "signup";
+
   return (
     <Card
       className={[
         "w-full transition",
-        mode === "signup" ? "ring-1 ring-violet-200/70" : "ring-1 ring-gray-200/60",
+        isSignup ? "ring-1 ring-accent/40 bg-accent/5" : "ring-1 ring-muted/40 bg-background",
       ].join(" ")}
     >
       <CardHeader className="space-y-1">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>{mode === "signup" ? "Créer un compte" : "Connexion"}</CardTitle>
-            <CardDescription>
-              {mode === "signup"
+            <CardTitle className="text-2xl">
+              {isSignup ? "Créer un compte" : "Connexion"}
+            </CardTitle>
+            <CardDescription className="text-sm">
+              {isSignup
                 ? "Créez votre accès à l’espace Minimoji."
                 : "Accédez à votre espace Minimoji"}
             </CardDescription>
           </div>
 
-          {/* Toggle de mode plus visible */}
-          <div className="inline-flex rounded-full border p-1 bg-muted/40">
+          <div className="inline-flex rounded-full bg-muted/50 p-1">
             <button
               type="button"
               onClick={() => setMode("login")}
-              aria-pressed={mode === "login"}
+              aria-pressed={!isSignup}
               className={[
-                "px-3 py-1 text-xs rounded-full transition",
-                mode === "login" ? "bg-background shadow-sm" : "opacity-70 hover:opacity-100",
+                "px-3 py-1 text-xs rounded-full transition whitespace-nowrap",
+                !isSignup
+                  ? "bg-accent text-accent-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               ].join(" ")}
               disabled={pending}
             >
@@ -103,10 +110,12 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
             <button
               type="button"
               onClick={() => setMode("signup")}
-              aria-pressed={mode === "signup"}
+              aria-pressed={isSignup}
               className={[
-                "px-3 py-1 text-xs rounded-full transition",
-                mode === "signup" ? "bg-background shadow-sm" : "opacity-70 hover:opacity-100",
+                "px-3 py-1 text-xs rounded-full transition whitespace-nowrap",
+                isSignup
+                  ? "bg-accent text-accent-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               ].join(" ")}
               disabled={pending}
             >
@@ -117,12 +126,11 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
       </CardHeader>
 
       <CardContent className="grid gap-4">
-        {/* 1) Connexion rapide Google en tête */}
         <Button
           type="button"
           onClick={() => onGoogle?.()}
           disabled={pending}
-          className="w-full h-10 gap-2 bg-white text-gray-900 border hover:bg-gray-50 shadow-sm"
+          className="w-full h-10 gap-2 bg-white text-gray-900 border hover:bg-white/90 shadow-sm"
         >
           <GoogleIcon />
           <span className="font-medium whitespace-nowrap">Continuer avec Google</span>
@@ -135,7 +143,6 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
           </span>
         </div>
 
-        {/* 2) Formulaire e-mail */}
         <form className="grid gap-4" onSubmit={handleSubmit} noValidate>
           <div className="grid gap-2">
             <Label htmlFor="email">E-mail</Label>
@@ -156,20 +163,18 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
             <Input
               id="password"
               type="password"
-              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              autoComplete={isSignup ? "new-password" : "current-password"}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={mode === "signup" ? "6 caractères minimum" : undefined}
+              placeholder={isSignup ? "6 caractères minimum" : undefined}
             />
           </div>
 
-          {error ? (
-            <p role="alert" className="text-sm text-red-600">{error}</p>
-          ) : null}
-          {info ? (
-            <p className="text-sm text-green-600">{info}</p>
-          ) : null}
+          <div aria-live="polite" className="space-y-1 min-h-[1.25rem]">
+            {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+            {info && <p className="text-sm text-green-600">{info}</p>}
+          </div>
 
           <Button
             type="submit"
@@ -179,11 +184,11 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
             aria-busy={pending}
           >
             {pending
-              ? (mode === "signup" ? "Création…" : "Connexion…")
-              : (mode === "signup" ? "Créer mon compte" : "Se connecter")}
+              ? (isSignup ? "Création…" : "Connexion…")
+              : (isSignup ? "Créer mon compte" : "Se connecter")}
           </Button>
 
-          {mode === "login" && (
+          {!isSignup && (
             <div className="text-center text-sm">
               <button
                 type="button"
@@ -205,10 +210,10 @@ export default function LoginForm({ onSubmitEmail, onGoogle, onReset, onSignup }
         <button
           type="button"
           className="underline underline-offset-4 whitespace-nowrap"
-          onClick={() => { setError(""); setInfo(""); setMode(mode === "login" ? "signup" : "login"); }}
+          onClick={() => { setError(""); setInfo(""); setMode(isSignup ? "login" : "signup"); }}
           disabled={pending}
         >
-          {mode === "login" ? "Créer un compte" : "J’ai déjà un compte"}
+          {isSignup ? "J’ai déjà un compte" : "Créer un compte"}
         </button>
       </CardFooter>
     </Card>

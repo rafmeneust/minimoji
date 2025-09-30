@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
 import HeroImage from "./HeroImage";
 import { useRef, useLayoutEffect, useState } from "react";
+import { loadMotionFeatures } from "@/lib/motion";
 
 const container = {
   hidden: { opacity: 0 },
@@ -79,7 +80,7 @@ function ScribbleWord({ children }) {
               <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
           </defs>
-          <motion.path
+          <m.path
             d={d1}
             fill="none"
             stroke="url(#scribbleGrad)"
@@ -91,7 +92,7 @@ function ScribbleWord({ children }) {
             animate={{ pathLength: 1 }}
             transition={{ delay: 0.3, duration: 1.3, ease: [0.33, 1, 0.68, 1] }}
           />
-          <motion.path
+          <m.path
             d={d2}
             fill="none"
             stroke="url(#scribbleGrad)"
@@ -111,49 +112,50 @@ function ScribbleWord({ children }) {
 
 export default function Hero() {
   return (
-    <section className="section flex flex-col justify-center items-center text-center bg-white dark:bg-gray-800 transition-colors duration-500 font-sans">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="container-pg flex flex-col-reverse lg:flex-row-reverse items-center gap-12 w-full"
-      >
-        {/* Texte + CTA */}
-        <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-4 max-w-md px-4 w-full">
-          <motion.h1
-          variants={child}
-          className="mb-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+    <LazyMotion features={loadMotionFeatures}>
+      <section className="section flex flex-col justify-center items-center text-center bg-white dark:bg-gray-800 transition-colors duration-500 font-sans">
+        <m.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="container-pg flex flex-col-reverse lg:flex-row-reverse items-center gap-12 w-full"
         >
-          Faites vivre les <ScribbleWord>dessins</ScribbleWord> de vos enfants
-        </motion.h1>
+          {/* Texte + CTA */}
+          <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-4 max-w-md px-4 w-full">
+            <m.h1
+              variants={child}
+              className="mb-2"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Faites vivre les <ScribbleWord>dessins</ScribbleWord> de vos enfants
+            </m.h1>
 
-          <motion.p
+            <m.p
+              variants={child}
+              className="font-sans text-sm text-gray-700 dark:text-gray-300 font-normal leading-snug"
+            >
+              Transformez leurs chefs-d’œuvre en mini-films remplis de magie. Une photo suffit.
+              <strong> En quelques clics, l’imaginaire prend vie.</strong>
+            </m.p>
+
+            <m.p
+              variants={child}
+              className="font-sans text-xs text-gray-500 dark:text-gray-400 font-normal italic"
+            >
+              À partir de 3,49 € – livré en 1h 🕐
+            </m.p>
+          </div>
+          {/* Image */}
+          <m.div
             variants={child}
-            className="font-sans text-sm text-gray-700 dark:text-gray-300 font-normal leading-snug"
+            className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto flex justify-center"
           >
-            Transformez leurs chefs-d’œuvre en mini-films remplis de magie. Une photo suffit.
-            <strong> En quelques clics, l’imaginaire prend vie.</strong>
-          </motion.p>
-          
-          <motion.p
-            variants={child}
-            className="font-sans text-xs text-gray-500 dark:text-gray-400 font-normal italic"
-          >
-            À partir de 3,49 € – livré en 1h 🕐
-          </motion.p>
-        </div>
-        {/* Image */}
-        <motion.div
-          variants={child}
-          className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto flex justify-center"
-        >
-          <HeroImage />
-        </motion.div>
-        
-      </motion.div>
-    </section>
+            <HeroImage />
+          </m.div>
+        </m.div>
+      </section>
+    </LazyMotion>
   );
 }

@@ -156,7 +156,15 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
             selected === "mini" ? "border-4 border-indigo-400 ring-4 ring-indigo-400/60 bg-indigo-50/40 dark:bg-white/10 shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)]" : ""
           }`}
         >
-          <img src="/potion1.svg" alt="Potion bleue - Formule Mini" className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4" />
+          <img
+            src="/potion1.svg"
+            alt="Potion bleue - Formule Mini"
+            className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4"
+            loading="lazy"
+            decoding="async"
+            width="128"
+            height="128"
+          />
           <h2 className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-2 font-display">Formule Mini</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">6 à 10 s · 1 scène animée.</p>
           <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 mt-2 list-disc list-inside">
@@ -214,7 +222,15 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
               Recommandée
             </span>
           </div>
-          <img src="/potion2.svg" alt="Potion violette - Formule Classique" className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4" />
+          <img
+            src="/potion2.svg"
+            alt="Potion violette - Formule Classique"
+            className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4"
+            loading="lazy"
+            decoding="async"
+            width="128"
+            height="128"
+          />
           <h2 className="text-xl font-bold text-indigo-700 dark:text-white mb-2 font-display">Formule Classique</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">16 à 25 s · 2 à 3 scènes, transitions légères.</p>
           <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 mt-2 list-disc list-inside">
@@ -277,7 +293,15 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
             selected === "grand" ? "border-4 border-indigo-400 ring-4 ring-indigo-400/60 bg-indigo-50/40 dark:bg-white/10 shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)]" : ""
           }`}
         >
-          <img src="/potion3.svg" alt="Potion dorée - Formule Grand Héros" className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4" />
+          <img
+            src="/potion3.svg"
+            alt="Potion dorée - Formule Grand Héros"
+            className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4"
+            loading="lazy"
+            decoding="async"
+            width="128"
+            height="128"
+          />
           <h2 className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-2 font-display">Formule Grand Héros</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">30 s et + · Récit illustré, scènes multiples.</p>
           <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 mt-2 list-disc list-inside">

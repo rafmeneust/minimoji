@@ -29,6 +29,10 @@ export default function NotFound() {
         alt="Le magicien et le dinosaure cherchent leur chemin sur une carte"
         className="w-72 h-auto mb-6"
         role="presentation"
+        loading="lazy"
+        decoding="async"
+        width="288"
+        height="256"
       />
 
       <p className="text-lg text-gray-600 dark:text-gray-300 mb-2">

@@ -42,6 +42,7 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
 // Exports (utiliser `app` **après** son initialisation)
 export const auth = getAuth(app);
+    auth.useDeviceLanguage();
 export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 if (import.meta.env.DEV) setLogLevel("error");
