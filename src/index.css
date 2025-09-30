@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face{font-family:"Nunito";font-style:normal;font-weight:400;font-display:swap;src:url("/fonts/Nunito-400.woff2") format("woff2")}
+@font-face{font-family:"Nunito";font-style:normal;font-weight:600;font-display:swap;src:url("/fonts/Nunito-600.woff2") format("woff2")}
+@font-face{font-family:"Fredoka";font-style:normal;font-weight:700;font-display:swap;src:url("/fonts/Fredoka-700.woff2") format("woff2")}
+
 /* --- Patch de sûreté : garantit l'existence de .font-display (peut être retiré plus tard) --- */
 @layer utilities {
   /* Display font: Fredoka for headings via .font-display */
