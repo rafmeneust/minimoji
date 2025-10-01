@@ -1,6 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { LazyMotion, m } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { loadMotionFeatures } from "@/lib/motion";
 
 const baseCardClasses = 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md space-y-4 text-left';
 const stackedCardClasses = `${baseCardClasses} mt-10`;
@@ -8,6 +9,7 @@ const linkClasses = 'text-indigo-600 dark:text-indigo-400 hover:underline';
 
 export default function MentionsLegales() {
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <>
       <Helmet>
         <title>Mentions légales – Minimoji</title>
@@ -25,14 +27,14 @@ export default function MentionsLegales() {
       </Helmet>
 
       <section className="max-w-3xl mx-auto px-6 py-12 text-center font-poppins text-gray-800 dark:text-gray-100">
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-3xl font-bold mb-8"
         >
           Mentions légales
-        </motion.h1>
+        </m.h1>
 
         <div className={baseCardClasses}>
           <p>
@@ -228,5 +230,6 @@ export default function MentionsLegales() {
         </div>
       </section>
     </>
+    </LazyMotion>
   );
 }

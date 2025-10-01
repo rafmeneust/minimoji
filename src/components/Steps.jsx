@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
+import { loadMotionFeatures } from "@/lib/motion";
 
 const container = {
   hidden: {},
@@ -107,30 +108,31 @@ export function StepsDefault() {
     },
   });
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <section className="section bg-[#E6F0FF] dark:bg-gray-900 transition-colors duration-500 text-center relative overflow-hidden">
       {/* Ligne horizontale desktop */}
       <div className="hidden sm:block absolute top-[64px] left-1/2 w-[80%] h-[2px] -translate-x-1/2 z-0" />
 
-      <motion.div
+      <m.div
         variants={container}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
         className="container-pg"
       >
-        <motion.h2
+        <m.h2
           variants={child}
           className="mb-6 text-center max-w-2xl mx-auto"
         >
           Comment ça marche ?
-        </motion.h2>
+        </m.h2>
 
-        <motion.p
+        <m.p
           variants={child}
           className="text-gray-700 dark:text-gray-300 transition-colors duration-500 max-w-3xl mx-auto mt-4"
         >
           En quelques clics, donnez vie aux dessins de votre enfant et créez un souvenir unique, animé avec tendresse et magie.
-        </motion.p>
+        </m.p>
         <div className="w-full max-w-4xl mx-auto mt-10 mb-16 rounded-2xl overflow-hidden shadow-card border border-white/70 dark:border-white/20 bg-white/90 dark:bg-white/10 aspect-video">
           <iframe
             src={playerSrc}
@@ -148,13 +150,13 @@ export function StepsDefault() {
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-12 lg:gap-24 mt-10">
           {items.map((item, index) => (
-            <motion.div
+            <m.div
               key={index}
               variants={child}
               className="flex flex-col items-center text-gray-700 dark:text-gray-300 max-w-[420px] z-10"
             >
               {/* Image animée */}
-              <motion.img
+              <m.img
                 src={item.icon}
                 alt={`Étape ${item.step}`}
                 loading="lazy"
@@ -168,17 +170,17 @@ export function StepsDefault() {
               />
 
               {/* Bulle de numéro animée */}
-              <motion.div
+              <m.div
                 whileHover={{ scale: 1.4 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ duration: 0.2 }}
                 className={`w-12 h-12 flex items-center justify-center rounded-full ${item.color} text-xl font-bold mb-2 cursor-pointer`}
               >
                 {item.step}
-              </motion.div>
+              </m.div>
 
               {/* Texte */}
-              <motion.div
+              <m.div
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
                 className="card bg-white dark:bg-white p-5 shadow-[0_10px_30px_-8px_rgba(99,102,241,0.18)] hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.45)] hover:ring-2 hover:ring-indigo-400/50 transition-shadow duration-300"
@@ -186,11 +188,12 @@ export function StepsDefault() {
                 <p className="text-sm font-medium text-gray-900 whitespace-pre-line leading-snug">
                   {item.title}
                 </p>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           ))}
         </div>
-      </motion.div>
+      </m.div>
     </section>
+    </LazyMotion>
   );
 }

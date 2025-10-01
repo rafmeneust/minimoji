@@ -1,5 +1,5 @@
 import SEO from "./components/helmet";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
@@ -8,7 +8,6 @@ import { HelmetProvider } from "react-helmet-async";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-import DinoPopup from "./components/DinoPopup";
 import NotFound from "./pages/NotFound";
 import SignInUpload from "./components/SignInUpload";
 import ParcoursCards, { PARCOURS } from "./components/ParcoursCards";
@@ -30,6 +29,7 @@ const Pitch = lazy(() => import("./components/Pitch"));
 const Values = lazy(() => import("./components/Values"));
 const Galerie = lazy(() => import("./components/Galerie"));
 const Testimonials = lazy(() => import("./components/Testimonials"));
+const DinoPopupLazy = lazy(() => import("./components/DinoPopup"));
 
 import RequireAuth from "./components/auth/require-auth.jsx";
 import Dashboard from "./app/Dashboard.jsx";
@@ -118,6 +118,7 @@ function RouteChangeTracker() {
 
 function App() {
   const location = useLocation();
+  const [showDino, setShowDino] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -148,6 +149,17 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const activate = () => setShowDino(true);
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(activate, { timeout: 5000 });
+    } else {
+      const id = window.setTimeout(activate, 2000);
+      return () => window.clearTimeout(id);
+    }
+  }, []);
+
+  useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
       const target = document.querySelector(hash);
@@ -161,7 +173,11 @@ function App() {
 
   return (
     <HelmetProvider>
-      <DinoPopup />
+      {showDino && (
+        <Suspense fallback={null}>
+          <DinoPopupLazy />
+        </Suspense>
+      )}
       <div className="scroll-smooth bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100">
         <ScrollToTop key={location.pathname} /> 
         <RouteChangeTracker />

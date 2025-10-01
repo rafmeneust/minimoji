@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { LazyMotion, m, AnimatePresence } from "framer-motion";
+import { loadMotionFeatures } from "@/lib/motion";
 
 const sound = new Audio("/pop.wav");
 
@@ -28,11 +29,12 @@ export default function DinoPopup() {
   };
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <AnimatePresence>
       {show && (
         <>
           {/* Fond flouté */}
-          <motion.div
+          <m.div
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -40,7 +42,7 @@ export default function DinoPopup() {
           />
 
           {/* Popup */}
-          <motion.div
+          <m.div
             className="fixed inset-0 flex items-center justify-center z-50"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -59,7 +61,7 @@ export default function DinoPopup() {
               </button>
 
               {/* Dino animé */}
-              <motion.div
+              <m.div
                 animate={{ x: ["-70px", "70px", "-70px"] }}
                 transition={{
                   duration: 6,
@@ -69,7 +71,7 @@ export default function DinoPopup() {
                 }}
                 className="relative w-24 h-24 mx-auto"
               >
-                <motion.img
+                <m.img
                   src="/dino.svg"
                   alt="Dino"
                   className="absolute top-0 left-0 w-full origin-center"
@@ -84,7 +86,7 @@ export default function DinoPopup() {
                     repeatType: "loop"
                   }}
                 />
-                <motion.div
+                <m.div
                   className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-3 rounded-full bg-black/10 dark:bg-white/10"
                   animate={{
                     scaleX: [.9, 1.1, .9],
@@ -97,7 +99,7 @@ export default function DinoPopup() {
                     repeatType: "loop"
                   }}
                 />
-              </motion.div>
+              </m.div>
 
               {/* Texte principal */}
               <h3 className="text-lg font-extrabold leading-tight tracking-wide mt-4">
@@ -112,7 +114,7 @@ export default function DinoPopup() {
 
               {/* Code promo animé */}
               {showPromo && (
-                <motion.div
+                <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
@@ -127,7 +129,7 @@ export default function DinoPopup() {
                     {copied ? "✅" : "Copier"}
                   </button>
                 </div>
-              </motion.div>
+              </m.div>
               )}
 
               {/* Bouton "J'en profite" */}
@@ -142,9 +144,10 @@ export default function DinoPopup() {
                 </div>
               )}
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>
+    </LazyMotion>
   );
 }

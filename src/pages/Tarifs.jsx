@@ -7,8 +7,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/Pricing.js";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
-const motion = m;
-
 export default function Tarifs() {
   const [selected, setSelected] = useState(null);
   const buttonRef = useRef(null);
@@ -19,15 +17,14 @@ export default function Tarifs() {
   const title = "Nos formules magiques";
   const letters = Array.from(title);
 
-
   // Etat des options (communes, filtrées par plan courant)
   const [options, setOptions] = useState({ music: false, sfx: false, voice: false, intro: false, express: false });
 
-const allowed = useMemo(() => (selected ? OPTIONS_BY_PLAN[selected] : []), [selected]);
-const basePrice = useMemo(() => (selected ? PRICES[selected] : 0), [selected]);
-const activeOpts = useMemo(() => allowed.filter((k) => options[k]), [allowed, options]);
-const optionsTotal = useMemo(() => activeOpts.reduce((sum, k) => sum + OPTS[k], 0), [activeOpts]);
-const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), [selected, basePrice, optionsTotal]);
+  const allowed = useMemo(() => (selected ? OPTIONS_BY_PLAN[selected] : []), [selected]);
+  const basePrice = useMemo(() => (selected ? PRICES[selected] : 0), [selected]);
+  const activeOpts = useMemo(() => allowed.filter((k) => options[k]), [allowed, options]);
+  const optionsTotal = useMemo(() => activeOpts.reduce((sum, k) => sum + OPTS[k], 0), [activeOpts]);
+  const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), [selected, basePrice, optionsTotal]);
 
   // --- Build search string for /creer (plan + opts) ---
   const search = useMemo(() => {
@@ -106,7 +103,7 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
       <section className="section bg-white dark:bg-gray-900 font-sans pb-6 md:pb-8">
         <div className="container-pg max-w-4xl text-center">
           <div className="relative inline-block">
-            <motion.h1
+            <m.h1
               className="text-4xl sm:text-5xl font-extrabold mb-2 md:mb-3 font-display tracking-tight"
               aria-label={title}
               initial="hidden"
@@ -117,7 +114,7 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
               }}
             >
               {letters.map((ch, i) => (
-                <motion.span
+                <m.span
                   key={i}
                   aria-hidden="true"
                   className={ch === " " ? "inline-block w-2" : "inline-block"}
@@ -133,9 +130,9 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
                   }}
                 >
                   {ch}
-                </motion.span>
+                </m.span>
               ))}
-            </motion.h1>
+            </m.h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-sans">
             Choisissez la formule qui correspond à votre univers.  
@@ -412,7 +409,7 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
             </div>
 
             {/* CTA */}
-            <motion.div initial={false} className="w-full md:w-auto relative">
+            <m.div initial={false} className="w-full md:w-auto relative">
               <Link
                 ref={buttonRef}
                 to={{ pathname: "/creer", search }}
@@ -434,7 +431,7 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
                 <ArrowRightIcon className="ml-2 h-5 w-5" aria-hidden />
               </Link>
               {!prefersReducedMotion && (
-                <motion.span
+                <m.span
                   aria-hidden="true"
                   className="absolute inset-0 rounded-full ring-2 ring-orange-400/60 pointer-events-none"
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -442,7 +439,7 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
                   transition={{ duration: 0.9, ease: "easeOut", repeat: Infinity, repeatDelay: 5 }}
                 />
               )}
-            </motion.div>
+            </m.div>
           </div>
         ) : (
           <p className="text-sm text-center text-gray-600 dark:text-gray-300">
@@ -452,16 +449,16 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
       </aside>
     </div>
   </section>
-<motion.div
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  viewport={{ once: true }}
->
-  <Pitch />
-</motion.div>
+      <m.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <Pitch />
+      </m.div>
 
-    </main>
+      </main>
     </LazyMotion>
   );
 }

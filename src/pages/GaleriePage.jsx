@@ -1,6 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
 import { useState, useRef, useMemo } from "react";
+import { loadMotionFeatures } from "@/lib/motion";
 
 const videos = [
   {
@@ -155,9 +156,10 @@ export default function GaleriePage() {
   };
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="px-4 sm:px-6 md:px-10 py-20 max-w-6xl mx-auto">
-        <motion.h1
+        <m.h1
           className="text-4xl sm:text-5xl font-extrabold leading-snug mb-4 text-center font-display"
           aria-label={h1Title}
           initial="hidden"
@@ -165,7 +167,7 @@ export default function GaleriePage() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } } }}
         >
           {h1Letters.map((ch, i) => (
-            <motion.span
+            <m.span
               key={i}
               aria-hidden="true"
               className={ch === " " ? "inline-block w-2" : "inline-block"}
@@ -181,9 +183,9 @@ export default function GaleriePage() {
               }}
             >
               {ch}
-            </motion.span>
+            </m.span>
           ))}
-        </motion.h1>
+        </m.h1>
         <p className="text-base sm:text-lg text-center text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-12">
           Voici une sélection de vidéos magiques, créées à partir de vrais dessins d’enfants. Chaque film est une aventure unique.
         </p>
@@ -192,7 +194,7 @@ export default function GaleriePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {shuffledVideos.map((vid, index) => {
             return (
-              <motion.div
+              <m.div
                 key={index}
                 className="card relative p-0 w-full rounded-2xl overflow-hidden transition-all duration-300 bg-white dark:bg-gray-800 group shadow-[0_10px_30px_-8px_rgba(99,102,241,0.25)] hover:scale-[1.02] hover:ring-4 hover:ring-indigo-400/60 hover:shadow-[0_22px_80px_-10px_rgba(99,102,241,0.55)]"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -247,7 +249,7 @@ export default function GaleriePage() {
                   <h3 className="text-sm font-semibold truncate">{vid.title}</h3>
                   <p className="text-xs opacity-80 truncate">{vid.subtitle}</p>
                 </div>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
@@ -271,7 +273,7 @@ export default function GaleriePage() {
                 "En moins de 24h, le dessin devient une vidéo à partager. Un souvenir magique que l’on garde et que l’on montre fièrement.",
             },
           ].map((step, index) => (
-            <motion.div
+            <m.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -281,7 +283,7 @@ export default function GaleriePage() {
             >
               <h3 className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">{step.title}</h3>
               <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">{step.description}</p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
@@ -299,5 +301,6 @@ export default function GaleriePage() {
         </div>
       </section>
     </main>
+    </LazyMotion>
   );
 }

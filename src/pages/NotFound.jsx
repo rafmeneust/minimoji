@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { LazyMotion, m } from 'framer-motion';
+import { loadMotionFeatures } from "@/lib/motion";
 import NotFoundIllustration from '/404.svg';
 
 export default function NotFound() {
@@ -9,12 +10,13 @@ export default function NotFound() {
   }, []);
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <main
       role="main"
       aria-labelledby="page-title"
       className="min-h-screen flex flex-col justify-center items-center bg-white dark:bg-gray-900 text-center px-6"
     >
-      <motion.h1
+      <m.h1
         id="page-title"
         className="text-5xl sm:text-6xl font-extrabold text-black mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -22,7 +24,7 @@ export default function NotFound() {
         transition={{ duration: 0.5 }}
       >
         404 - Page introuvable
-      </motion.h1>
+      </m.h1>
 
       <img
         src={NotFoundIllustration}
@@ -50,5 +52,6 @@ export default function NotFound() {
         Retour à l’accueil
       </Link>
     </main>
+    </LazyMotion>
   );
 }

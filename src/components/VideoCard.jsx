@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function VideoCard({ vid, index }) {
   const [isReady, setIsReady] = useState(false);
@@ -15,7 +15,7 @@ export default function VideoCard({ vid, index }) {
   };
 
   return (
-    <motion.div
+    <m.div
       key={index}
       className="relative overflow-hidden rounded-2xl group bg-gray-100 dark:bg-gray-800"
       initial={{ opacity: 0, scale: 0.95 }}
@@ -62,6 +62,6 @@ s
         <h3 className="text-sm font-semibold truncate">{vid.title}</h3>
         <p className="text-xs opacity-80 truncate">{vid.subtitle}</p>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

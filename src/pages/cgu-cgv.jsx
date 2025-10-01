@@ -1,11 +1,13 @@
-import { motion } from 'framer-motion';
+import { LazyMotion, m } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { loadMotionFeatures } from "@/lib/motion";
 
 const wrapperClasses = 'bg-white dark:bg-gray-900 rounded-xl px-6 sm:px-10 py-6 shadow-md text-gray-800 dark:text-gray-200 text-sm space-y-4 max-w-3xl mx-auto mb-12';
 const headingClasses = 'text-lg font-semibold mt-6';
 
 export default function CGUCGV() {
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <div className="py-12 px-6">
       <Helmet>
         <title>Conditions Générales d’Utilisation et de Vente - Minimoji</title>
@@ -22,14 +24,14 @@ export default function CGUCGV() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.minimoji.fr/cgu-cgv" />
       </Helmet>
-      <motion.h1
+      <m.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-3xl font-bold text-center mb-6"
       >
         Conditions Générales d’Utilisation et de Vente
-      </motion.h1>
+      </m.h1>
 
       <div className={wrapperClasses}>
         <h2 className={headingClasses}>Objet des CGU-CGV</h2>
@@ -172,5 +174,6 @@ export default function CGUCGV() {
         </p>
       </div>
     </div>
+    </LazyMotion>
   );
 }

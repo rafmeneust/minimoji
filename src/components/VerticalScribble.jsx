@@ -1,6 +1,7 @@
 // src/components/VerticalScribble.jsx
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
 import { useMemo } from "react";
+import { loadMotionFeatures } from "@/lib/motion";
 
 /**
  * Gribouillis vertical texturé (crayon) avec animation de tracé.
@@ -39,6 +40,7 @@ export default function VerticalScribble({
   }, [height, width, amplitude, turns]);
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <svg
       width={width}
       height={height}
@@ -61,7 +63,7 @@ export default function VerticalScribble({
       </defs>
 
       {/* couche 1 (plus marquée) */}
-      <motion.path
+      <m.path
         d={pathD}
         fill="none"
         stroke={`url(#${gradientId})`}
@@ -74,7 +76,7 @@ export default function VerticalScribble({
         transition={{ delay, duration, ease: [0.33, 1, 0.68, 1] }}
       />
       {/* couche 2 (plus légère) */}
-      <motion.path
+      <m.path
         d={pathD}
         fill="none"
         stroke={`url(#${gradientId})`}
@@ -87,5 +89,6 @@ export default function VerticalScribble({
         transition={{ delay: delay + 0.15, duration: duration + 0.1, ease: [0.33, 1, 0.68, 1] }}
       />
     </svg>
+    </LazyMotion>
   );
 }

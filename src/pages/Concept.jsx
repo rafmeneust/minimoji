@@ -1,10 +1,11 @@
 import { LazyMotion, m } from "framer-motion";
 import { loadMotionFeatures } from "@/lib/motion";
 import { Helmet } from "react-helmet-async";
-import DrawingCanvas from "../components/DrawingCanvas";
 import Toolbar from "../components/Toolbar";
-import SaveExportButtons from "../components/SaveExportButtons";
-import { useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
+
+const DrawingCanvas = lazy(() => import("../components/DrawingCanvas"));
+const SaveExportButtons = lazy(() => import("../components/SaveExportButtons"));
 
 export default function Concept() {
   const [color, setColor] = useState("#000000");
@@ -13,6 +14,16 @@ export default function Concept() {
   const stageRef = useRef(null);
   const h1Title = "Un dessin aujourd'hui, un film magique dès demain ✨";
   const h1Letters = Array.from(h1Title);
+
+  useEffect(() => {
+    // Pré-charge l'atelier dès que la page est visible pour réduire la latence perçue
+    const preloadDrawingArea = () => {
+      import("../components/DrawingCanvas");
+      import("../components/SaveExportButtons");
+    };
+
+    preloadDrawingArea();
+  }, []);
 
   return (
     <>
@@ -231,16 +242,24 @@ export default function Concept() {
           setTool={setTool}
           onClear={() => setClearCanvas(true)}
         />
-        <DrawingCanvas
-          color={color}
-          tool={tool}
-          clearCanvas={clearCanvas}
-          onClearComplete={() => setClearCanvas(false)}
-          stageRef={stageRef}
-        />
-        <div className="flex justify-center mb-4">
-          <SaveExportButtons stageRef={stageRef} />
-        </div>
+        <Suspense
+          fallback={
+            <div className="mt-10 flex h-64 items-center justify-center rounded-2xl border border-dashed border-indigo-300/60 bg-indigo-50/40 text-indigo-600">
+              Atelier magique en préparation…
+            </div>
+          }
+        >
+          <DrawingCanvas
+            color={color}
+            tool={tool}
+            clearCanvas={clearCanvas}
+            onClearComplete={() => setClearCanvas(false)}
+            stageRef={stageRef}
+          />
+          <div className="flex justify-center mb-4">
+            <SaveExportButtons stageRef={stageRef} />
+          </div>
+        </Suspense>
       </div>
       </section>
         </main>

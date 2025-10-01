@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
 import { useState, useRef, useLayoutEffect } from "react";
 import VerticalScribble from "../components/VerticalScribble";
+import { loadMotionFeatures } from "@/lib/motion";
 
 function ScribbleWord({ children }) {
   const ref = useRef(null);
@@ -54,7 +55,7 @@ function ScribbleWord({ children }) {
               <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
             </filter>
           </defs>
-          <motion.path
+          <m.path
             d={d1}
             fill="none"
             stroke="url(#scribbleGrad-galerie)"
@@ -67,7 +68,7 @@ function ScribbleWord({ children }) {
             viewport={{ once: true, amount: 0.7 }}
             transition={{ delay: 0.2, duration: 1.1, ease: [0.33, 1, 0.68, 1] }}
           />
-          <motion.path
+          <m.path
             d={d2}
             fill="none"
             stroke="url(#scribbleGrad-galerie)"
@@ -151,7 +152,8 @@ export default function Galerie() {
   };
 
   return (
-    <section className="section relative bg-white dark:bg-gray-900 transition-colors duration-500 font-sans" id="galerie">
+    <LazyMotion features={loadMotionFeatures}>
+      <section className="section relative bg-white dark:bg-gray-900 transition-colors duration-500 font-sans" id="galerie">
       <div className="relative">
           <VerticalScribble
             className="absolute -left-10 -top-2 -z-10"
@@ -177,7 +179,7 @@ export default function Galerie() {
         {/* Galerie */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8">
           {["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4", "video6.mp4", "video7.mp4", "video8.mp4"].map((videoSrc, index) => (
-            <motion.div
+            <m.div
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -208,7 +210,7 @@ export default function Galerie() {
                   />
                 </div>
               )}
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
@@ -218,5 +220,6 @@ export default function Galerie() {
         </div>
       </div>
     </section>
+    </LazyMotion>
   );
 }

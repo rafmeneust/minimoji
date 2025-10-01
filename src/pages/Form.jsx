@@ -171,13 +171,14 @@ export default function Form() {
     classique: "Formule Classique",
     grand: "Formule Grand Héros",
   };
-  const OPTS = [
-    { key: "music", label: "Musique d’ambiance", price: 1.5 },
-    { key: "sfx", label: "Effets sonores (SFX)", price: 1.5 },
-    { key: "voice", label: "Voix-off personnalisée", price: 3.9 },
-    { key: "intro", label: "Écran intro/fin stylisé", price: 1.5 },
-    { key: "express", label: "Livraison express 6 h", price: 4.0 },
-  ];
+  const OPTION_MAP = {
+    music: { label: "Musique d’ambiance", price: 1.5 },
+    sfx: { label: "Effets sonores (SFX)", price: 1.5 },
+    voice: { label: "Voix-off personnalisée", price: 3.9 },
+    intro: { label: "Écran intro/fin stylisé", price: 1.5 },
+    express: { label: "Livraison express 6 h", price: 4.0 },
+  };
+  const OPTS = Object.entries(OPTION_MAP).map(([key, value]) => ({ key, ...value }));
   // Options autorisées par formule
 const ALLOWED_OPTS = {
   mini: new Set(["voice", "intro", "express"]),
@@ -194,20 +195,25 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
   });
   const toggleOption = (k) => setOptions((o) => ({ ...o, [k]: !o[k] }));
 
-  // Pré-sélection des options depuis l'URL: /creer?plan=...&opts=voice,intro
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const raw = (params.get('opts') || '')
-      .split(',')
+    const planParam = (params.get("plan") || "").toLowerCase();
+    if (["mini", "classique", "grand"].includes(planParam)) {
+      setPlan((prev) => (prev === planParam ? prev : planParam));
+    }
+    const raw = (params.get("opts") || "")
+      .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
     if (!raw.length) return;
     setOptions((prev) => {
       const next = { ...prev };
-      raw.forEach((k) => { if (k in next && isAllowed(plan, k)) next[k] = true; });
+      raw.forEach((k) => {
+        if (k in next && isAllowed(planParam || plan, k)) next[k] = true;
+      });
       return next;
     });
-  }, [location.search, plan]);
+  }, [location.search]);
 
   // Fallback: lecture via location.state (depuis /tarifs)
   useEffect(() => {
@@ -241,7 +247,7 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
   const total = useMemo(() => {
     let t = BASE[plan] || 0;
     for (const [k, v] of Object.entries(options)) {
-      if (v) t += OPTS.find((o) => o.key === k).price;
+      if (v && OPTION_MAP[k]) t += OPTION_MAP[k].price;
     }
     return Number(t.toFixed(2));
   }, [plan, options]);

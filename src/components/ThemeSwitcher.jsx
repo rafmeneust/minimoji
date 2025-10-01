@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion"; // On utilise motion pour faire le rebond fluide
+import { m } from "framer-motion"; // On utilise m pour le rebond fluide
 
 export default function ThemeSwitcher() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -14,13 +14,13 @@ export default function ThemeSwitcher() {
   }, [isDarkMode]);
 
   return (
-    <motion.button
+    <m.button
       whileTap={{ scale: 0.95 }} // => petit rebond rapide au clic
       onClick={() => setIsDarkMode(!isDarkMode)}
       className="ml-4 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-200 text-gray-800 dark:text-gray-600 font-semibold transition-all duration-500
                  hover:ring-4 hover:ring-indigo-300 hover:shadow-md dark:hover:ring-indigo-500 dark:hover:shadow-indigo-500/30"
     >
       {isDarkMode ? "☀️ Light" : "🌙 Dark"}
-    </motion.button>
+    </m.button>
   );
 }

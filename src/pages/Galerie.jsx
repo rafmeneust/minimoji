@@ -1,9 +1,11 @@
 import { Helmet } from "react-helmet";
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
+import { loadMotionFeatures } from "@/lib/motion";
 
 export default function Galerie() {
   return (
-    <>
+    <LazyMotion features={loadMotionFeatures}>
+      <>
       <Helmet>
         <title>Galerie | Minimoji - Les dessins s’animent</title>
         <meta name="description" content="Découvrez des exemples de dessins transformés en mini-films animés. Magie, émotions et créativité enfantine au cœur de notre galerie." />
@@ -58,13 +60,13 @@ export default function Galerie() {
               <p className="text-base text-gray-700 dark:text-gray-300 mb-4">
                 Vous êtes parent, enseignant ou curieux ? Offrez à votre enfant l’opportunité de voir son imagination prendre vie. Chaque mois, certains dessins sont sélectionnés pour intégrer notre galerie magique.
               </p>
-              <motion.a
+              <m.a
                 href="/creer"
                 className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-semibold text-base transition"
                 whileHover={{ scale: 1.05 }}
               >
                 Créer mon dessin animé
-              </motion.a>
+              </m.a>
             </div>
 
           </div>
@@ -104,17 +106,18 @@ export default function Galerie() {
 
         {/* CTA final */}
         <div className="mt-16 text-center">
-          <motion.a
+          <m.a
             href="#create"
             className="inline-block px-6 py-3 bg-[#FB923C] hover:bg-orange-600 text-white rounded-full font-semibold text-base transition"
             whileHover={{ scale: 1.05 }}
           >
             Je confie le dessin au magicien
-          </motion.a>
+          </m.a>
         </div>
 
       </section>
     </main>
     </>
+    </LazyMotion>
   );
 }

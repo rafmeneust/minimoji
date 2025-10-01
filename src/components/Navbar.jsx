@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { LazyMotion, m, AnimatePresence } from 'framer-motion';
 import ThemeSwitcher from './ThemeSwitcher';
 import { Link, useLocation } from 'react-router-dom';
+import { loadMotionFeatures } from '@/lib/motion';
+import { prefetchRoute } from '@/lib/prefetchRoute';
 
 const preloadFormPage = () => import('@/pages/Form');
 
@@ -28,11 +30,12 @@ export default function Navbar() {
   };
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md transition-colors duration-500">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
 
         {/* Logo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -59,7 +62,7 @@ export default function Navbar() {
 
             <AnimatePresence>
               {isHoveringLogo && (
-                <motion.svg
+                <m.svg
                   key={underlineIdx}
                   viewBox="0 0 310 40"
                   className="absolute -bottom-1.5 left-0 w-full h-3 pointer-events-none text-indigo-400 dark:text-indigo-300"
@@ -67,7 +70,7 @@ export default function Navbar() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <motion.path
+                  <m.path
                     d={UNDERLINE_PATHS[underlineIdx]}
                     fill="none"
                     stroke="currentColor"
@@ -77,17 +80,18 @@ export default function Navbar() {
                     animate={{ pathLength: 1 }}
                     transition={{ duration: 0.55, ease: "easeInOut" }}
                   />
-                </motion.svg>
+                </m.svg>
               )}
             </AnimatePresence>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Desktop nav + CTA */}
         <div className="hidden md:flex items-center space-x-6">
           <nav className="flex space-x-8 text-sm font-medium text-gray-700 dark:text-gray-300">
             <Link
               to="/concept"
+              onMouseEnter={() => prefetchRoute('/concept')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/concept" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -96,6 +100,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/ecole"
+              onMouseEnter={() => prefetchRoute('/ecole')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/ecole" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -104,6 +109,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/atelier"
+              onMouseEnter={() => prefetchRoute('/atelier')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/atelier" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -112,6 +118,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/galerie"
+              onMouseEnter={() => prefetchRoute('/galerie')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/galerie" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -120,6 +127,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/tarifs"
+              onMouseEnter={() => prefetchRoute('/tarifs')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/tarifs" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -170,6 +178,7 @@ export default function Navbar() {
           <nav className="flex flex-col items-center space-y-4 text-gray-700 dark:text-gray-300 text-xl font-medium mt-4 text-center">
             <Link
               to="/concept"
+              onMouseEnter={() => prefetchRoute('/concept')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/concept" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -179,6 +188,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/ecole"
+              onMouseEnter={() => prefetchRoute('/ecole')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/ecole" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -188,6 +198,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/atelier"
+              onMouseEnter={() => prefetchRoute('/atelier')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/atelier" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -197,6 +208,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/galerie"
+              onMouseEnter={() => prefetchRoute('/galerie')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/galerie" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -206,6 +218,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/tarifs"
+              onMouseEnter={() => prefetchRoute('/tarifs')}
               className={`transition hover:text-indigo-600 dark:hover:text-indigo-400 ${
                 location.pathname === "/tarifs" ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""
               }`}
@@ -215,9 +228,9 @@ export default function Navbar() {
             </Link>
             <Link
               to="/creer"
+              onMouseEnter={() => prefetchRoute('/creer')}
               className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 w-full rounded-full text-center transition"
               onClick={() => setIsOpen(false)}
-              onMouseEnter={preloadFormPage}
             >
               Créer mon Dessin Animé
             </Link>
@@ -225,5 +238,6 @@ export default function Navbar() {
         </div>
       )}
     </header>
+    </LazyMotion>
   );
 }

@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { LazyMotion, m, useReducedMotion } from "framer-motion";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { loadMotionFeatures } from "@/lib/motion";
 
 // --- Effet "pop" lettre par lettre pour le H1 ---
 const POP_CONTAINER = {
@@ -30,7 +31,7 @@ const formatEuro = (n) => {
 function AnimatedLetters({ text, reduced }) {
   const words = text.split(" ");
   return (
-    <motion.span
+    <m.span
       aria-hidden="true"
       className="inline-block"
       variants={reduced ? undefined : POP_CONTAINER}
@@ -40,17 +41,17 @@ function AnimatedLetters({ text, reduced }) {
       {words.map((word, wi) => (
         <span key={`w-${wi}`} className="inline-block whitespace-nowrap mr-2">
           {[...word].map((ch, ci) => (
-            <motion.span
+            <m.span
               key={`w-${wi}-c-${ci}`}
               variants={POP_LETTER}
               className="inline-block will-change-transform"
             >
               {ch}
-            </motion.span>
+            </m.span>
           ))}
         </span>
       ))}
-    </motion.span>
+    </m.span>
   );
 }
 
@@ -97,6 +98,7 @@ export default function Confirmation() {
   }, []);
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <>
       <Helmet>
         <title>Confirmation – Minimoji</title>
@@ -106,7 +108,7 @@ export default function Confirmation() {
       {/* Section normalisée (utilise les styles globaux de index.css) */}
       <section aria-labelledby="confirm-title">
         <div className="container-pg">
-          <motion.div
+          <m.div
             role="status"
             aria-live="polite"
             ref={cardRef}
@@ -118,7 +120,7 @@ export default function Confirmation() {
           >
             {/* Illustration animée (respecte prefers-reduced-motion) */}
             <div className="relative w-24 h-24 mx-auto mb-4">
-              <motion.img
+              <m.img
                 src="/dino.svg"
                 alt=""
                 aria-hidden="true"
@@ -126,7 +128,7 @@ export default function Confirmation() {
                 animate={prefersReducedMotion ? {} : { scaleX: [1, 1, -1, -1, 1], y: [0, -5, 0, 5, 0] }}
                 transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatType: "loop" }}
               />
-              <motion.div
+              <m.div
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-3 rounded-full bg-black/10 dark:bg-white/10"
                 animate={prefersReducedMotion ? {} : { scaleX: [0.9, 1.1, 0.9], opacity: [0.6, 0.4, 0.6] }}
                 transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatType: "loop" }}
@@ -175,9 +177,10 @@ export default function Confirmation() {
               <Link to="/" className="btn btn-primary">Retour à l’accueil</Link>
               <Link to="/creer#upload" className="btn btn-ghost">Téléverser un autre dessin</Link>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </section>
     </>
+    </LazyMotion>
   );
 }

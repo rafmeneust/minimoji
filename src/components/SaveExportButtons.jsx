@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function SaveExportButtons({ stageRef }) {
   const handleExport = () => {
@@ -13,13 +13,13 @@ export default function SaveExportButtons({ stageRef }) {
 
   return (
     <div className="mt-8 text-center">
-      <motion.button
+      <m.button
         onClick={handleExport}
         className="inline-block px-6 py-4 bg-[#FB923C] hover:bg-orange-600 text-white rounded-full font-semibold transition"
         whileHover={{ scale: 1.05 }}
       >
         Exporter en PNG
-      </motion.button>
+      </m.button>
     </div>
   );
 }
