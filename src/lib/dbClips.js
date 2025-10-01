@@ -1,8 +1,14 @@
 // src/lib/dbClips.js
 import { db } from "@/lib/firebaseClient";
 import {
-  collection, doc, setDoc, serverTimestamp,
-  query, orderBy, onSnapshot
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 
 /** transforme un public_id Cloudinary en id de doc Firestore */
@@ -14,7 +20,14 @@ export function clipDocId(publicId) {
 /** enregistre (ou met à jour) un clip sous /users/<uid>/clips/<docId> */
 export async function saveClip(uid, cloudinaryResp) {
   const {
-    public_id, secure_url, playback_url, duration, width, height, bytes
+    public_id,
+    secure_url,
+    playback_url,
+    duration,
+    width,
+    height,
+    bytes,
+    original_filename,
   } = cloudinaryResp;
 
   const id = clipDocId(public_id);
@@ -30,6 +43,7 @@ export async function saveClip(uid, cloudinaryResp) {
       width: width || null,
       height: height || null,
       bytes: bytes || null,
+      title: original_filename || null,
       status: "ready",
       updatedAt: serverTimestamp(),
       createdAt: serverTimestamp(),
@@ -38,6 +52,11 @@ export async function saveClip(uid, cloudinaryResp) {
   );
 
   return { id, ref };
+}
+
+export async function deleteClipDoc(uid, docId) {
+  const ref = doc(collection(db, "users", uid, "clips"), docId);
+  await deleteDoc(ref);
 }
 
 /** écoute les clips d’un user, triés du plus récent au plus ancien */

@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { LazyMotion, m } from "framer-motion";
+import { loadMotionFeatures } from "@/lib/motion";
 import { Helmet } from "react-helmet-async";
 import DrawingCanvas from "../components/DrawingCanvas";
 import Toolbar from "../components/Toolbar";
@@ -36,7 +37,8 @@ export default function Concept() {
         <meta name="twitter:description" content="Du dessin au mini‑film en 24 h (HD MP4 + lien privé). Formats portrait/paysage/carré. Paiement sécurisé, respect du droit à l’image." />
         <meta name="twitter:image" content="https://minimoji.fr/images/preview-form.jpg" />
       </Helmet>
-      <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
+      <LazyMotion features={loadMotionFeatures}>
+        <main className="bg-white dark:bg-gray-900 transition-colors duration-500 text-gray-900 dark:text-gray-100 font-sans">
       <section className="section bg-white dark:bg-gray-900 font-sans"><div className="container-pg max-w-3xl relative">
         <img
           src="/scribble_bonhomme.svg"
@@ -51,7 +53,7 @@ export default function Concept() {
         />
 
         {/* Accroche principale */}
-         <motion.h1
+         <m.h1
           className="text-3xl sm:text-4xl lg:text-4xl font-extrabold mb-10 text-center font-display"
           aria-label={h1Title}
           initial="hidden"
@@ -59,7 +61,7 @@ export default function Concept() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } } }}
         >
           {h1Letters.map((ch, i) => (
-            <motion.span
+            <m.span
               key={i}
               aria-hidden="true"
               className={ch === " " ? "inline-block w-2" : "inline-block"}
@@ -75,9 +77,9 @@ export default function Concept() {
               }}
             >
               {ch}
-            </motion.span>
+            </m.span>
           ))}
-        </motion.h1>
+        </m.h1>
         <p className="text-lg sm:text-xl leading-relaxed text-center text-indigo-700 dark:text-indigo-300 mb-12">
           Confiez‑le à notre magicien… et réveillez‑vous avec la magie
         </p>
@@ -85,7 +87,7 @@ export default function Concept() {
         {/* Étapes du rituel */}
         <div className="space-y-16">
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -96,9 +98,9 @@ export default function Concept() {
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Envoyez une photo ou un scan du dessin de votre enfant — même bancal, même griffonné. L’essentiel, c’est l’élan créatif. Vous pouvez y ajouter une note vocale ou un petit texte si vous souhaitez enrichir l’histoire. Pas obligatoire, mais notre magicien aime les détails !
             </p>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -109,9 +111,9 @@ export default function Concept() {
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Il analyse les lignes, les couleurs, l’énergie du dessin. Puis, d’un coup de baguette, il en fait une animation. Fidèle, mais prolongée. Une mini‑histoire naît, pleine de douceur ou de folie, selon l’inspiration de l’œuvre.
             </p>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -122,7 +124,7 @@ export default function Concept() {
             <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300">
               Vous recevez un lien sécurisé contenant la vidéo en HD, sans watermark. Elle est prête à être projetée, partagée ou transformée en souvenir : certains l’intègrent dans un album, d’autres la collent au dos du dessin via QR code.
             </p>
-          </motion.div>
+          </m.div>
         </div>
         {/* Preuve sociale + Formats & livraisons */}
         <div className="mt-10">
@@ -149,13 +151,13 @@ export default function Concept() {
         </div>
           {/* CTA final */}
          <div className="mt-16 text-center">
-          <motion.a
+          <m.a
             href="/creer"
             className="inline-block px-6 py-3 bg-[#FB923C] hover:bg-orange-600 text-white rounded-full font-semibold text-base transition"
             whileHover={{ scale: 1.05 }}
           >
             Je confie le dessin au magicien
-          </motion.a>
+          </m.a>
           <img
             src="/step-2.svg"
             alt=""
@@ -241,7 +243,8 @@ export default function Concept() {
         </div>
       </div>
       </section>
-      </main>
+        </main>
+      </LazyMotion>
     </>
   );
 }

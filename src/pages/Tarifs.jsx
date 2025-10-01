@@ -1,10 +1,13 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { LazyMotion, m, useReducedMotion } from "framer-motion";
+import { loadMotionFeatures } from "@/lib/motion";
 import Pitch from "../components/Pitch";
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { PRICES, OPTS, OPTIONS_BY_PLAN } from "../config/Pricing.js";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+
+const motion = m;
 
 export default function Tarifs() {
   const [selected, setSelected] = useState(null);
@@ -76,7 +79,8 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
   }, [selected, options, setSearchParams]);
 
   return (
-    <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+    <LazyMotion features={loadMotionFeatures}>
+      <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-500">
       <Helmet>
         <title>Tarifs Minimoji – Vidéos animées à partir des dessins d’enfants</title>
         <meta
@@ -458,5 +462,6 @@ const totalEstimated = useMemo(() => (selected ? basePrice + optionsTotal : 0), 
 </motion.div>
 
     </main>
+    </LazyMotion>
   );
 }
