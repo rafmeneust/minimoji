@@ -1,12 +1,33 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, Suspense, lazy } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import toast, { Toaster } from "react-hot-toast";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRightIcon, CloudArrowUpIcon, UserIcon, PencilSquareIcon, EnvelopeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { auth, provider } from "../lib/firebaseClient";
 
-import { signInWithPopup, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
+const loadHotToast = () => import("react-hot-toast");
+const LazyToaster = lazy(() => loadHotToast().then((mod) => ({ default: mod.Toaster })));
+
+let toastModulePromise;
+const toast = {
+  success(message, options) {
+    toastModulePromise = toastModulePromise || loadHotToast();
+    toastModulePromise.then((mod) => mod.default.success(message, options)).catch(() => {});
+  },
+  error(message, options) {
+    toastModulePromise = toastModulePromise || loadHotToast();
+    toastModulePromise.then((mod) => mod.default.error(message, options)).catch(() => {});
+  },
+};
+
+const loadFirebaseAuth = () => import("firebase/auth");
+let firebaseAuthPromise;
+function getFirebaseAuth() {
+  if (!firebaseAuthPromise) {
+    firebaseAuthPromise = loadFirebaseAuth();
+  }
+  return firebaseAuthPromise;
+}
 // Safe analytics stub so we don't crash if GA isn't ready
 if (typeof window !== 'undefined' && !window.track) {
   window.track = (eventName, params = {}) => {
@@ -35,6 +56,7 @@ export default function Form() {
   const signIn = async () => {
     setAuthError("");
     try {
+      const { signInWithPopup } = await getFirebaseAuth();
       const cred = await signInWithPopup(auth, provider);
       setUser(cred.user);
       setOneTapFallback(false);
@@ -67,6 +89,7 @@ export default function Form() {
           callback: async ({ credential }) => {
             if (!credential) return;
             try {
+              const { GoogleAuthProvider, signInWithCredential } = await getFirebaseAuth();
               const cred = GoogleAuthProvider.credential(credential);
               await signInWithCredential(auth, cred);
               setUser(auth.currentUser);
@@ -386,7 +409,9 @@ const isAllowed = (p, key) => (ALLOWED_OPTS[p] || ALLOWED_OPTS.classique).has(ke
         <link rel="canonical" href="https://minimoji.fr/creer" />
       </Helmet>
 
-      <Toaster position="bottom-center" />
+      <Suspense fallback={null}>
+        <LazyToaster position="bottom-center" />
+      </Suspense>
 
       {/* Section principale */}
       <section className="section bg-white dark:bg-gray-900 relative">

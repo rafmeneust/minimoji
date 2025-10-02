@@ -1,15 +1,10 @@
 // src/lib/dbClips.js
-import { db } from "@/lib/firebaseClient";
-import {
-  collection,
-  doc,
-  setDoc,
-  deleteDoc,
-  serverTimestamp,
-  query,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
+import { getDb, loadFirestore } from "@/lib/firebaseClient";
+
+async function ensureFirestore() {
+  const [firestore, db] = await Promise.all([loadFirestore(), getDb()]);
+  return { firestore, db };
+}
 
 /** transforme un public_id Cloudinary en id de doc Firestore */
 export function clipDocId(publicId) {
@@ -19,6 +14,8 @@ export function clipDocId(publicId) {
 
 /** enregistre (ou met à jour) un clip sous /users/<uid>/clips/<docId> */
 export async function saveClip(uid, cloudinaryResp) {
+  const { firestore, db } = await ensureFirestore();
+  const { collection, doc, setDoc, serverTimestamp } = firestore;
   const {
     public_id,
     secure_url,
@@ -55,13 +52,32 @@ export async function saveClip(uid, cloudinaryResp) {
 }
 
 export async function deleteClipDoc(uid, docId) {
+  const { firestore, db } = await ensureFirestore();
+  const { collection, doc, deleteDoc } = firestore;
   const ref = doc(collection(db, "users", uid, "clips"), docId);
   await deleteDoc(ref);
 }
 
 /** écoute les clips d’un user, triés du plus récent au plus ancien */
 export function listenClips(uid, { next, error }) {
-  const col = collection(db, "users", uid, "clips");
-  const q = query(col, orderBy("createdAt", "desc"));
-  return onSnapshot(q, next, error);
+  let unsubscribe = null;
+  let cancelled = false;
+
+  ensureFirestore()
+    .then(({ firestore, db }) => {
+      if (cancelled) return;
+      const { collection, query, orderBy, onSnapshot } = firestore;
+      const col = collection(db, "users", uid, "clips");
+      const q = query(col, orderBy("createdAt", "desc"));
+      unsubscribe = onSnapshot(q, next, error);
+    })
+    .catch((err) => {
+      if (cancelled) return;
+      error?.(err);
+    });
+
+  return () => {
+    cancelled = true;
+    unsubscribe?.();
+  };
 }

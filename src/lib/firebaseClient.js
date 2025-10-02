@@ -1,7 +1,6 @@
 // src/lib/firebaseClient.js
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, setLogLevel } from "firebase/firestore";
 
 
 // Lis les variables d'env exposées par Vite (préfixe VITE_)
@@ -42,10 +41,29 @@ const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
 // Exports (utiliser `app` **après** son initialisation)
 export const auth = getAuth(app);
-    auth.useDeviceLanguage();
-export const db = getFirestore(app);
+auth.useDeviceLanguage();
 export const provider = new GoogleAuthProvider();
-if (import.meta.env.DEV) setLogLevel("error");
+
+let firestoreModulePromise;
+let firestoreInstancePromise;
+
+export function loadFirestore() {
+  if (!firestoreModulePromise) {
+    firestoreModulePromise = import("firebase/firestore");
+  }
+  return firestoreModulePromise;
+}
+
+export async function getDb() {
+  if (!firestoreInstancePromise) {
+    firestoreInstancePromise = loadFirestore().then(({ getFirestore, setLogLevel }) => {
+      const instance = getFirestore(app);
+      if (import.meta.env.DEV) setLogLevel("error");
+      return instance;
+    });
+  }
+  return firestoreInstancePromise;
+}
 
 // Expose pour debug console en dev
 if (import.meta.env.DEV) window.__auth = auth;

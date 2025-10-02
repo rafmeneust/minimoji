@@ -4,12 +4,12 @@ import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { prefetchRoutes } from "./lib/prefetchRoute";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import NotFound from "./pages/NotFound";
-import SignInUpload from "./components/SignInUpload";
 import ParcoursCards, { PARCOURS } from "./components/ParcoursCards";
 
 const loadFormPage = () => import("./pages/Form");
@@ -22,6 +22,7 @@ const CGUCGV = lazy(() => import("./pages/cgu-cgv"));
 const Confirmation = lazy(() => import("./pages/Confirmation"));
 const Ecole = lazy(() => import("./pages/Ecole"));
 const Atelier = lazy(() => import("./pages/Atelier"));
+const SignInUpload = lazy(() => import("./components/SignInUpload"));
 const StepsLazy = lazy(() => import("./components/Steps").then((mod) => ({ default: mod.StepsDefault })));
 const BlockyDivider = lazy(() => import("./components/BlockyDivider"));
 const BlockyDividerBottom = lazy(() => import("./components/BlockyDividerBottom"));
@@ -30,16 +31,17 @@ const Values = lazy(() => import("./components/Values"));
 const Galerie = lazy(() => import("./components/Galerie"));
 const Testimonials = lazy(() => import("./components/Testimonials"));
 const DinoPopupLazy = lazy(() => import("./components/DinoPopup"));
-
-import RequireAuth from "./components/auth/require-auth.jsx";
-import Dashboard from "./app/Dashboard.jsx";
-import Login from "./app/Login.jsx";
+const RequireAuth = lazy(() => import("./components/auth/require-auth.jsx"));
+const Dashboard = lazy(() => import("./app/Dashboard.jsx"));
+const Login = lazy(() => import("./app/Login.jsx"));
 
 function HomePage() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const preload = () => {
       loadFormPage();
+      import("./components/SignInUpload");
+      prefetchRoutes(["/concept", "/tarifs", "/galerie", "/creer"]);
     };
     if ("requestIdleCallback" in window) {
       window.requestIdleCallback(preload, { timeout: 2000 });
@@ -74,7 +76,15 @@ function HomePage() {
         />
       </SEO>
       <Hero />
-      <SignInUpload />
+      <Suspense
+        fallback={
+          <div className="max-w-xl mx-auto my-12 rounded-2xl border border-dashed border-indigo-200/70 bg-white/60 p-6 text-center text-sm text-indigo-600 shadow-sm dark:border-indigo-400/40 dark:bg-indigo-900/20">
+            Chargement de l’espace de dépôt…
+          </div>
+        }
+      >
+        <SignInUpload />
+      </Suspense>
       <Suspense fallback={null}>
         <BlockyDivider />
       </Suspense>
@@ -197,12 +207,21 @@ function App() {
             <Route
               path="/app"
               element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
+                <Suspense fallback={<div className="p-8 text-sm text-gray-600 dark:text-gray-300">Ouverture de l’espace sécurisé…</div>}>
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                </Suspense>
               }
             />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={
+                <Suspense fallback={<div className="p-8 text-sm text-gray-600 dark:text-gray-300">Chargement du module de connexion…</div>}>
+                  <Login />
+                </Suspense>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
